@@ -3,7 +3,7 @@ import Preloader from "../helper/Preloader";
 import HeaderOne from "../components/HeaderOne";
 // import BrandSectionOne from "../components/BrandSectionOne";
 import FooterOne from "../components/FooterOne";
-import BreadcrumbFive from "../components/BreadcrumbFive";
+import ShoppingBreadcrumb from "../components/ShoppingBreadcrumb";
 import CartPersonal from "../components/CartPersonal";
 
 const CartPersonalPage = () => {
@@ -15,8 +15,8 @@ const CartPersonalPage = () => {
       {/* HeaderOne */}
       <HeaderOne />
 
-      {/* BreadcrumbFive */}
-      <BreadcrumbFive />
+      {/* ShoppingBreadcrumb */}
+      <ShoppingBreadcrumb />
 
       {/* CartPersonal */}
       <CartPersonal />

@@ -77,9 +77,52 @@ const HeaderOne = () => {
                     Products
                   </NavLink>
                 </li>
-                <li className='nav-menu__item has-submenu d-none'>
+                <li className='nav-menu__item has-submenu '>
                   <Link to='#' className='nav-menu__link'>
-                    Pages
+                    All Category
+                  </Link>
+                  <ul className='nav-submenu'>
+                    <li className='nav-submenu__item'>
+                      <NavLink to='/profile' className='nav-submenu__link'>
+                        Profile
+                      </NavLink>
+                    </li>
+                    <li className='nav-submenu__item'>
+                      <NavLink to='/cart' className='nav-submenu__link'>
+                        Shopping Cart
+                      </NavLink>
+                    </li>
+                    <li className='nav-submenu__item'>
+                      <NavLink
+                        to='/cart-personal'
+                        className='nav-submenu__link'
+                      >
+                        Mailing Address
+                      </NavLink>
+                    </li>
+                    <li className='nav-submenu__item'>
+                      <NavLink to='/cart-payment' className='nav-submenu__link'>
+                        Payment Method
+                      </NavLink>
+                    </li>
+                    <li className='nav-submenu__item'>
+                      <NavLink
+                        to='/cart-thank-you'
+                        className='nav-submenu__link'
+                      >
+                        Preview Order
+                      </NavLink>
+                    </li>
+                    <li className='nav-submenu__item'>
+                      <NavLink to='/dashboard' className='nav-submenu__link'>
+                        Dashboard
+                      </NavLink>
+                    </li>
+                  </ul>
+                </li>
+                <li className='nav-menu__item has-submenu '>
+                  <Link to='#' className='nav-menu__link'>
+                    All Brand
                   </Link>
                   <ul className='nav-submenu'>
                     <li className='nav-submenu__item'>
@@ -121,17 +164,6 @@ const HeaderOne = () => {
                   </ul>
                 </li>
 
-                <li className='nav-menu__item'>
-                  <NavLink to='/contact' className='nav-menu__link'>
-                    Categories
-                  </NavLink>
-                </li>
-
-                <li className='nav-menu__item'>
-                  <NavLink to='/contact' className='nav-menu__link'>
-                    Brands
-                  </NavLink>
-                </li>
                 <li className='nav-menu__item'>
                   <NavLink to='/contact' className='nav-menu__link'>
                     Contact

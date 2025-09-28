@@ -8,6 +8,11 @@ import AllProductPage from "./pages/AllProductPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import CartPage from "./pages/CartPage";
 import CartPersonalPage from "./pages/CartPersonalPage";
+import CartThankYouPage from "./pages/CartThankYouPage";
+import ContactPage from "./pages/ContactPage";
+import DashboardProfilePage from "./pages/DashboardProfilePage";
+import OrdersPage from "./pages/OrdersPage";
+import ReviewPage from "./pages/ReviewPage";
 
 function App() {
   return (
@@ -20,9 +25,21 @@ function App() {
         <Route exact path='/product-details' element={<ProductDetailsPage />} />
         <Route exact path='/cart' element={<CartPage />} />
         <Route exact path='/cart-personal' element={<CartPersonalPage />} />
+        <Route exact path='/cart-thank-you' element={<CartThankYouPage />} />
+
+        <Route exact path='/contact' element={<ContactPage />} />
 
         <Route exact path='/register' element={<RegisterPage />} />
         <Route exact path='/login' element={<LoginPage />} />
+
+        {/* dashboard */}
+        <Route
+          exact
+          path='/dashboard-profile'
+          element={<DashboardProfilePage />}
+        />
+        <Route exact path='/dashboard-all-orders' element={<OrdersPage />} />
+        <Route exact path='/dashboard-review' element={<ReviewPage />} />
       </Routes>
     </BrowserRouter>
   );

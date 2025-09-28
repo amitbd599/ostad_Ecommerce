@@ -3,10 +3,9 @@ import Preloader from "../helper/Preloader";
 import HeaderOne from "../components/HeaderOne";
 import BrandSectionOne from "../components/BrandSectionOne";
 import FooterOne from "../components/FooterOne";
-import ShoppingBreadcrumb from "../components/ShoppingBreadcrumb";
-import Cart from "../components/Cart";
-
-const CartPage = () => {
+import Contact from "../components/Contact";
+import Breadcrumb from "../components/Breadcrumb";
+const ContactPage = () => {
   return (
     <>
       {/* Preloader */}
@@ -15,11 +14,11 @@ const CartPage = () => {
       {/* HeaderOne */}
       <HeaderOne />
 
-      {/* ShoppingBreadcrumb */}
-      <ShoppingBreadcrumb />
+      {/* BreadcrumbEight */}
+      <Breadcrumb />
 
-      {/* Cart */}
-      <Cart />
+      {/* Contact */}
+      <Contact />
 
       {/* BrandSectionOne */}
       <BrandSectionOne />
@@ -30,4 +29,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default ContactPage;
