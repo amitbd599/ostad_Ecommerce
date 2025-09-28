@@ -8,6 +8,7 @@ import UpdateProductPage from "./pages/UpdateProductPage";
 import AllProductPage from "./pages/AllProductPage";
 import CategoryPage from "./pages/CategoryPage";
 import BrandPage from "./pages/BrandPage";
+import AllOrdersPage from "./pages/AllOrdersPage";
 
 function App() {
   return (
@@ -20,10 +21,11 @@ function App() {
         {/* dashboard */}
         <Route exact path='/admin-profile' element={<DashboardProfilePage />} />
         <Route exact path='/create-product' element={<CreateProductPage />} />
-        <Route exact path='/update-product' element={<UpdateProductPage />} />
+   
         <Route exact path='/all-product' element={<AllProductPage />} />
         <Route exact path='/category' element={<CategoryPage />} />
         <Route exact path='/brand' element={<BrandPage />} />
+        <Route exact path='/all-orders' element={<AllOrdersPage />} />
       </Routes>
     </BrowserRouter>
   );
