@@ -22,18 +22,22 @@ const Brand = () => {
                     <div className='tab-pane fade show active'>
                       <form action='#' autoComplete='off'>
                         <div className='row gy-4'>
-                          <div>
-                            <label
-                              htmlFor='fName'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Create Brand
+                          <div className='col-md-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Brand name
                             </label>
                             <input
                               type='text'
                               className='common-input border'
-                              defaultValue='Mobile'
-                              placeholder='Enter Brand name'
+                            />
+                          </div>
+                          <div className='col-md-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Image single
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
                             />
                           </div>
 
@@ -192,12 +196,22 @@ const Brand = () => {
                       <div className='tab-pane fade show active'>
                         <form action='#' autoComplete='off'>
                           <div className='row gy-4'>
-                            <div>
+                            <div className='col-md-6'>
+                              <label className='form-label mb-2 font-18 font-heading fw-600'>
+                                Brand name
+                              </label>
                               <input
                                 type='text'
                                 className='common-input border'
-                                defaultValue='Mobile'
-                                placeholder='Enter Brand name'
+                              />
+                            </div>
+                            <div className='col-md-6'>
+                              <label className='form-label mb-2 font-18 font-heading fw-600'>
+                                Image single
+                              </label>
+                              <input
+                                type='text'
+                                className='common-input border'
                               />
                             </div>
                           </div>
