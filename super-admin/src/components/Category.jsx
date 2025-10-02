@@ -23,18 +23,22 @@ const Category = () => {
                     <div className='tab-pane fade show active'>
                       <form action='#' autoComplete='off'>
                         <div className='row gy-4'>
-                          <div>
-                            <label
-                              htmlFor='fName'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
+                          <div className='col-md-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
                               Create Category
                             </label>
                             <input
                               type='text'
                               className='common-input border'
-                              defaultValue='Mobile'
-                              placeholder='Enter Category name'
+                            />
+                          </div>
+                          <div className='col-md-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Image Single
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
                             />
                           </div>
 
