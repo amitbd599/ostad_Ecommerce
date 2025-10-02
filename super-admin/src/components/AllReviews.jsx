@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-
-const AllOrders = () => {
+import { FaRegStar, FaRegStarHalfStroke } from "react-icons/fa6";
+import { FaStar } from "react-icons/fa";
+const AllReviews = () => {
   return (
     <>
       {/* Cover Photo Start */}
       <div className='cover-photo  overflow-hidden'>
         <div className='avatar-upload p-5'>
           <h2>Supper Admin</h2>
-          <h5>All Orders</h5>
+          <h5>All Reviews</h5>
         </div>
       </div>
       <div className='dashboard-body__content mt-0'>
@@ -20,26 +21,32 @@ const AllOrders = () => {
                   <table className='table text-body '>
                     <thead>
                       <tr>
-                        <th>Order ID</th>
-                        <th>Date</th>
-                        <th>Price</th>
+                        <th>Product Name</th>
+                        <th>Purchase time</th>
+                        <th>Invoice No</th>
+                        <th>Message</th>
+                        <th>Review</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>#DR54745425478 </td>
-                        <td>2022-12-31 03:36 AM</td>
-                        <td> 500</td>
+                        <td>Product Name</td>
+                        <td>Purchase time </td>
+                        <td> Invoice No</td>
+                        <td> Message</td>
+                        <td>
+                          <FaStar />
+                          <FaRegStarHalfStroke />
+                          <FaRegStar />
+                          <FaRegStar />
+                          <FaRegStar />
+                        </td>
                         <td>
                           <div className='d-flex justify-content-end gap-2'>
-                            <button
-                              className='btn btn-success'
-                              data-bs-toggle='modal'
-                              data-bs-target={`#exampleModal_${1}`}
-                            >
-                              View order
-                            </button>
+                            <Link to='/' className='btn btn-success'>
+                              Show product
+                            </Link>
                           </div>
                         </td>
                       </tr>
@@ -113,4 +120,4 @@ const AllOrders = () => {
   );
 };
 
-export default AllOrders;
+export default AllReviews;

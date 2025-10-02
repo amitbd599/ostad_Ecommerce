@@ -8,6 +8,7 @@ import AllProductPage from "./pages/AllProductPage";
 import CategoryPage from "./pages/CategoryPage";
 import BrandPage from "./pages/BrandPage";
 import AllOrdersPage from "./pages/AllOrdersPage";
+import AllReviewPage from "./pages/AllReviewPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route exact path='/create-product' element={<CreateProductPage />} />
 
         <Route exact path='/all-product' element={<AllProductPage />} />
+        <Route exact path='/all-reviews' element={<AllReviewPage />} />
         <Route exact path='/category' element={<CategoryPage />} />
         <Route exact path='/brand' element={<BrandPage />} />
         <Route exact path='/all-orders' element={<AllOrdersPage />} />
