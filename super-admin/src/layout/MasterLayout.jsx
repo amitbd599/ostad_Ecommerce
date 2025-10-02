@@ -217,7 +217,7 @@ const MasterLayout = ({ children }) => {
               <ul className='sidebar-list'>
                 <li className='sidebar-list__item'>
                   <NavLink
-                    to='/admin-profile'
+                    to='/'
                     className={(navData) =>
                       navData.isActive
                         ? "sidebar-list__link activePage"

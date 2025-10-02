@@ -4,7 +4,6 @@ import ScrollToTop from "react-scroll-to-top";
 import LoginPage from "./pages/LoginPage";
 import DashboardProfilePage from "./pages/DashboardProfilePage";
 import CreateProductPage from "./pages/CreateProductPage";
-import UpdateProductPage from "./pages/UpdateProductPage";
 import AllProductPage from "./pages/AllProductPage";
 import CategoryPage from "./pages/CategoryPage";
 import BrandPage from "./pages/BrandPage";
@@ -19,9 +18,9 @@ function App() {
         <Route exact path='/login' element={<LoginPage />} />
 
         {/* dashboard */}
-        <Route exact path='/admin-profile' element={<DashboardProfilePage />} />
+        <Route exact path='/' element={<DashboardProfilePage />} />
         <Route exact path='/create-product' element={<CreateProductPage />} />
-   
+
         <Route exact path='/all-product' element={<AllProductPage />} />
         <Route exact path='/category' element={<CategoryPage />} />
         <Route exact path='/brand' element={<BrandPage />} />

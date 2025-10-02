@@ -9580,5 +9580,14 @@ input[type="number"] {
   }
 }
 
+.sidebar-list__link.activePage {
+  color: hsl(var(--heading-color));
+  background-color: hsl(var(--gray-seven));
+}
+
+.modal-dialog {
+  min-width: 70vw;
+}
+
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */
