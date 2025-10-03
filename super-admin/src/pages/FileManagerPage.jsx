@@ -1,6 +1,6 @@
 import MasterLayout from "../layout/MasterLayout";
 import Preloader from "../helper/Preloader";
-import AllOrders from "../components/AllOrders";
+import FileManager from "../components/FileManager";
 
 const FileManagerPage = () => {
   return (
@@ -8,8 +8,8 @@ const FileManagerPage = () => {
       {/* Preloader */}
       <Preloader />
 
-      {/* AllOrders */}
-      <AllOrders />
+      {/* FileManager */}
+      <FileManager />
     </MasterLayout>
   );
 };
