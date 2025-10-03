@@ -9,6 +9,7 @@ import CategoryPage from "./pages/CategoryPage";
 import BrandPage from "./pages/BrandPage";
 import AllOrdersPage from "./pages/AllOrdersPage";
 import AllReviewPage from "./pages/AllReviewPage";
+import FileManagerPage from "./pages/FileManagerPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route exact path='/category' element={<CategoryPage />} />
         <Route exact path='/brand' element={<BrandPage />} />
         <Route exact path='/all-orders' element={<AllOrdersPage />} />
+        <Route exact path='/file-manager' element={<FileManagerPage />} />
       </Routes>
     </BrowserRouter>
   );
