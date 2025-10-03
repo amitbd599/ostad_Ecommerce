@@ -499,7 +499,7 @@ const ProductDetails = () => {
                 </li>
                 <li className='meta-attribute__item'>
                   <span className='name'>Category</span>
-                  <span className='details'>Themes</span>
+                  <span className='details'>Ecommerce</span>
                 </li>
                 <li className='meta-attribute__item'>
                   <span className='name'>SKU</span>

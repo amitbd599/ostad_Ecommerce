@@ -25,12 +25,13 @@ const BannerOne = () => {
               <div className='hero-inner position-relative pe-lg-5'>
                 <div>
                   <h1 className='hero-inner__title'>
-                    2M+ curated digital products
+                    Exclusive Design Collection
                   </h1>
                   <p className='hero-inner__desc font-18'>
-                    Explore the best premium themes and plugins available for
-                    sale. Our unique collection is hand-curated by experts. Find
-                    and buy the perfect premium theme today.
+                    Your premier destination for fashion-forward clothing and
+                    accessories. We pride ourselves on offering a curated
+                    selection of rare and beautiful items sourced both locally
+                    and globally.
                   </p>
                 </div>
               </div>
@@ -64,7 +65,7 @@ const BannerOne = () => {
                     22k
                   </h5>
                   <span className='statistics__text text-heading font-14'>
-                    Themes &amp; Plugins
+                    Product &amp; Offering rare
                   </span>
                 </div>
               </div>

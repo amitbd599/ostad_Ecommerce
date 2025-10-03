@@ -149,13 +149,13 @@ const AllProduct = () => {
                     type='button'
                     className='filter-sidebar__button font-16 text-capitalize fw-500'
                   >
-                    Category
+                    Brands
                   </button>
                   <div className='filter-sidebar__content'>
                     <ul className='filter-sidebar-list'>
                       <li className='filter-sidebar-list__item'>
                         <Link to='/' className='filter-sidebar-list__text'>
-                          All Categories <span className='qty'>25489</span>
+                          All Brands <span className='qty'>25489</span>
                         </Link>
                       </li>
                       <li className='filter-sidebar-list__item'>
@@ -302,7 +302,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -380,7 +380,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -458,7 +458,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -536,7 +536,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -614,7 +614,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -692,7 +692,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -770,7 +770,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -848,7 +848,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -926,7 +926,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -1004,7 +1004,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -1082,7 +1082,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>
@@ -1160,7 +1160,7 @@ const AllProduct = () => {
                             to='/product-details'
                             className='btn btn-outline-light btn-sm pill'
                           >
-                            Live Demo
+                            View Product
                           </Link>
                         </div>
                       </div>

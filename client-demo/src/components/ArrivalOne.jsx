@@ -49,12 +49,12 @@ const ArrivalOne = () => {
                     </h6>
                     <div className='product-item__info flx-between gap-2'>
                       <span className='product-item__author'>
-                        by
                         <Link
                           to='/profile'
                           className='link hover-text-decoration-underline'
                         >
-                          themepix
+                          {" "}
+                          Admin
                         </Link>
                       </span>
                       <div className='flx-align gap-2'>
@@ -96,7 +96,7 @@ const ArrivalOne = () => {
                         to='/product-details'
                         className='btn btn-outline-light btn-sm pill'
                       >
-                        Live Demo
+                        View Product
                       </Link>
                     </div>
                   </div>
@@ -124,12 +124,12 @@ const ArrivalOne = () => {
                     </h6>
                     <div className='product-item__info flx-between gap-2'>
                       <span className='product-item__author'>
-                        by
                         <Link
                           to='/profile'
                           className='link hover-text-decoration-underline'
                         >
-                          themepix
+                          {" "}
+                          Admin
                         </Link>
                       </span>
                       <div className='flx-align gap-2'>
@@ -171,7 +171,7 @@ const ArrivalOne = () => {
                         to='/product-details'
                         className='btn btn-outline-light btn-sm pill'
                       >
-                        Live Demo
+                        View Product
                       </Link>
                     </div>
                   </div>
@@ -199,12 +199,12 @@ const ArrivalOne = () => {
                     </h6>
                     <div className='product-item__info flx-between gap-2'>
                       <span className='product-item__author'>
-                        by
                         <Link
                           to='/profile'
                           className='link hover-text-decoration-underline'
                         >
-                          themepix
+                          {" "}
+                          Admin
                         </Link>
                       </span>
                       <div className='flx-align gap-2'>
@@ -246,7 +246,7 @@ const ArrivalOne = () => {
                         to='/product-details'
                         className='btn btn-outline-light btn-sm pill'
                       >
-                        Live Demo
+                        View Product
                       </Link>
                     </div>
                   </div>
@@ -274,12 +274,12 @@ const ArrivalOne = () => {
                     </h6>
                     <div className='product-item__info flx-between gap-2'>
                       <span className='product-item__author'>
-                        by
                         <Link
                           to='/profile'
                           className='link hover-text-decoration-underline'
                         >
-                          themepix
+                          {" "}
+                          Admin
                         </Link>
                       </span>
                       <div className='flx-align gap-2'>
@@ -321,7 +321,7 @@ const ArrivalOne = () => {
                         to='/product-details'
                         className='btn btn-outline-light btn-sm pill'
                       >
-                        Live Demo
+                        View Product
                       </Link>
                     </div>
                   </div>
@@ -349,12 +349,12 @@ const ArrivalOne = () => {
                     </h6>
                     <div className='product-item__info flx-between gap-2'>
                       <span className='product-item__author'>
-                        by
                         <Link
                           to='/profile'
                           className='link hover-text-decoration-underline'
                         >
-                          themepix
+                          {" "}
+                          Admin
                         </Link>
                       </span>
                       <div className='flx-align gap-2'>
@@ -396,7 +396,7 @@ const ArrivalOne = () => {
                         to='/product-details'
                         className='btn btn-outline-light btn-sm pill'
                       >
-                        Live Demo
+                        View Product
                       </Link>
                     </div>
                   </div>
@@ -424,12 +424,12 @@ const ArrivalOne = () => {
                     </h6>
                     <div className='product-item__info flx-between gap-2'>
                       <span className='product-item__author'>
-                        by
                         <Link
                           to='/profile'
                           className='link hover-text-decoration-underline'
                         >
-                          themepix
+                          {" "}
+                          Admin
                         </Link>
                       </span>
                       <div className='flx-align gap-2'>
@@ -471,7 +471,7 @@ const ArrivalOne = () => {
                         to='/product-details'
                         className='btn btn-outline-light btn-sm pill'
                       >
-                        Live Demo
+                        View Product
                       </Link>
                     </div>
                   </div>
@@ -499,12 +499,12 @@ const ArrivalOne = () => {
                     </h6>
                     <div className='product-item__info flx-between gap-2'>
                       <span className='product-item__author'>
-                        by
                         <Link
                           to='/profile'
                           className='link hover-text-decoration-underline'
                         >
-                          themepix
+                          {" "}
+                          Admin
                         </Link>
                       </span>
                       <div className='flx-align gap-2'>
@@ -546,7 +546,7 @@ const ArrivalOne = () => {
                         to='/product-details'
                         className='btn btn-outline-light btn-sm pill'
                       >
-                        Live Demo
+                        View Product
                       </Link>
                     </div>
                   </div>
@@ -574,12 +574,12 @@ const ArrivalOne = () => {
                     </h6>
                     <div className='product-item__info flx-between gap-2'>
                       <span className='product-item__author'>
-                        by
                         <Link
                           to='/profile'
                           className='link hover-text-decoration-underline'
                         >
-                          themepix
+                          {" "}
+                          Admin
                         </Link>
                       </span>
                       <div className='flx-align gap-2'>
@@ -621,7 +621,7 @@ const ArrivalOne = () => {
                         to='/product-details'
                         className='btn btn-outline-light btn-sm pill'
                       >
-                        Live Demo
+                        View Product
                       </Link>
                     </div>
                   </div>

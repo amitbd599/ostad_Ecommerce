@@ -163,7 +163,7 @@ const FooterOne = () => {
         <div className='container container-two'>
           <div className='bottom-footer__inner flx-between gap-3'>
             <p className='bottom-footer__text font-14'>
-              Copyright © 2024 DPmarket, All rights reserved.
+              Copyright © 2025 PIXBO, All rights reserved.
             </p>
           </div>
         </div>

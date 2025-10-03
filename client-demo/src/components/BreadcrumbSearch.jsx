@@ -24,15 +24,15 @@ const BreadcrumbSearch = () => {
                 58,000+ products available for purchase
               </h3>
               <p className='breadcrumb-one-content__desc text-center text-black-three'>
-                Explore the best premium themes and plugins available for sale.
-                Our unique collection is hand-curated by experts. Find and buy
-                the perfect premium theme.
+                Explore the best Product available for sale. Our unique
+                collection is hand-curated by experts. Find and buy the perfect
+                premium product.
               </p>
               <form action='#' className='search-box'>
                 <input
                   type='text'
                   className='common-input common-input--lg pill shadow-sm'
-                  placeholder='Search theme, plugins & more...'
+                  placeholder='Search product & more...'
                 />
                 <button
                   type='submit'
