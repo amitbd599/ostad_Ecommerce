@@ -5,6 +5,7 @@ const AuthVerificationAdmin = require("../middlewares/AuthVerificationAdmin.js")
 
 const adminController = require("../controllers/adminController.js");
 const productController = require("../controllers/productController.js");
+const categoryController = require("../controllers/categoryController.js");
 
 //! ============== For Super admin ==================
 router.post("/admin-register", adminController.register);
@@ -21,5 +22,34 @@ router.post(
 );
 router.get("/all-products/:per_page/:page_no", productController.allProduct);
 router.get("/single-product/:id", productController.singleProduct);
+router.put(
+  "/update-product/:id",
+  AuthVerificationAdmin,
+  productController.updateProduct
+);
+router.delete(
+  "/delete-product/:id",
+  AuthVerificationAdmin,
+  productController.deleteProduct
+);
+
+//! ============== For category ==================
+router.post(
+  "/create-category",
+  AuthVerificationAdmin,
+  categoryController.createCategory
+);
+// router.get("/all-products/:per_page/:page_no", productController.allProduct);
+// router.get("/single-product/:id", productController.singleProduct);
+// router.put(
+//   "/update-product/:id",
+//   AuthVerificationAdmin,
+//   productController.updateProduct
+// );
+// router.delete(
+//   "/delete-product/:id",
+//   AuthVerificationAdmin,
+//   productController.deleteProduct
+// );
 
 module.exports = router;

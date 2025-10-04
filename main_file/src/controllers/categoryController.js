@@ -1,42 +1,17 @@
-const productModel = require("../models/productModel");
+const categoryModel = require("../models/CategoryModel");
 
-//! Product create
-exports.createProduct = async (req, res) => {
+//! Category create
+exports.createCategory = async (req, res) => {
   try {
-    const {
-      title,
-      images,
-      sort_description,
-      price,
-      is_discount,
-      discount_price,
-      remark,
-      stock,
-      color,
-      size,
-      description,
-      category_id,
-      brand_id,
-    } = req.body;
+    const { category_name, category_img } = req.body;
 
-    let data = await productModel.create({
-      title,
-      images,
-      sort_description,
-      price,
-      is_discount,
-      discount_price,
-      remark,
-      stock,
-      color,
-      size,
-      description,
-      category_id,
-      brand_id,
+    let data = await categoryModel.create({
+      category_name,
+      category_img,
     });
     res.status(200).json({
       success: true,
-      message: "Product created successfully",
+      message: "Category created successfully",
       data,
     });
   } catch (error) {
@@ -48,8 +23,8 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-//! Product Get All with Pagination
-exports.allProduct = async (req, res) => {
+//! Category Get All with Pagination
+exports.allCategory = async (req, res) => {
   try {
     let page_no = Number(req.params.page_no);
     let per_page = Number(req.params.per_page);
@@ -60,7 +35,7 @@ exports.allProduct = async (req, res) => {
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
-        products: [
+        Categorys: [
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
@@ -81,12 +56,12 @@ exports.allProduct = async (req, res) => {
       },
     };
 
-    let products = await productModel.aggregate([facetStage]);
+    let Categorys = await categoryModel.aggregate([facetStage]);
 
     res.status(200).json({
       success: true,
-      message: "Products fetched successfully",
-      data: products[0],
+      message: "Categorys fetched successfully",
+      data: Categorys[0],
     });
   } catch (error) {
     res.status(500).json({
@@ -97,15 +72,15 @@ exports.allProduct = async (req, res) => {
   }
 };
 
-//! Product Get Single
-exports.singleProduct = async (req, res) => {
+//! Category Get Single
+exports.singleCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    let data = await productModel.findById(id);
+    let data = await categoryModel.findById(id);
     res.status(200).json({
       success: true,
-      message: "Product fetched successfully",
+      message: "Category fetched successfully",
       data,
     });
   } catch (error) {
@@ -117,8 +92,8 @@ exports.singleProduct = async (req, res) => {
   }
 };
 
-//! Product update single
-exports.updateProduct = async (req, res) => {
+//! Category update single
+exports.updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -137,7 +112,7 @@ exports.updateProduct = async (req, res) => {
       brand_id,
     } = req.body;
 
-    let data = await productModel.findByIdAndUpdate(
+    let data = await categoryModel.findByIdAndUpdate(
       id,
       {
         title,
@@ -158,7 +133,7 @@ exports.updateProduct = async (req, res) => {
     );
     res.status(200).json({
       success: true,
-      message: "Product updated successfully",
+      message: "Category updated successfully",
       data,
     });
   } catch (error) {
@@ -170,15 +145,15 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-//! Product delete single
-exports.deleteProduct = async (req, res) => {
+//! Category delete single
+exports.deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    let data = await productModel.findByIdAndDelete(id);
+    let data = await categoryModel.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
-      message: "Product deleted successfully",
+      message: "Category deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
