@@ -46,10 +46,10 @@ router.put(
   AuthVerificationAdmin,
   categoryController.updateCategory
 );
-// router.delete(
-//   "/delete-product/:id",
-//   AuthVerificationAdmin,
-//   productController.deleteProduct
-// );
+router.delete(
+  "/delete-category/:id",
+  AuthVerificationAdmin,
+  categoryController.deleteCategory
+);
 
 module.exports = router;
