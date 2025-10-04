@@ -16,9 +16,9 @@ module.exports = (req, res, next) => {
     });
   } else {
     let email = decoded["email"];
-    let user_id = decoded["user_id"];
+    let _id = decoded["_id"];
     req.headers.email = email;
-    req.headers.user_id = user_id;
+    req.headers._id = _id;
     next();
   }
 };

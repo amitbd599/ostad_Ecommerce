@@ -1,8 +1,6 @@
 const jwt = require("jsonwebtoken");
 
 exports.EncodeToken = (email, _id) => {
-  console.log(email, _id);
-
   let key = process.env.JWT_KEY;
   let expire = process.env.JWT_Expire_Time;
   let payload = { email, _id };

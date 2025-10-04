@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const adminModel = require("../models/adminModel");
 const { EncodeToken } = require("../utility/tokenHelper");
@@ -103,7 +102,7 @@ exports.admin = async (req, res) => {
 //! user Logout
 exports.logout = async (req, res) => {
   try {
-    res.clearCookie("Token");
+    res.clearCookie("token");
     res.status(200).json({ success: true, message: "Logout success!" });
   } catch (e) {
     res.status(500).json({ success: false, error: e.toString() });
