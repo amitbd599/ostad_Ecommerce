@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
       };
 
       // Set cookie
-      res.cookie("Token", token, options);
+      res.cookie("token", token, options);
       res.status(200).json({
         success: true,
         message: "Login successful",
@@ -72,9 +72,12 @@ exports.login = async (req, res) => {
 };
 
 //! get User
-exports.user = async (req, res) => {
+exports.admin = async (req, res) => {
   try {
     let email = req.headers.email;
+
+    console.log(email);
+
     let MatchStage = {
       $match: {
         email,

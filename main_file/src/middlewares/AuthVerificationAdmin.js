@@ -1,4 +1,4 @@
-const { DecodeToken } = require("../utility/TokenHelper");
+const { DecodeToken } = require("../utility/tokenHelper");
 
 module.exports = (req, res, next) => {
   let token = req.headers["token"];
@@ -8,6 +8,7 @@ module.exports = (req, res, next) => {
   }
 
   let decoded = DecodeToken(token);
+
   if (decoded === null) {
     return res.status(401).json({
       status: 401,
