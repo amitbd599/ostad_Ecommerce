@@ -39,13 +39,13 @@ router.post(
   AuthVerificationAdmin,
   categoryController.createCategory
 );
-// router.get("/all-products/:per_page/:page_no", productController.allProduct);
-// router.get("/single-product/:id", productController.singleProduct);
-// router.put(
-//   "/update-product/:id",
-//   AuthVerificationAdmin,
-//   productController.updateProduct
-// );
+router.get("/all-category/:per_page/:page_no", categoryController.allCategory);
+router.get("/single-category/:id", categoryController.singleCategory);
+router.put(
+  "/update-category/:id",
+  AuthVerificationAdmin,
+  categoryController.updateCategory
+);
 // router.delete(
 //   "/delete-product/:id",
 //   AuthVerificationAdmin,

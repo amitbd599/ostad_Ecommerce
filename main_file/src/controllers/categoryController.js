@@ -35,33 +35,25 @@ exports.allCategory = async (req, res) => {
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
-        Categorys: [
+        Categories: [
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
           {
             $project: {
-              _id: 1,
-              title: 1,
-              images: 1,
-              price: 1,
-              is_discount: 1,
-              discount_price: 1,
-              remark: 1,
-              stock: 1,
-              createdAt: 1,
+              updatedAt: 0,
             },
           },
         ],
       },
     };
 
-    let Categorys = await categoryModel.aggregate([facetStage]);
+    let Categories = await categoryModel.aggregate([facetStage]);
 
     res.status(200).json({
       success: true,
-      message: "Categorys fetched successfully",
-      data: Categorys[0],
+      message: "Categories fetched successfully",
+      data: Categories[0],
     });
   } catch (error) {
     res.status(500).json({
@@ -96,38 +88,13 @@ exports.singleCategory = async (req, res) => {
 exports.updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      title,
-      images,
-      sort_description,
-      price,
-      is_discount,
-      discount_price,
-      remark,
-      stock,
-      color,
-      size,
-      description,
-      category_id,
-      brand_id,
-    } = req.body;
+    const { category_name, category_img } = req.body;
 
     let data = await categoryModel.findByIdAndUpdate(
       id,
       {
-        title,
-        images,
-        sort_description,
-        price,
-        is_discount,
-        discount_price,
-        remark,
-        stock,
-        color,
-        size,
-        description,
-        category_id,
-        brand_id,
+        category_name,
+        category_img,
       },
       { new: true }
     );
