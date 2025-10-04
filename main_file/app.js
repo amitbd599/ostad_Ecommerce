@@ -14,7 +14,7 @@ const dotENV = require("dotenv");
 dotENV.config();
 
 let URL =
-  "mongodb+srv://amitbd590:Czp5nsdi1itSzVRB@cluster0.wiqvbd4.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://amitbd590:Czp5nsdi1itSzVRB@cluster0.wiqvbd4.mongodb.net/ostad-ecommerce?retryWrites=true&w=majority&appName=Cluster0";
 let option = {
   user: process.env.DB_USER,
   pass: process.env.DB_PASS,

@@ -1,12 +1,12 @@
 const { DecodeToken } = require("../utility/TokenHelper");
 
 module.exports = async (req, res, next) => {
-  let Token = await req?.cookies?.Token;
-  let decoded = DecodeToken(Token);
+  let token = await req?.cookies?.token;
+  let decoded = DecodeToken(token);
   if (decoded === null) {
     return res.status(401).json({
       status: 401,
-      message: "Invalid Token",
+      message: "Invalid token",
     });
   } else {
     let email = decoded["email"];
