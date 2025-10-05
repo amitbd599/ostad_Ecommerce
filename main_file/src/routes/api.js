@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const AuthVerificationAdmin = require("../middlewares/AuthVerificationAdmin.js");
+const authVerificationAdmin = require("../middlewares/authVerificationAdmin.js");
 
 const adminController = require("../controllers/adminController.js");
 const productController = require("../controllers/productController.js");
@@ -11,64 +11,64 @@ const brandController = require("../controllers/brandController.js");
 //! ============== For Super admin ==================
 router.post("/admin-register", adminController.register);
 router.post("/admin-login", adminController.login);
-router.get("/admin", AuthVerificationAdmin, adminController.admin);
-router.get("/admin-logout", AuthVerificationAdmin, adminController.logout);
-router.put("/admin-update", AuthVerificationAdmin, adminController.update);
+router.get("/admin", authVerificationAdmin, adminController.admin);
+router.get("/admin-logout", authVerificationAdmin, adminController.logout);
+router.put("/admin-update", authVerificationAdmin, adminController.update);
 
 //! ============== For product ==================
 router.post(
   "/create-product",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   productController.createProduct
 );
 router.get("/all-products/:per_page/:page_no", productController.allProduct);
 router.get("/single-product/:id", productController.singleProduct);
 router.put(
   "/update-product/:id",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   productController.updateProduct
 );
 router.delete(
   "/delete-product/:id",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   productController.deleteProduct
 );
 
 //! ============== For category ==================
 router.post(
   "/create-category",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   categoryController.createCategory
 );
 router.get("/all-category/:per_page/:page_no", categoryController.allCategory);
 router.get("/single-category/:id", categoryController.singleCategory);
 router.put(
   "/update-category/:id",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   categoryController.updateCategory
 );
 router.delete(
   "/delete-category/:id",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   categoryController.deleteCategory
 );
 
 //! ============== For brands ==================
 router.post(
   "/create-brand",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   brandController.createBrand
 );
-router.get("/all-category/:per_page/:page_no", categoryController.allCategory);
+router.get("/all-brand/:per_page/:page_no", brandController.allBrand);
 router.get("/single-category/:id", categoryController.singleCategory);
 router.put(
   "/update-category/:id",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   categoryController.updateCategory
 );
 router.delete(
   "/delete-category/:id",
-  AuthVerificationAdmin,
+  authVerificationAdmin,
   categoryController.deleteCategory
 );
 
