@@ -6,6 +6,7 @@ const AuthVerificationAdmin = require("../middlewares/AuthVerificationAdmin.js")
 const adminController = require("../controllers/adminController.js");
 const productController = require("../controllers/productController.js");
 const categoryController = require("../controllers/categoryController.js");
+const brandController = require("../controllers/brandController.js");
 
 //! ============== For Super admin ==================
 router.post("/admin-register", adminController.register);
@@ -38,6 +39,25 @@ router.post(
   "/create-category",
   AuthVerificationAdmin,
   categoryController.createCategory
+);
+router.get("/all-category/:per_page/:page_no", categoryController.allCategory);
+router.get("/single-category/:id", categoryController.singleCategory);
+router.put(
+  "/update-category/:id",
+  AuthVerificationAdmin,
+  categoryController.updateCategory
+);
+router.delete(
+  "/delete-category/:id",
+  AuthVerificationAdmin,
+  categoryController.deleteCategory
+);
+
+//! ============== For brands ==================
+router.post(
+  "/create-brand",
+  AuthVerificationAdmin,
+  brandController.createBrand
 );
 router.get("/all-category/:per_page/:page_no", categoryController.allCategory);
 router.get("/single-category/:id", categoryController.singleCategory);
