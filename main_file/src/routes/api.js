@@ -60,7 +60,7 @@ router.post(
   brandController.createBrand
 );
 router.get("/all-brand/:per_page/:page_no", brandController.allBrand);
-router.get("/single-category/:id", categoryController.singleCategory);
+router.get("/single-brand/:id", brandController.singleBrand);
 router.put(
   "/update-category/:id",
   authVerificationAdmin,
