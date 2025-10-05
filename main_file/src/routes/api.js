@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 const authVerificationAdmin = require("../middlewares/authVerificationAdmin.js");
+const fileUploads = require("../middlewares/fileUpload.js");
 
 const adminController = require("../controllers/adminController.js");
 const productController = require("../controllers/productController.js");
 const categoryController = require("../controllers/categoryController.js");
 const brandController = require("../controllers/brandController.js");
+const fileController = require("../controllers/fileController.js");
 
 //! ============== For Super admin ==================
 router.post("/admin-register", adminController.register);
@@ -71,5 +73,16 @@ router.delete(
   authVerificationAdmin,
   brandController.deleteBrand
 );
+
+// ! File Uploads
+// ! File Uploads
+router.post(
+  "/file-upload",
+  authVerificationAdmin,
+  fileUploads.single("file"),
+  fileController.fileUpload
+);
+router.delete("/file-remove", authVerificationAdmin, fileController.fileRemove);
+router.get("/all-file/:per_page/:page_no", fileController.allFile);
 
 module.exports = router;
