@@ -62,14 +62,14 @@ router.post(
 router.get("/all-brand/:per_page/:page_no", brandController.allBrand);
 router.get("/single-brand/:id", brandController.singleBrand);
 router.put(
-  "/update-category/:id",
+  "/update-brand/:id",
   authVerificationAdmin,
-  categoryController.updateCategory
+  brandController.updateBrand
 );
 router.delete(
-  "/delete-category/:id",
+  "/delete-brand/:id",
   authVerificationAdmin,
-  categoryController.deleteCategory
+  brandController.deleteBrand
 );
 
 module.exports = router;
