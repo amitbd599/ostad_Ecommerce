@@ -23,7 +23,10 @@ router.post(
   authVerificationAdmin,
   productController.createProduct
 );
-router.get("/all-products/:per_page/:page_no", productController.allProduct);
+router.get(
+  "/all-products/:category_id/:brand_id/:remark/:per_page/:page_no",
+  productController.allProduct
+);
 router.get("/single-product/:id", productController.singleProduct);
 router.put(
   "/update-product/:id",
@@ -35,6 +38,12 @@ router.delete(
   authVerificationAdmin,
   productController.deleteProduct
 );
+
+//! Product List By Similar category routes
+// router.get(
+//   "/product-list-by-similar-category/:category_id/:per_page/:page_no",
+//   productController.productListBySimilarCategory
+// );
 
 //! ============== For category ==================
 router.post(
@@ -74,7 +83,6 @@ router.delete(
   brandController.deleteBrand
 );
 
-// ! File Uploads
 // ! File Uploads
 router.post(
   "/file-upload",

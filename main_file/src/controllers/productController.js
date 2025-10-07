@@ -1,4 +1,6 @@
+const mongoose = require("mongoose");
 const productModel = require("../models/productModel");
+const ObjectId = mongoose.Types.ObjectId;
 
 //! Product create
 exports.createProduct = async (req, res) => {
@@ -53,10 +55,33 @@ exports.allProduct = async (req, res) => {
   try {
     let page_no = Number(req.params.page_no);
     let per_page = Number(req.params.per_page);
+    let category_id = req.params.category_id;
+    let brand_id = req.params.brand_id;
+    let remark = req.params.remark;
 
     let skipRow = (page_no - 1) * per_page;
 
     let sortStage = { createdAt: -1 };
+
+    let MatchingStage;
+    if (category_id !== "0") {
+      MatchingStage = {
+        $match: { category_id: new ObjectId(category_id) },
+      };
+    } else if (brand_id !== "0") {
+      MatchingStage = {
+        $match: { brand_id: new ObjectId(brand_id) },
+      };
+    } else if (remark !== "0") {
+      MatchingStage = {
+        $match: { remark: remark },
+      };
+    } else {
+      MatchingStage = {
+        $match: {},
+      };
+    }
+
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
@@ -67,6 +92,8 @@ exports.allProduct = async (req, res) => {
           {
             $project: {
               _id: 1,
+              category_id: 1,
+              brand_id: 1,
               title: 1,
               images: 1,
               price: 1,
@@ -81,7 +108,7 @@ exports.allProduct = async (req, res) => {
       },
     };
 
-    let products = await productModel.aggregate([facetStage]);
+    let products = await productModel.aggregate([MatchingStage, facetStage]);
 
     res.status(200).json({
       success: true,

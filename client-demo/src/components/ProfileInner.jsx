@@ -2,46 +2,16 @@ const ProfileInner = () => {
   return (
     <>
       {/* Cover Photo Start */}
-      <div className='cover-photo position-relative z-index-1 overflow-hidden'>
-        <div className='avatar-upload'>
-          <div className='avatar-edit'>
-            <input type='file' id='imageUploadTwo' accept='.png, .jpg, .jpeg' />
-            <label htmlFor='imageUploadTwo'>
-              <span className='icon'>
-                {" "}
-                <img src='assets/images/icons/camera-two.svg' alt='' />{" "}
-              </span>
-              <span className='text'>Change Cover</span>
-            </label>
-          </div>
-          <div className='avatar-preview'>
-            <div id='imagePreviewTwo'></div>
-          </div>
-        </div>
-      </div>
+      <div className='cover-photo position-relative z-index-1 overflow-hidden'></div>
       {/* Cover Photo End */}
-      <div className='dashboard-body__content profile-content-wrapper z-index-1 position-relative mt--100'>
+      {/* Cover Photo End */}
+      <div className='dashboard-body__content profile-content-wrapper z-index-1 position-relative mt--150'>
         {/* Profile Content Start */}
         <div className='profile'>
           <div className='row gy-4'>
             <div className='col-xxl-3 col-xl-4'>
               <div className='profile-info'>
                 <div className='profile-info__inner mb-40 text-center'>
-                  <div className='avatar-upload mb-24'>
-                    <div className='avatar-edit'>
-                      <input
-                        type='file'
-                        id='imageUpload'
-                        accept='.png, .jpg, .jpeg'
-                      />
-                      <label htmlFor='imageUpload'>
-                        <img src='assets/images/icons/camera.svg' alt='' />
-                      </label>
-                    </div>
-                    <div className='avatar-preview'>
-                      <div id='imagePreview'></div>
-                    </div>
-                  </div>
                   <h5 className='profile-info__name mb-1'>Michel Smith</h5>
                   <span className='profile-info__designation font-14'>
                     Exclusive Author
@@ -96,17 +66,7 @@ const ProfileInner = () => {
                     </span>
                     <span className='profile-info-list__info'>Bangladesh</span>
                   </li>
-                  <li className='profile-info-list__item'>
-                    <span className='profile-info-list__content flx-align flex-nowrap gap-2'>
-                      <img
-                        src='assets/images/icons/profile-info-icon5.svg'
-                        alt=''
-                        className='icon'
-                      />
-                      <span className='text text-heading fw-500'>Balance</span>
-                    </span>
-                    <span className='profile-info-list__info'>$0.00 USD</span>
-                  </li>
+
                   <li className='profile-info-list__item'>
                     <span className='profile-info-list__content flx-align flex-nowrap gap-2'>
                       <img
@@ -121,19 +81,6 @@ const ProfileInner = () => {
                     <span className='profile-info-list__info'>
                       Jan, 01, 2024
                     </span>
-                  </li>
-                  <li className='profile-info-list__item'>
-                    <span className='profile-info-list__content flx-align flex-nowrap gap-2'>
-                      <img
-                        src='assets/images/icons/profile-info-icon7.svg'
-                        alt=''
-                        className='icon'
-                      />
-                      <span className='text text-heading fw-500'>
-                        Purchased
-                      </span>
-                    </span>
-                    <span className='profile-info-list__info'>0 items</span>
                   </li>
                 </ul>
               </div>
@@ -189,140 +136,184 @@ const ProfileInner = () => {
                       <form action='#' autoComplete='off'>
                         <div className='row gy-4'>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='fName'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
                               First Name
                             </label>
                             <input
                               type='text'
                               className='common-input border'
-                              id='fName'
-                              defaultValue='Michel'
                               placeholder='First Name'
                             />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='lastNamee'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
                               Last Name
                             </label>
                             <input
                               type='text'
                               className='common-input border'
-                              id='lastNamee'
-                              defaultValue='Smith'
                               placeholder='Last Name'
                             />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='phonee'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
                               Phone Number
                             </label>
                             <input
                               type='tel'
                               className='common-input border'
-                              id='phonee'
-                              defaultValue='+880 15589 236 45'
                               placeholder='Phone Number'
                             />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='emailAdddd'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Email Address
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Email
                             </label>
                             <input
                               type='email'
                               className='common-input border'
-                              id='emailAdddd'
-                              defaultValue='michel15@gmail.com'
                               placeholder='Email Address'
                             />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='cityyy'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Address
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder=' Address'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
                               City
                             </label>
-                            <div className='select-has-icon'>
-                              <select
-                                className='common-input border'
-                                id='cityyy'
-                                defaultValue={1}
-                              >
-                                <option value={1}>Dhaka</option>
-                                <option value={1}>Chandpur</option>
-                                <option value={1}>Comilla</option>
-                                <option value={1}>Rangpur</option>
-                              </select>
-                            </div>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='City'
+                            />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='Stateee'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              State/Region
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Country
                             </label>
-                            <div className='select-has-icon'>
-                              <select
-                                className='common-input border'
-                                id='Stateee'
-                                defaultValue={1}
-                              >
-                                <option value={1}>USA</option>
-                                <option value={1}>Bangladesh</option>
-                                <option value={1}>India</option>
-                                <option value={1}>Pakistan</option>
-                              </select>
-                            </div>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Country'
+                            />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='Postcodeee'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Fax
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Fax'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
                               Postcode
                             </label>
                             <input
                               type='text'
                               className='common-input border'
-                              id='Postcodeee'
-                              defaultValue={1219}
-                              placeholder='Post Code'
+                              placeholder='Postcode'
                             />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='Countryyy'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Country
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              State
                             </label>
-                            <div className='select-has-icon'>
-                              <select
-                                className='common-input border'
-                                id='Countryyy'
-                                defaultValue={1}
-                              >
-                                <option value={1}>USA</option>
-                                <option value={1}>Bangladesh</option>
-                                <option value={1}>India</option>
-                                <option value={1}>Pakistan</option>
-                              </select>
-                            </div>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='State'
+                            />
                           </div>
+
+                          <div className='col-sm-6 col-xs-6 pt-3'>
+                            <label className='form-label font-18 font-heading fw-600'>
+                              Shipping Details:
+                            </label>
+                          </div>
+                          <hr />
+
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping Name
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping Name'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping Phone
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping Phone'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping Address
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping Address'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping City
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping City'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping Country
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping Country'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping Postcode
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping Postcode'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping State
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping State'
+                            />
+                          </div>
+
                           <div className='col-sm-12 text-end'>
                             <button className='btn btn-main btn-lg pill mt-4'>
                               {" "}
