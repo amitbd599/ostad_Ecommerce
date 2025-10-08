@@ -58,6 +58,7 @@ exports.allProduct = async (req, res) => {
     let category_id = req.params.category_id;
     let brand_id = req.params.brand_id;
     let remark = req.params.remark;
+    let keyword = req.params.keyword;
 
     let skipRow = (page_no - 1) * per_page;
 
@@ -75,6 +76,19 @@ exports.allProduct = async (req, res) => {
     } else if (remark !== "0") {
       MatchingStage = {
         $match: { remark: remark },
+      };
+    } else if (keyword !== "0") {
+      let searchRegex = {
+        $regex: keyword,
+        $options: "i",
+      };
+      let searchParams = [{ title: searchRegex }];
+
+      let searchStage = {
+        $or: searchParams,
+      };
+      MatchingStage = {
+        $match: searchStage,
       };
     } else {
       MatchingStage = {

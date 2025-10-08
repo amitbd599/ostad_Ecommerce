@@ -24,7 +24,7 @@ router.post(
   productController.createProduct
 );
 router.get(
-  "/all-products/:category_id/:brand_id/:remark/:per_page/:page_no",
+  "/all-products/:category_id/:brand_id/:remark/:keyword/:per_page/:page_no",
   productController.allProduct
 );
 router.get("/single-product/:id", productController.singleProduct);
@@ -38,12 +38,6 @@ router.delete(
   authVerificationAdmin,
   productController.deleteProduct
 );
-
-//! Product List By Similar category routes
-// router.get(
-//   "/product-list-by-similar-category/:category_id/:per_page/:page_no",
-//   productController.productListBySimilarCategory
-// );
 
 //! ============== For category ==================
 router.post(
