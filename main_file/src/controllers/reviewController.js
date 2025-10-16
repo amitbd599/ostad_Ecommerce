@@ -38,7 +38,7 @@ exports.allReview = async (req, res) => {
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
-        Categories: [
+        data: [
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
@@ -51,12 +51,12 @@ exports.allReview = async (req, res) => {
       },
     };
 
-    let Categories = await reviewModel.aggregate([facetStage]);
+    let data = await reviewModel.aggregate([facetStage]);
 
     res.status(200).json({
       success: true,
-      message: "Categories fetched successfully",
-      data: Categories[0],
+      message: "Review fetched successfully",
+      data: data[0],
     });
   } catch (error) {
     res.status(500).json({

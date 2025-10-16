@@ -85,8 +85,8 @@ router.post(
   authVerificationUser,
   reviewController.createReview
 );
-// router.get("/all-brand/:per_page/:page_no", brandController.allBrand);
-// router.get("/single-brand/:id", brandController.singleBrand);
+router.get("/all-review/:per_page/:page_no", reviewController.allReview);
+router.get("/single-review/:id", reviewController.singleReview);
 // router.put(
 //   "/update-brand/:id",
 //   authVerificationAdmin,
