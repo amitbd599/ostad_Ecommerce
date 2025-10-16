@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const authVerificationAdmin = require("../middlewares/authVerificationAdmin.js");
+const authVerificationUser = require("../middlewares/authVerificationUser.js");
 const fileUploads = require("../middlewares/fileUpload.js");
 
 const adminController = require("../controllers/adminController.js");
 const productController = require("../controllers/productController.js");
 const categoryController = require("../controllers/categoryController.js");
 const brandController = require("../controllers/brandController.js");
+const reviewController = require("../controllers/reviewController.js");
 const fileController = require("../controllers/fileController.js");
 
 //! ============== For Super admin ==================
@@ -76,6 +78,25 @@ router.delete(
   authVerificationAdmin,
   brandController.deleteBrand
 );
+
+//! ============== For review ==================
+router.post(
+  "/create-review",
+  authVerificationUser,
+  reviewController.createReview
+);
+// router.get("/all-brand/:per_page/:page_no", brandController.allBrand);
+// router.get("/single-brand/:id", brandController.singleBrand);
+// router.put(
+//   "/update-brand/:id",
+//   authVerificationAdmin,
+//   brandController.updateBrand
+// );
+// router.delete(
+//   "/delete-brand/:id",
+//   authVerificationAdmin,
+//   brandController.deleteBrand
+// );
 
 // ! File Uploads
 router.post(

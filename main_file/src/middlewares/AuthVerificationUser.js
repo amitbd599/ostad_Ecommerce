@@ -1,4 +1,4 @@
-const { DecodeToken } = require("../utility/TokenHelper");
+const { DecodeToken } = require("../utility/tokenHelper");
 
 module.exports = async (req, res, next) => {
   let token = await req?.cookies?.token;
