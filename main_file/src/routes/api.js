@@ -11,6 +11,7 @@ const productController = require("../controllers/productController.js");
 const categoryController = require("../controllers/categoryController.js");
 const brandController = require("../controllers/brandController.js");
 const reviewController = require("../controllers/reviewController.js");
+const cartController = require("../controllers/cartController.js");
 const fileController = require("../controllers/fileController.js");
 
 //! ============== For Super admin ==================
@@ -87,25 +88,6 @@ router.delete(
   brandController.deleteBrand
 );
 
-//! ============== For user ==================
-router.post(
-  "/create-brand",
-  authVerificationAdmin,
-  brandController.createBrand
-);
-// router.get("/all-brand/:per_page/:page_no", brandController.allBrand);
-// router.get("/single-brand/:id", brandController.singleBrand);
-// router.put(
-//   "/update-brand/:id",
-//   authVerificationAdmin,
-//   brandController.updateBrand
-// );
-// router.delete(
-//   "/delete-brand/:id",
-//   authVerificationAdmin,
-//   brandController.deleteBrand
-// );
-
 //! ============== For review ==================
 router.post(
   "/create-review",
@@ -124,6 +106,21 @@ router.delete(
   authVerificationUser,
   reviewController.deleteReview
 );
+
+//! ============== For cart ==================
+router.post("/create-cart", authVerificationUser, cartController.createCart);
+// router.get("/all-review/:per_page/:page_no", reviewController.allReview);
+// router.get("/single-review/:id", reviewController.singleReview);
+// router.put(
+//   "/update-review/:id",
+//   authVerificationUser,
+//   reviewController.updateReview
+// );
+// router.delete(
+//   "/delete-review/:id",
+//   authVerificationUser,
+//   reviewController.deleteReview
+// );
 
 // ! File Uploads
 router.post(
