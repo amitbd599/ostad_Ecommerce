@@ -3,10 +3,7 @@ const reviewModel = require("../models/reviewModel");
 //! Review create
 exports.createReview = async (req, res) => {
   try {
-    let user_id = req.headers.user_id;
-
-    console.log(user_id);
-
+    let user_id = req.headers._id;
     const { product_id, invoice_id, des, rating } = req.body;
 
     let data = await reviewModel.create({
@@ -94,14 +91,18 @@ exports.singleReview = async (req, res) => {
 //! Review update single
 exports.updateReview = async (req, res) => {
   try {
+    let user_id = req.headers._id;
+    const { product_id, invoice_id, des, rating } = req.body;
     const { id } = req.params;
-    const { review_name, review_img } = req.body;
 
     let data = await reviewModel.findByIdAndUpdate(
       id,
       {
-        review_name,
-        review_img,
+        user_id,
+        product_id,
+        invoice_id,
+        des,
+        rating,
       },
       { new: true }
     );

@@ -119,11 +119,11 @@ router.put(
   authVerificationUser,
   reviewController.updateReview
 );
-// router.delete(
-//   "/delete-brand/:id",
-//   authVerificationAdmin,
-//   brandController.deleteBrand
-// );
+router.delete(
+  "/delete-review/:id",
+  authVerificationUser,
+  reviewController.deleteReview
+);
 
 // ! File Uploads
 router.post(
