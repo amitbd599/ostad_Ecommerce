@@ -6,6 +6,7 @@ const authVerificationUser = require("../middlewares/authVerificationUser.js");
 const fileUploads = require("../middlewares/fileUpload.js");
 
 const adminController = require("../controllers/adminController.js");
+const userController = require("../controllers/userController.js");
 const productController = require("../controllers/productController.js");
 const categoryController = require("../controllers/categoryController.js");
 const brandController = require("../controllers/brandController.js");
@@ -18,6 +19,13 @@ router.post("/admin-login", adminController.login);
 router.get("/admin", authVerificationAdmin, adminController.admin);
 router.get("/admin-logout", authVerificationAdmin, adminController.logout);
 router.put("/admin-update", authVerificationAdmin, adminController.update);
+
+//! ============== For user ==================
+router.post("/user-register", userController.register);
+router.post("/user-login", userController.login);
+router.get("/user", authVerificationUser, userController.admin);
+router.get("/user-logout", authVerificationUser, userController.logout);
+router.put("/user-update", authVerificationUser, userController.update);
 
 //! ============== For product ==================
 router.post(
@@ -79,6 +87,25 @@ router.delete(
   brandController.deleteBrand
 );
 
+//! ============== For user ==================
+router.post(
+  "/create-brand",
+  authVerificationAdmin,
+  brandController.createBrand
+);
+// router.get("/all-brand/:per_page/:page_no", brandController.allBrand);
+// router.get("/single-brand/:id", brandController.singleBrand);
+// router.put(
+//   "/update-brand/:id",
+//   authVerificationAdmin,
+//   brandController.updateBrand
+// );
+// router.delete(
+//   "/delete-brand/:id",
+//   authVerificationAdmin,
+//   brandController.deleteBrand
+// );
+
 //! ============== For review ==================
 router.post(
   "/create-review",
@@ -87,11 +114,11 @@ router.post(
 );
 router.get("/all-review/:per_page/:page_no", reviewController.allReview);
 router.get("/single-review/:id", reviewController.singleReview);
-// router.put(
-//   "/update-brand/:id",
-//   authVerificationAdmin,
-//   brandController.updateBrand
-// );
+router.put(
+  "/update-review/:id",
+  authVerificationUser,
+  reviewController.updateReview
+);
 // router.delete(
 //   "/delete-brand/:id",
 //   authVerificationAdmin,

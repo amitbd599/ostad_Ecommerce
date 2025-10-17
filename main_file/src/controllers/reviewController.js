@@ -3,7 +3,11 @@ const reviewModel = require("../models/reviewModel");
 //! Review create
 exports.createReview = async (req, res) => {
   try {
-    const { user_id, product_id, invoice_id, des, rating } = req.body;
+    let user_id = req.headers.user_id;
+
+    console.log(user_id);
+
+    const { product_id, invoice_id, des, rating } = req.body;
 
     let data = await reviewModel.create({
       user_id,
