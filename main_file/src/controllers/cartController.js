@@ -57,6 +57,88 @@ exports.createCart = async (req, res) => {
   }
 };
 
+//! cart read
+exports.readCart = async (req, res) => {
+  try {
+    let user_id = new ObjectId(req.headers._id);
+
+    console.log(user_id);
+
+    let matchStage = { $match: { user_id } };
+    let joinWithProduct = {
+      $lookup: {
+        from: "products",
+        localField: "product_id",
+        foreignField: "_id",
+        as: "product",
+      },
+    };
+    let unwindProductStage = { $unwind: "$product" };
+    let joinWithBrand = {
+      $lookup: {
+        from: "brands",
+        localField: "product.brand_id",
+        foreignField: "_id",
+        as: "brand",
+      },
+    };
+    let joinWithCategory = {
+      $lookup: {
+        from: "categories",
+        localField: "product.category_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    };
+    let unwindBrandStage = { $unwind: "$brand" };
+    let unwindCategoryStage = { $unwind: "$category" };
+    let projectionStage = {
+      $project: {
+        _id: 1,
+        user_id: 0,
+        "product._id": 0,
+        "product.category_id": 0,
+        "product.brand_id": 0,
+        "product.createdAt": 0,
+        "product.updatedAt": 0,
+        "brand._id": 0,
+        "brand.createdAt": 0,
+        "brand.updatedAt": 0,
+        "category._id": 0,
+        "category.createdAt": 0,
+        "category.updatedAt": 0,
+
+        category_id: 0,
+        brand_id: 0,
+        createdAt: 0,
+        updatedAt: 0,
+      },
+    };
+    const data = await cartModel.aggregate([
+      matchStage,
+      joinWithProduct,
+      unwindProductStage,
+      joinWithBrand,
+      unwindBrandStage,
+      joinWithCategory,
+      unwindCategoryStage,
+      projectionStage,
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: "Cart fetched successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
 //! cart update
 exports.updateCart = async (req, res) => {
   try {

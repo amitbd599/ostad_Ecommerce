@@ -109,6 +109,11 @@ router.delete(
 
 //! ============== For cart ==================
 router.post("/create-cart", authVerificationUser, cartController.createCart);
+router.get(
+  "/read-cart/:cart_id",
+  authVerificationUser,
+  cartController.readCart
+);
 router.put(
   "/update-cart/:cart_id",
   authVerificationUser,
