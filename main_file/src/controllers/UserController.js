@@ -112,10 +112,8 @@ exports.logout = async (req, res) => {
 //! update user
 exports.update = async (req, res) => {
   try {
-    console.log(req.headers._id, req.headers.email);
-
     const { email, password } = req.body;
-    const userId = req.headers._id;
+    const _id = req.headers._id;
 
     let updatedData = { email };
 
@@ -125,18 +123,36 @@ exports.update = async (req, res) => {
       updatedData.password = hashedPassword;
     }
 
-    // Update user
-    const updatedUser = await userModel.findByIdAndUpdate(userId, updatedData, {
-      new: true,
-    });
+    // isMatch password
+    const isMatch = await bcrypt.compare(password, updatedData.password);
 
-    res.status(200).json({
-      success: true,
-      message: "User updated successfully",
-      user: {
-        email: updatedUser.email,
-      },
-    });
+    if (isMatch) {
+      let token = EncodeToken(email, _id.toString());
+
+      // Update user
+      const user = await userModel.findByIdAndUpdate(_id, updatedData, {
+        new: true,
+      });
+
+      let options = {
+        maxAge: process.env.Cookie_Expire_Time,
+        httpOnly: false,
+        sameSite: "none",
+        secure: true,
+      };
+
+      // Set cookie
+      res.cookie("token", token, options);
+      res.status(200).json({
+        success: true,
+        message: "Update data successful",
+        user: {
+          id: user._id,
+          email: user.email,
+        },
+        token: token,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
