@@ -114,7 +114,11 @@ router.put(
   authVerificationUser,
   cartController.updateCart
 );
-// router.get("/single-review/:id", reviewController.singleReview);
+router.delete(
+  "/delete-cart/:cart_id",
+  authVerificationUser,
+  cartController.deleteCart
+);
 // router.put(
 //   "/update-review/:id",
 //   authVerificationUser,

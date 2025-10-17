@@ -71,8 +71,26 @@ exports.updateCart = async (req, res) => {
     );
     res.status(200).json({
       success: true,
-      message: "Product add to cart successfully",
+      message: "Cart update successfully",
       data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! cart delete
+exports.deleteCart = async (req, res) => {
+  try {
+    let cart_id = new ObjectId(req.params.cart_id);
+    const data = await cartModel.deleteOne({ _id: cart_id });
+    res.status(200).json({
+      success: true,
+      message: "Cart deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
