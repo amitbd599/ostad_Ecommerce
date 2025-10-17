@@ -109,7 +109,11 @@ router.delete(
 
 //! ============== For cart ==================
 router.post("/create-cart", authVerificationUser, cartController.createCart);
-// router.get("/all-review/:per_page/:page_no", reviewController.allReview);
+router.put(
+  "/update-cart/:cart_id",
+  authVerificationUser,
+  cartController.updateCart
+);
 // router.get("/single-review/:id", reviewController.singleReview);
 // router.put(
 //   "/update-review/:id",
