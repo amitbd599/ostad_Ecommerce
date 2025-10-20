@@ -124,16 +124,8 @@ router.delete(
   authVerificationUser,
   cartController.deleteCart
 );
-// router.put(
-//   "/update-review/:id",
-//   authVerificationUser,
-//   reviewController.updateReview
-// );
-// router.delete(
-//   "/delete-review/:id",
-//   authVerificationUser,
-//   reviewController.deleteReview
-// );
+
+//! ============== For Invoice & Payment ==================
 
 // ! File Uploads
 router.post(
