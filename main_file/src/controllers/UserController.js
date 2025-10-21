@@ -112,10 +112,46 @@ exports.logout = async (req, res) => {
 //! update user
 exports.update = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const {
+      email,
+      password,
+      cus_add,
+      cus_city,
+      cus_country,
+      cus_fax,
+      cus_name,
+      cus_phone,
+      cus_postcode,
+      cus_state,
+      ship_add,
+      ship_city,
+      ship_country,
+      ship_name,
+      ship_phone,
+      ship_postcode,
+      ship_state,
+    } = req.body;
     const _id = req.headers._id;
 
-    let updatedData = { email };
+    let updatedData = {
+      email,
+      password,
+      cus_add,
+      cus_city,
+      cus_country,
+      cus_fax,
+      cus_name,
+      cus_phone,
+      cus_postcode,
+      cus_state,
+      ship_add,
+      ship_city,
+      ship_country,
+      ship_name,
+      ship_phone,
+      ship_postcode,
+      ship_state,
+    };
 
     // যদি password ফিল্ড থাকে, তবে সেটি bcrypt দিয়ে হ্যাশ করে আপডেট করবো
     if (password) {

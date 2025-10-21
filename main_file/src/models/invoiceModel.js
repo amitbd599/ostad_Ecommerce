@@ -9,8 +9,8 @@ const DataSchema = mongoose.Schema(
     val_id: { type: String, required: true },
     deliver_status: { type: String, required: true },
     payment_status: { type: String, required: true },
-    vat: { type: String, required: true },
-    total: { type: String, required: true },
+    vat: { type: Number, required: true },
+    total: { type: Number, required: true },
   },
   {
     timestamps: true,

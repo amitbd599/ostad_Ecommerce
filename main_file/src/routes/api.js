@@ -12,6 +12,7 @@ const categoryController = require("../controllers/categoryController.js");
 const brandController = require("../controllers/brandController.js");
 const reviewController = require("../controllers/reviewController.js");
 const cartController = require("../controllers/cartController.js");
+const invoiceController = require("../controllers/invoiceController.js");
 const fileController = require("../controllers/fileController.js");
 
 //! ============== For Super admin ==================
@@ -114,11 +115,11 @@ router.get(
   authVerificationUser,
   cartController.readCart
 );
-router.put(
-  "/update-cart/:cart_id",
-  authVerificationUser,
-  cartController.updateCart
-);
+// router.put(
+//   "/update-cart/:cart_id",
+//   authVerificationUser,
+//   cartController.updateCart
+// );
 router.delete(
   "/delete-cart/:cart_id",
   authVerificationUser,
@@ -126,6 +127,11 @@ router.delete(
 );
 
 //! ============== For Invoice & Payment ==================
+router.post(
+  "/create-invoice",
+  authVerificationUser,
+  invoiceController.createInvoice
+);
 
 // ! File Uploads
 router.post(
