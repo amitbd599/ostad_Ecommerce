@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { baseURLFile } from "../helper/config";
 
 const ArrivalOne = () => {
-  let { allProduct, newArrivalProductsRequest } = productStore();
+  let { allNewArrivalProducts, newArrivalProductsRequest } = productStore();
 
   useEffect(() => {
     (async () => {
@@ -13,7 +13,7 @@ const ArrivalOne = () => {
     })();
   }, [newArrivalProductsRequest]);
 
-  console.log(allProduct);
+  console.log(allNewArrivalProducts);
 
   return (
     <section className='arrival-product padding-y-120 section-bg position-relative z-index-1'>
@@ -33,7 +33,7 @@ const ArrivalOne = () => {
         </div>
 
         <div className='row gy-4'>
-          {allProduct === null ? (
+          {allNewArrivalProducts === null ? (
             <>
               {[...Array(4)].map(() => (
                 <div className='col-xl-3 col-lg-4 col-sm-6'>
@@ -45,7 +45,7 @@ const ArrivalOne = () => {
             </>
           ) : (
             <>
-              {allProduct?.map((item, index) => (
+              {allNewArrivalProducts?.map((item, index) => (
                 <div key={index} className='col-xl-3 col-lg-4 col-sm-6'>
                   <div className='product-item'>
                     <div className='product-item__thumb d-flex'>

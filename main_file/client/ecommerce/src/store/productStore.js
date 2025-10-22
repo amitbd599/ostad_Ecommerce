@@ -4,7 +4,7 @@ import { baseURL } from "../helper/config";
 
 const productStore = create((set) => ({
   // all-product
-  allProduct: null,
+  allNewArrivalProducts: null,
   newArrivalProductsRequest: async () => {
     let res = await axios.get(baseURL + `/all-products/0/0/0/0/8/1`, {
       withCredentials: true,
@@ -12,7 +12,7 @@ const productStore = create((set) => ({
     });
 
     if (res?.data?.success === true) {
-      set({ allProduct: res?.data?.data?.products });
+      set({ allNewArrivalProducts: res?.data?.data?.products });
     }
   },
 }));
