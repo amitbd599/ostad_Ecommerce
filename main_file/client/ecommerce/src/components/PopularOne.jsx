@@ -13,8 +13,6 @@ const PopularOne = () => {
     })();
   }, [allCategoryRequest]);
 
-  console.log(allCategory);
-
   function SampleNextArrow(props) {
     const { className, onClick } = props;
     return (

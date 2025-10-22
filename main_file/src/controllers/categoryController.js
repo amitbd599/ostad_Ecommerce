@@ -48,12 +48,12 @@ exports.allCategory = async (req, res) => {
       },
     };
 
-    let Categories = await categoryModel.aggregate([facetStage]);
+    let categories = await categoryModel.aggregate([facetStage]);
 
     res.status(200).json({
       success: true,
       message: "Categories fetched successfully",
-      data: Categories[0],
+      data: categories[0],
     });
   } catch (error) {
     res.status(500).json({

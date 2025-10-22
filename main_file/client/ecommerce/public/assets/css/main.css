@@ -9580,5 +9580,8 @@ input[type="number"] {
   }
 }
 
+.Skeleton span {
+  width: 100% !important;
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */
