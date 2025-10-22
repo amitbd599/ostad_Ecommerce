@@ -137,6 +137,33 @@ router.get(
   authVerificationUser,
   invoiceController.readAllInvoiceSingleUser
 );
+router.get(
+  "/read-all-invoice-all-user",
+  authVerificationAdmin,
+  invoiceController.readAllInvoiceAllUser
+);
+
+router.get(
+  "/read-single-invoice-single-user/:invoice_id",
+  authVerificationUser,
+  invoiceController.readSingleInvoiceSingleUser
+);
+
+router.get(
+  "/read-invoice-product-list-single-user/:invoice_id",
+  authVerificationUser,
+  invoiceController.readInvoiceProductListSingleUser
+);
+router.get(
+  "/order-list",
+  authVerificationUser,
+  invoiceController.readOrderList
+);
+router.get(
+  "/all-order-list",
+  authVerificationAdmin,
+  invoiceController.allOrderList
+);
 
 // ! File Uploads
 router.post(

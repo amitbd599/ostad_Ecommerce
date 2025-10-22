@@ -3,7 +3,7 @@ const DataSchema = mongoose.Schema(
   {
     user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
     product_id: { type: mongoose.Schema.Types.ObjectId, required: true },
-
+    product_name: { type: String, required: true },
     color: { type: String, required: true },
     price: { type: Number },
     qty: { type: Number, required: true },

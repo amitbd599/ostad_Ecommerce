@@ -6,24 +6,26 @@ const ObjectId = mongoose.Types.ObjectId;
 //! cart create
 exports.createCart = async (req, res) => {
   try {
-    const { product_id, color, qty, size } = req.body;
+    const { product_id, product_name, color, qty, size } = req.body;
 
     let user_id = req.headers._id;
 
     // Find existing cart
     let existingCart = await cartModel.findOne({
-      user_id: user_id,
-      product_id: product_id,
-      color: color,
-      size: size,
+      user_id,
+      product_id,
+      product_name,
+      color,
+      size,
     });
 
     if (!!existingCart) {
       let newReqBody = {
-        user_id: user_id,
-        product_id: product_id,
-        color: color,
-        size: size,
+        user_id,
+        product_id,
+        product_name,
+        color,
+        size,
         qty: parseInt(existingCart.qty) + parseInt(qty),
       };
 
@@ -51,7 +53,9 @@ exports.createCart = async (req, res) => {
       const data = await cartModel.create({
         user_id,
         product_id,
+        product_name,
         color,
+
         qty,
         size,
       });
