@@ -222,3 +222,26 @@ exports.createInvoice = async (req, res) => {
     });
   }
 };
+
+//! read all invoice single user
+exports.readAllInvoiceSingleUser = async (req, res) => {
+  try {
+    let user_id = new ObjectId(req.headers._id);
+
+    console.log(user_id);
+
+    let data = await invoiceModel.find({ user_id });
+
+    res.status(200).json({
+      success: true,
+      message: "Invoice fetched successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};

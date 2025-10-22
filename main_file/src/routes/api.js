@@ -132,6 +132,11 @@ router.post(
   authVerificationUser,
   invoiceController.createInvoice
 );
+router.get(
+  "/read-all-invoice-single-user",
+  authVerificationUser,
+  invoiceController.readAllInvoiceSingleUser
+);
 
 // ! File Uploads
 router.post(
