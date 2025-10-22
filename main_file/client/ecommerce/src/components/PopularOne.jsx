@@ -1,7 +1,20 @@
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import categoryStore from "../store/categoryStore";
+import { useEffect } from "react";
+import { baseURLFile } from "../helper/config";
 
 const PopularOne = () => {
+  let { allCategory, allCategoryRequest } = categoryStore();
+
+  useEffect(() => {
+    (async () => {
+      await allCategoryRequest(100, 1);
+    })();
+  }, [allCategoryRequest]);
+
+  console.log(allCategory);
+
   function SampleNextArrow(props) {
     const { className, onClick } = props;
     return (
@@ -66,69 +79,18 @@ const PopularOne = () => {
         </div>
         <div className='popular-slider arrow-style-two row gy-4'>
           <Slider {...settings}>
-            <div>
-              <Link to='/all-product' className='popular-item w-100'>
-                <span className='popular-item__icon'>
-                  <img src='assets/images/icons/popular-icon1.svg' alt='' />
-                </span>
-                <h6 className='popular-item__title font-18'>Laptops & PC</h6>
-                <span className='popular-item__qty text-body'>15,296</span>
-              </Link>
-            </div>
-            <div>
-              <Link to='/all-product' className='popular-item w-100'>
-                <span className='popular-item__icon'>
-                  <img src='assets/images/icons/popular-icon2.svg' alt='' />
-                </span>
-                <h6 className='popular-item__title font-18'>Smartwatches</h6>
-                <span className='popular-item__qty text-body'>15,296</span>
-              </Link>
-            </div>
-            <div>
-              <Link to='/all-product' className='popular-item w-100'>
-                <span className='popular-item__icon'>
-                  <img src='assets/images/icons/popular-icon3.svg' alt='' />
-                </span>
-                <h6 className='popular-item__title font-18'>Cameras</h6>
-                <span className='popular-item__qty text-body'>15,296</span>
-              </Link>
-            </div>
-            <div>
-              <Link to='/all-product' className='popular-item w-100'>
-                <span className='popular-item__icon'>
-                  <img src='assets/images/icons/popular-icon4.svg' alt='' />
-                </span>
-                <h6 className='popular-item__title font-18'>Console Games</h6>
-                <span className='popular-item__qty text-body'>15,296</span>
-              </Link>
-            </div>
-            <div>
-              <Link to='/all-product' className='popular-item w-100'>
-                <span className='popular-item__icon'>
-                  <img src='assets/images/icons/popular-icon5.svg' alt='' />
-                </span>
-                <h6 className='popular-item__title font-18'>Headphones</h6>
-                <span className='popular-item__qty text-body'>15,296</span>
-              </Link>
-            </div>
-            <div>
-              <Link to='/all-product' className='popular-item w-100'>
-                <span className='popular-item__icon'>
-                  <img src='assets/images/icons/popular-icon6.svg' alt='' />
-                </span>
-                <h6 className='popular-item__title font-18'>Virtual Reality</h6>
-                <span className='popular-item__qty text-body'>15,296</span>
-              </Link>
-            </div>
-            <div>
-              <Link to='/all-product' className='popular-item w-100'>
-                <span className='popular-item__icon'>
-                  <img src='assets/images/icons/popular-icon4.svg' alt='' />
-                </span>
-                <h6 className='popular-item__title font-18'>Smartwatches</h6>
-                <span className='popular-item__qty text-body'>15,296</span>
-              </Link>
-            </div>
+            {allCategory?.map((item, index) => (
+              <div key={index}>
+                <Link to='/all-product' className='popular-item w-100'>
+                  <span className='popular-item__icon'>
+                    <img src={`${baseURLFile}/${item?.category_img}`} alt='' />{" "}
+                  </span>
+                  <h6 className='popular-item__title font-18'>
+                    {item?.category_name}
+                  </h6>
+                </Link>
+              </div>
+            ))}
           </Slider>
         </div>
         <div className='popular__button text-center'>

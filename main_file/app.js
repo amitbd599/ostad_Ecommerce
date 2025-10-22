@@ -55,6 +55,9 @@ app.use("/api/v1", router);
 
 app.use("/api/v1/get-file", express.static("uploads"));
 
+// ✅ Serve static files from Vite's dist folder
+app.use(express.static(path.join(__dirname, "client", "ecommerce", "dist")));
+
 // Add React Front End Routing supper admin
 app.get("/super-admin", function (req, res) {
   res.sendFile(path.resolve(__dirname, "client", "super-admin", "index.html"));
@@ -62,7 +65,9 @@ app.get("/super-admin", function (req, res) {
 
 // Add React Front End Routing
 app.get("*", function (req, res) {
-  res.sendFile(path.resolve(__dirname, "client", "ecommerce", "index.html"));
+  res.sendFile(
+    path.resolve(__dirname, "client", "ecommerce", "dist", "index.html")
+  );
 });
 
 module.exports = app;

@@ -35,7 +35,7 @@ exports.allCategory = async (req, res) => {
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
-        Categories: [
+        categories: [
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
