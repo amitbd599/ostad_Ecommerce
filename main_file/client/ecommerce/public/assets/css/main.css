@@ -9583,5 +9583,36 @@ input[type="number"] {
 .Skeleton span {
   width: 100% !important;
 }
+
+.category_title {
+  background: #4664f1;
+  color: #fff !important;
+  padding: 3px 16px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pagination.active {
+  background-color: rgba(0, 4, 36, 0.992) !important;
+  color: #fff !important;
+}
+
+.courser {
+  cursor: pointer;
+}
+
+.pill.category {
+  padding: 8px 22px;
+}
+
+@media (min-width: 424px) and (max-width: 575px) {
+  .product-item {
+    display: block;
+  }
+  .list-view .list-grid-wrapper .product-item {
+    display: block;
+  }
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */

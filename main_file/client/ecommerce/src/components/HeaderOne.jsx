@@ -73,7 +73,10 @@ const HeaderOne = () => {
                   </NavLink>
                 </li>
                 <li className='nav-menu__item'>
-                  <NavLink to='/all-product' className='nav-submenu__link'>
+                  <NavLink
+                    to='/all-products?category_id=0&brand_id=0&remark=0&keyword=0&per_page=12&page_no=1'
+                    className='nav-submenu__link'
+                  >
                     Products
                   </NavLink>
                 </li>

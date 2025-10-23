@@ -1350,7 +1350,7 @@ prelude-ls@^1.2.1:
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prop-types@^15.6.0, prop-types@^15.8.1:
+prop-types@^15, prop-types@^15.6.0, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -1412,6 +1412,11 @@ react-fast-marquee@^1.6.4:
   resolved "https://registry.npmjs.org/react-fast-marquee/-/react-fast-marquee-1.6.5.tgz"
   integrity sha512-swDnPqrT2XISAih0o74zQVE2wQJFMvkx+9VZXYYNSLb/CUcAzU9pNj637Ar2+hyRw6b4tP6xh4GQZip2ZCpQpg==
 
+react-icons@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.npmjs.org/react-icons/-/react-icons-5.5.0.tgz"
+  integrity sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==
+
 react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -1440,6 +1445,13 @@ react-on-screen@^2.1.1:
     lodash.throttle "^4.1.1"
     prop-types "^15.6.0"
     shallowequal "^1.0.2"
+
+react-paginate@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.npmjs.org/react-paginate/-/react-paginate-8.3.0.tgz"
+  integrity sha512-TptZE37HPkT3R+7AszWA++LOTIsIHXcCSWMP9WW/abeF8sLpJzExFB/dVs7xbtqteJ5njF6kk+udTDC0AR3y5w==
+  dependencies:
+    prop-types "^15"
 
 react-range@^1.8.14:
   version "1.10.0"
@@ -1482,7 +1494,7 @@ react-slick@^0.30.2:
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
 
-react@*, "react@^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.8.0 || 17.x || ^18 || ^19", react@^19.1.1, "react@>= 16.3.0", "react@>= 16.8.0 || ^18.0.0", react@>=0.13, react@>=15.0.0, react@>=16.8.0, react@>=16.9.0, react@>=18, react@>=18.0.0:
+react@*, "react@^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16 || ^17 || ^18 || ^19", "react@^16.8.0 || 17.x || ^18 || ^19", react@^19.1.1, "react@>= 16.3.0", "react@>= 16.8.0 || ^18.0.0", react@>=0.13, react@>=15.0.0, react@>=16.8.0, react@>=16.9.0, react@>=18, react@>=18.0.0:
   version "19.1.1"
   resolved "https://registry.npmjs.org/react/-/react-19.1.1.tgz"
   integrity sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ==

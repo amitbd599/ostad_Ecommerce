@@ -32,6 +32,20 @@ exports.allCategory = async (req, res) => {
     let skipRow = (page_no - 1) * per_page;
 
     let sortStage = { createdAt: -1 };
+    let joinWithProduct = {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "category_id",
+        as: "products",
+      },
+    };
+
+    const addProductCount = {
+      $addFields: {
+        totalProduct: { $size: "$products" },
+      },
+    };
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
@@ -39,9 +53,12 @@ exports.allCategory = async (req, res) => {
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
+          joinWithProduct,
+          addProductCount,
           {
             $project: {
               updatedAt: 0,
+              products: 0,
             },
           },
         ],

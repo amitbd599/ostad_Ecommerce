@@ -86,6 +86,11 @@ const PopularOne = () => {
                   <h6 className='popular-item__title font-18'>
                     {item?.category_name}
                   </h6>
+                  <p>
+                    <span className='popular-item__qty text-body'>
+                      {item?.totalProduct}
+                    </span>
+                  </p>
                 </Link>
               </div>
             ))}

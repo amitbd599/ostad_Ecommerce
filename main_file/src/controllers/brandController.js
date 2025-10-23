@@ -32,28 +32,46 @@ exports.allBrand = async (req, res) => {
     let skipRow = (page_no - 1) * per_page;
 
     let sortStage = { createdAt: -1 };
+    let joinWithProduct = {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "brand_id",
+        as: "products",
+      },
+    };
+
+    const addProductCount = {
+      $addFields: {
+        totalProduct: { $size: "$products" },
+      },
+    };
+
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
-        Categories: [
+        brands: [
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
+          joinWithProduct,
+          addProductCount,
           {
             $project: {
               updatedAt: 0,
+              products: 0,
             },
           },
         ],
       },
     };
 
-    let Categories = await brandModel.aggregate([facetStage]);
+    let brands = await brandModel.aggregate([facetStage]);
 
     res.status(200).json({
       success: true,
-      message: "Categories fetched successfully",
-      data: Categories[0],
+      message: "Brands fetched successfully",
+      data: brands[0],
     });
   } catch (error) {
     res.status(500).json({

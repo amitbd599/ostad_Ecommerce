@@ -15,7 +15,7 @@ const AllProductPage = () => {
       <HeaderOne />
 
       {/* BreadcrumbSearch */}
-      <BreadcrumbSearch />
+      {/* <BreadcrumbSearch /> */}
 
       {/* AllProduct */}
       <AllProduct />

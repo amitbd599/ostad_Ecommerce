@@ -96,6 +96,15 @@ exports.allProduct = async (req, res) => {
       };
     }
 
+    let joinWithCategory = {
+      $lookup: {
+        from: "categories",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    };
+
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
@@ -103,6 +112,7 @@ exports.allProduct = async (req, res) => {
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
+          joinWithCategory,
           {
             $project: {
               _id: 1,
@@ -116,6 +126,7 @@ exports.allProduct = async (req, res) => {
               remark: 1,
               stock: 1,
               createdAt: 1,
+              "category.category_name": 1,
             },
           },
         ],

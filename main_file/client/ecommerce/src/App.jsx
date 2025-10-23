@@ -21,7 +21,8 @@ function App() {
       <ScrollToTop smooth color='#A847F0' />
       <Routes>
         <Route exact path='/' element={<HomePage />} />
-        <Route exact path='/all-product' element={<AllProductPage />} />
+        {/* all-products/:category_id/:brand_id/:remark/:keyword/:per_page/:page_no */}
+        <Route exact path='/all-products' element={<AllProductPage />} />
         <Route exact path='/product-details' element={<ProductDetailsPage />} />
         <Route exact path='/cart' element={<CartPage />} />
         <Route exact path='/cart-personal' element={<CartPersonalPage />} />
