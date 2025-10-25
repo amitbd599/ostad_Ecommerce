@@ -1,38 +1,38 @@
 import { Link } from "react-router-dom";
 
-const Breadcrumb = () => {
+const Breadcrumb = ({ title }) => {
   return (
-    <section className="breadcrumb border-bottom p-0 d-block section-bg position-relative z-index-1">
-      <div className="breadcrumb-two">
+    <section className='breadcrumb border-bottom p-0 d-block section-bg position-relative z-index-1'>
+      <div className='breadcrumb-two'>
         <img
-          src="assets/images/gradients/breadcrumb-gradient-bg.png"
-          alt=""
-          className="bg--gradient"
+          src='assets/images/gradients/breadcrumb-gradient-bg.png'
+          alt=''
+          className='bg--gradient'
         />
-        <div className="container container-two">
-          <div className="row justify-content-center">
-            <div className="col-lg-12">
-              <div className="breadcrumb-two-content text-center">
-                <ul className="breadcrumb-list flx-align gap-2 mb-2 justify-content-center">
-                  <li className="breadcrumb-list__item font-14 text-body">
+        <div className='container container-two'>
+          <div className='row justify-content-center'>
+            <div className='col-lg-12'>
+              <div className='breadcrumb-two-content text-center'>
+                <ul className='breadcrumb-list flx-align gap-2 mb-2 justify-content-center'>
+                  <li className='breadcrumb-list__item font-14 text-body'>
                     <Link
-                      to="/"
-                      className="breadcrumb-list__link text-body hover-text-main"
+                      to='/'
+                      className='breadcrumb-list__link text-body hover-text-main'
                     >
                       Home
                     </Link>
                   </li>
-                  <li className="breadcrumb-list__item font-14 text-body">
-                    <span className="breadcrumb-list__icon font-10">
-                      <i className="fas fa-chevron-right" />
+                  <li className='breadcrumb-list__item font-14 text-body'>
+                    <span className='breadcrumb-list__icon font-10'>
+                      <i className='fas fa-chevron-right' />
                     </span>
                   </li>
-                  <li className="breadcrumb-list__item font-14 text-body">
-                    <span className="breadcrumb-list__text">Contact</span>
+                  <li className='breadcrumb-list__item font-14 text-body'>
+                    <span className='breadcrumb-list__text'>{title}</span>
                   </li>
                 </ul>
-                <h3 className="breadcrumb-two-content__title mb-0 text-capitalize">
-                  Contact Us
+                <h3 className='breadcrumb-two-content__title mb-0 text-capitalize'>
+                  {title}
                 </h3>
               </div>
             </div>
@@ -40,8 +40,7 @@ const Breadcrumb = () => {
         </div>
       </div>
     </section>
-
   );
-}
+};
 
 export default Breadcrumb;

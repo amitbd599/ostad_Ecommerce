@@ -12,8 +12,8 @@ const DataSchema = new mongoose.Schema(
     discount_price: { type: Number },
     remark: { type: String },
     stock: { type: Number },
-    color: { type: String },
-    size: { type: String },
+    color: [String],
+    size: [String],
     description: { type: String },
 
     category_id: { type: mongoose.Schema.Types.ObjectId, required: true },

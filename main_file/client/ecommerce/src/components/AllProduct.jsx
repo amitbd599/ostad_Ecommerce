@@ -351,7 +351,7 @@ const AllProduct = () => {
                                     </span>
                                   </div>
                                   <Link
-                                    to='/product-details'
+                                    to={`/product-details?product_id=${item?._id}`}
                                     className='btn btn-outline-light btn-sm pill'
                                   >
                                     View Product

@@ -1,10 +1,10 @@
 import React from "react";
 import Preloader from "../helper/Preloader";
 import HeaderOne from "../components/HeaderOne";
-import BreadcrumbTwo from "../components/Breadcrumb";
 import ProductDetails from "../components/ProductDetails";
 // import BrandSectionOne from "../components/BrandSectionOne";
 import FooterOne from "../components/FooterOne";
+import BreadcrumbProductDetails from "../components/BreadcrumbProductDetails";
 
 const ProductDetailsPage = () => {
   return (
@@ -16,7 +16,7 @@ const ProductDetailsPage = () => {
       <HeaderOne />
 
       {/* BreadcrumbTwo */}
-      <BreadcrumbTwo />
+      <BreadcrumbProductDetails />
 
       {/* ProductDetails */}
       <ProductDetails />

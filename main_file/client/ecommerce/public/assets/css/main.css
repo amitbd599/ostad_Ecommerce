@@ -9614,5 +9614,11 @@ input[type="number"] {
     display: block;
   }
 }
+
+.size_varient .active {
+  background: #4d57f2;
+  color: #fff;
+  border: 1px solid #4d57f2;
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */
