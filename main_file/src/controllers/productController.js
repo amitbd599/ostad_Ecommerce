@@ -152,9 +152,37 @@ exports.allProduct = async (req, res) => {
 //! Product Get Single
 exports.singleProduct = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = new ObjectId(req.params.id);
 
-    let data = await productModel.findById(id);
+    console.log(id);
+
+    let matchStage = {
+      $match: { _id: id },
+    };
+
+    let joinWithCategory = {
+      $lookup: {
+        from: "categories",
+        localField: "category_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    };
+
+    let joinWithBrand = {
+      $lookup: {
+        from: "brands",
+        localField: "brand_id",
+        foreignField: "_id",
+        as: "brand",
+      },
+    };
+
+    let data = await productModel.aggregate([
+      matchStage,
+      joinWithCategory,
+      joinWithBrand,
+    ]);
     res.status(200).json({
       success: true,
       message: "Product fetched successfully",

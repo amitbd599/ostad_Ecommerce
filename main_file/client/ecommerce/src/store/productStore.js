@@ -52,7 +52,7 @@ const productStore = create((set) => ({
     });
 
     if (res?.data?.success === true) {
-      set({ singleProduct: res?.data?.data });
+      set({ singleProduct: res?.data?.data?.[0] });
     }
   },
 }));

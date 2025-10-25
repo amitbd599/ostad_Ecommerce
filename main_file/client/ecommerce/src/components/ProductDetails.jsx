@@ -10,15 +10,22 @@ import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import productStore from "../store/productStore";
 import { baseURLFile } from "../helper/config";
 import Skeleton from "react-loading-skeleton";
+import { formatDate } from "../helper/helper";
 
 const ProductDetails = () => {
   const [searchParams] = useSearchParams();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  const [size, setSize] = useState(null);
-  const [color, setColor] = useState(null);
-  const [sizeActive, setSizeActive] = useState(false);
-  const [sizeColor, setColorActive] = useState(false);
+  let [initData, setInitData] = useState({
+    size: "",
+    color: "",
+    qty: 1,
+    activeColor: null,
+    activeSize: null,
+  });
+
   const product_id = searchParams.get("product_id");
+
+  console.log(initData);
 
   let { singleProduct, singleProductsRequest } = productStore();
 
@@ -32,8 +39,6 @@ const ProductDetails = () => {
     ((singleProduct?.price - singleProduct?.discount_price) /
       singleProduct?.price) *
     100;
-
-  console.log(size);
 
   return (
     <div className='product-details mt-32 padding-b-120'>
@@ -378,15 +383,18 @@ const ProductDetails = () => {
                   </div>
 
                   <div className='size py-3'>
-                    <h4>Size: {size}</h4>
+                    <h4>Size: {initData?.size}</h4>
                     <div className='size_varient'>
                       {singleProduct?.size?.map((item, index) => (
                         <button
-                          className={sizeActive === index && "active"}
+                          className={initData?.activeSize === index && "active"}
                           key={index}
                           onClick={() => {
-                            setSize(item);
-                            setSizeActive(index);
+                            setInitData({
+                              ...initData,
+                              size: item,
+                              activeSize: index,
+                            });
                           }}
                         >
                           {item}
@@ -396,15 +404,20 @@ const ProductDetails = () => {
                   </div>
 
                   <div className='color py-3'>
-                    <h4>Color: {color}</h4>
+                    <h4>Color: {initData?.color}</h4>
                     <div className='size_varient'>
                       {singleProduct?.color?.map((item, index) => (
                         <button
-                          className={sizeColor === index && "active"}
+                          className={
+                            initData?.activeColor === index && "active"
+                          }
                           key={index}
                           onClick={() => {
-                            setColor(item);
-                            setColorActive(index);
+                            setInitData({
+                              ...initData,
+                              color: item,
+                              activeColor: index,
+                            });
                           }}
                         >
                           {item}
@@ -415,9 +428,29 @@ const ProductDetails = () => {
                   <div className='quantity py-3'>
                     <div className='w-100'>
                       <div className='inner'>
-                        <button className='btn-quantity btn-decrease'>-</button>
-                        <span className='quantity-product'>2</span>
-                        <button className='btn-quantity btn-increase'>+</button>
+                        <button
+                          className='btn-quantity btn-decrease'
+                          onClick={() =>
+                            setInitData({
+                              ...initData,
+                              qty: initData.qty > 1 ? initData.qty - 1 : 1,
+                            })
+                          }
+                        >
+                          -
+                        </button>
+                        <span className='quantity-product'>{initData.qty}</span>
+                        <button
+                          onClick={() =>
+                            setInitData({
+                              ...initData,
+                              qty: initData.qty + 1,
+                            })
+                          }
+                          className='btn-quantity btn-increase'
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                     <div className='w-100'>
@@ -437,23 +470,39 @@ const ProductDetails = () => {
                 <ul className='meta-attribute'>
                   <li className='meta-attribute__item'>
                     <span className='name'>Last Update</span>
-                    <span className='details'>Feb 21, 2024</span>
+                    <span className='details'>
+                      {formatDate(singleProduct?.updatedAt)}
+                    </span>
                   </li>
                   <li className='meta-attribute__item'>
                     <span className='name'>Published</span>
-                    <span className='details'>Feb 15, 2024</span>
+                    <span className='details'>
+                      {" "}
+                      {formatDate(singleProduct?.createdAt)}
+                    </span>
                   </li>
                   <li className='meta-attribute__item'>
                     <span className='name'>Category</span>
-                    <span className='details'>Ecommerce</span>
+                    <span className='details'>
+                      {singleProduct?.category?.[0]?.category_name}
+                    </span>
                   </li>
                   <li className='meta-attribute__item'>
-                    <span className='name'>SKU</span>
-                    <span className='details'>Yes</span>
+                    <span className='name'>Brand</span>
+                    <span className='details'>
+                      {singleProduct?.brand?.[0]?.brand_name}
+                    </span>
                   </li>
+
                   <li className='meta-attribute__item'>
                     <span className='name'>Is Discount</span>
-                    <span className='details'>Yes</span>
+                    <span className='details'>
+                      {singleProduct?.is_discount ? "True" : "False"}
+                    </span>
+                  </li>
+                  <li className='meta-attribute__item'>
+                    <span className='name'>Discount Percent</span>
+                    <span className='details'>{discount.toFixed(0)}%</span>
                   </li>
                 </ul>
                 {/* Meta Attribute List End */}
