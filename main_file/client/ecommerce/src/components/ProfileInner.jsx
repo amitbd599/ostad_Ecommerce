@@ -1,9 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import userStore from "../store/userStore";
 import { baseURLFile } from "../helper/config";
 import { formatDate } from "../helper/helper";
 
 const ProfileInner = () => {
+  let [data, setData] = useState({
+    email: "",
+    password: "",
+    cus_add: "",
+    cus_city: "",
+    cus_country: "",
+    cus_fax: "",
+    cus_name: "",
+    cus_phone: "",
+    cus_postcode: "",
+    cus_state: "",
+    ship_add: "",
+    ship_city: "",
+    ship_country: "",
+    ship_name: "",
+    ship_phone: "",
+    ship_postcode: "",
+    ship_state: "",
+    image: "",
+  });
   // api
   let { user, userRequest } = userStore();
   useEffect(() => {
@@ -163,65 +183,87 @@ const ProfileInner = () => {
                       <form action='#' autoComplete='off'>
                         <div className='row gy-4'>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='fName'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              First Name
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Email
                             </label>
                             <input
-                              type='text'
-                              className='common-input border'
-                              id='fName'
-                              defaultValue='Michel'
-                              placeholder='First Name'
-                            />
-                          </div>
-                          <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='lastNamee'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Last Name
-                            </label>
-                            <input
-                              type='text'
-                              className='common-input border'
-                              id='lastNamee'
-                              defaultValue='Smith'
-                              placeholder='Last Name'
-                            />
-                          </div>
-                          <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='phonee'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Phone Number
-                            </label>
-                            <input
-                              type='tel'
-                              className='common-input border'
-                              id='phonee'
-                              defaultValue='+880 15589 236 45'
-                              placeholder='Phone Number'
-                            />
-                          </div>
-                          <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='emailAdddd'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Email Address
-                            </label>
-                            <input
+                              onChange={(e) =>
+                                setData({ ...data, email: e.target.value })
+                              }
                               type='email'
                               className='common-input border'
-                              id='emailAdddd'
-                              defaultValue='michel15@gmail.com'
-                              placeholder='Email Address'
+                              placeholder='Email'
                             />
                           </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Full Name
+                            </label>
+                            <input
+                              onChange={(e) =>
+                                setData({ ...data, cus_name: e.target.value })
+                              }
+                              type='text'
+                              className='common-input border'
+                              placeholder='Full Name'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Customer address
+                            </label>
+                            <input
+                              type='text'
+                              className='common-input border'
+                              placeholder='Customer address'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Customer city
+                            </label>
+                            <input
+                              onChange={(e) =>
+                                setData({ ...data, cus_city: e.target.value })
+                              }
+                              type='email'
+                              className='common-input border'
+                              placeholder='Customer city'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Customer country
+                            </label>
+                            <input
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  cus_country: e.target.value,
+                                })
+                              }
+                              type='email'
+                              className='common-input border'
+                              placeholder='Customer country'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Customer fax
+                            </label>
+                            <input
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  cus_fax: e.target.value,
+                                })
+                              }
+                              type='email'
+                              className='common-input border'
+                              placeholder='Customer fax'
+                            />
+                          </div>
+
                           <div className='col-sm-6 col-xs-6'>
                             <label
                               htmlFor='cityyy'
