@@ -6,11 +6,21 @@ exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // find the existing user
+
+    let ifUser = await userModel.find({ email });
+    if (ifUser.length > 0) {
+      return res.status(200).json({
+        success: false,
+        message: "Email already registered.",
+      });
+    }
+
     // Create and save the new user
     user = await userModel.create({ email, password });
     res.status(200).json({
       success: true,
-      message: "User created successfully",
+      message: "Registration successfully.",
     });
   } catch (error) {
     res.status(500).json({

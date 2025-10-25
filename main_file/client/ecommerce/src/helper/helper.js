@@ -21,11 +21,14 @@ class FormHelper {
   //   }
 
   ErrorToast(msg) {
+    console.log(msg);
     toast.error(msg, {
       position: "bottom-right",
     });
   }
   SuccessToast(msg) {
+    console.log(msg);
+
     toast.success(msg, {
       position: "bottom-right",
     });

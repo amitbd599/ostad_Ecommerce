@@ -25,15 +25,17 @@ const ProductDetails = () => {
 
   const product_id = searchParams.get("product_id");
 
-  console.log(initData);
-
+  // product Store
   let { singleProduct, singleProductsRequest } = productStore();
-
   useEffect(() => {
     (async () => {
       await singleProductsRequest(product_id);
     })();
   }, [product_id, singleProductsRequest]);
+
+  // let cartSubmit=()=>{
+  //     userRegisterRequest()
+  // }
 
   const discount =
     ((singleProduct?.price - singleProduct?.discount_price) /
