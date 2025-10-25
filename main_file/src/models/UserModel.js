@@ -10,6 +10,7 @@ const DataSchema = new mongoose.Schema(
       trim: true,
     },
     password: { type: String, required: true },
+    image: { type: String },
     cus_add: { type: String },
     cus_city: { type: String },
     cus_country: { type: String },

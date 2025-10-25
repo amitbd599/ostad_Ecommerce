@@ -4,7 +4,6 @@ import userStore from "../store/userStore";
 import { useState } from "react";
 
 const Register = () => {
-  // user Store
   let { userRegisterLoading, userRegisterRequest } = userStore();
   const navigate = useNavigate();
   let [data, setData] = useState({ email: "", password: "" });
@@ -117,11 +116,13 @@ const Register = () => {
 
                 <div className='col-12'>
                   <button
+                    disabled={userRegisterLoading}
                     onClick={userSubmit}
                     className='btn btn-main btn-lg w-100 pill'
                   >
-                    {" "}
-                    Create An Account
+                    {userRegisterLoading
+                      ? "🛻 Loading..."
+                      : "Create An Account"}
                   </button>
                 </div>
 

@@ -125,6 +125,7 @@ exports.update = async (req, res) => {
     const {
       email,
       password,
+      image,
       cus_add,
       cus_city,
       cus_country,
@@ -146,6 +147,7 @@ exports.update = async (req, res) => {
     let updatedData = {
       email,
       password,
+      image,
       cus_add,
       cus_city,
       cus_country,

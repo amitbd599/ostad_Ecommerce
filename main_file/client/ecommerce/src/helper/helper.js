@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import moment from "moment";
 import Swal from "sweetalert2";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
 let EmailRegx = /\S+@\S+\.\S+/;
@@ -15,20 +15,17 @@ class FormHelper {
     return !EmailRegx.test(value);
   }
 
-  //   getToken() {
-  //     const token = Cookies.get("Token");
-  //     return !!token;
-  //   }
+  getToken() {
+    const token = Cookies.get("token");
+    return !!token;
+  }
 
   ErrorToast(msg) {
-    console.log(msg);
     toast.error(msg, {
       position: "bottom-right",
     });
   }
   SuccessToast(msg) {
-    console.log(msg);
-
     toast.success(msg, {
       position: "bottom-right",
     });

@@ -1,7 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import userStore from "../store/userStore";
+import { useState } from "react";
 
 const Login = () => {
+  let { userLoginLoading, userLoginRequest } = userStore();
+  const navigate = useNavigate();
+  let [data, setData] = useState({ email: "", password: "" });
+
+  let userSubmit = async () => {
+    let res = await userLoginRequest(data);
+
+    if (res) {
+      navigate("/dashboard-profile");
+    }
+  };
   return (
     <>
       {/* ================================== Account Page Start =========================== */}
@@ -48,7 +61,7 @@ const Login = () => {
             <h4 className='account-content__title mb-48 text-capitalize'>
               Welcome Back! Please Sign In
             </h4>
-            <form action='#'>
+            <div>
               <div className='row gy-4'>
                 <div className='col-12'>
                   <label
@@ -59,6 +72,10 @@ const Login = () => {
                   </label>
                   <div className='position-relative'>
                     <input
+                      onChange={(e) =>
+                        setData({ ...data, email: e.target.value })
+                      }
+                      required
                       type='email'
                       className='common-input common-input--bg common-input--withIcon'
                       id='email'
@@ -78,6 +95,10 @@ const Login = () => {
                   </label>
                   <div className='position-relative'>
                     <input
+                      onChange={(e) =>
+                        setData({ ...data, password: e.target.value })
+                      }
+                      required
                       type='password'
                       className='common-input common-input--bg common-input--withIcon'
                       id='your-password'
@@ -94,11 +115,11 @@ const Login = () => {
 
                 <div className='col-12'>
                   <button
-                    type='submit'
+                    disabled={userLoginLoading}
+                    onClick={userSubmit}
                     className='btn btn-main btn-lg w-100 pill'
                   >
-                    {" "}
-                    Sign In
+                    {userLoginLoading ? "🛻 Loading..." : "Sign In"}
                   </button>
                 </div>
 
@@ -116,7 +137,7 @@ const Login = () => {
                   </div>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </section>

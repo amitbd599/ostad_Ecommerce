@@ -8816,14 +8816,22 @@ input[type="number"] {
 }
 
 .avatar-upload .avatar-preview {
-  width: 116px;
-  height: 116px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+
   position: relative;
-  border-radius: 100%;
-  background-image: url(../images/thumbs/profile-info-img.png);
+  /* background-image: url(../images/thumbs/profile-info-img.png); */
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+}
+#imagePreview img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
 }
 
 .avatar-upload .avatar-preview > div {

@@ -13,6 +13,7 @@ import ContactPage from "./pages/ContactPage";
 import DashboardProfilePage from "./pages/DashboardProfilePage";
 import OrdersPage from "./pages/OrdersPage";
 import ReviewPage from "./pages/ReviewPage";
+import PrivateRoute from "./layout/PrivateRoute";
 
 function App() {
   return (
@@ -37,10 +38,30 @@ function App() {
         <Route
           exact
           path='/dashboard-profile'
-          element={<DashboardProfilePage />}
+          element={
+            <PrivateRoute>
+              <DashboardProfilePage />
+            </PrivateRoute>
+          }
         />
-        <Route exact path='/dashboard-all-orders' element={<OrdersPage />} />
-        <Route exact path='/dashboard-review' element={<ReviewPage />} />
+        <Route
+          exact
+          path='/dashboard-all-orders'
+          element={
+            <PrivateRoute>
+              <OrdersPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          exact
+          path='/dashboard-review'
+          element={
+            <PrivateRoute>
+              <ReviewPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

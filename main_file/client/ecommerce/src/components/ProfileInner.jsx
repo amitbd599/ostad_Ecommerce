@@ -1,19 +1,22 @@
+import { useEffect } from "react";
+import userStore from "../store/userStore";
+import { baseURLFile } from "../helper/config";
+import { formatDate } from "../helper/helper";
+
 const ProfileInner = () => {
+  // api
+  let { user, userRequest } = userStore();
+  useEffect(() => {
+    (async () => {
+      await userRequest();
+    })();
+  }, [userRequest]);
+
   return (
     <>
       {/* Cover Photo Start */}
       <div className='cover-photo position-relative z-index-1 overflow-hidden'>
         <div className='avatar-upload'>
-          <div className='avatar-edit'>
-            <input type='file' id='imageUploadTwo' accept='.png, .jpg, .jpeg' />
-            <label htmlFor='imageUploadTwo'>
-              <span className='icon'>
-                {" "}
-                <img src='assets/images/icons/camera-two.svg' alt='' />{" "}
-              </span>
-              <span className='text'>Change Cover</span>
-            </label>
-          </div>
           <div className='avatar-preview'>
             <div id='imagePreviewTwo'></div>
           </div>
@@ -39,26 +42,17 @@ const ProfileInner = () => {
                       </label>
                     </div>
                     <div className='avatar-preview'>
-                      <div id='imagePreview'></div>
+                      <div id='imagePreview'>
+                        <img src={`${baseURLFile}/${user?.image}`} alt='' />
+                      </div>
                     </div>
                   </div>
-                  <h5 className='profile-info__name mb-1'>Michel Smith</h5>
+                  <h5 className='profile-info__name mb-1'>{user?.cus_name}</h5>
                   <span className='profile-info__designation font-14'>
                     Exclusive Author
                   </span>
                 </div>
                 <ul className='profile-info-list'>
-                  <li className='profile-info-list__item'>
-                    <span className='profile-info-list__content flx-align flex-nowrap gap-2'>
-                      <img
-                        src='assets/images/icons/profile-info-icon1.svg'
-                        alt=''
-                        className='icon'
-                      />
-                      <span className='text text-heading fw-500'>Username</span>
-                    </span>
-                    <span className='profile-info-list__info'>michel15</span>
-                  </li>
                   <li className='profile-info-list__item'>
                     <span className='profile-info-list__content flx-align flex-nowrap gap-2'>
                       <img
@@ -69,7 +63,7 @@ const ProfileInner = () => {
                       <span className='text text-heading fw-500'>Email</span>
                     </span>
                     <span className='profile-info-list__info'>
-                      michel15@gmail.com
+                      {user?.email}
                     </span>
                   </li>
                   <li className='profile-info-list__item'>
@@ -82,7 +76,7 @@ const ProfileInner = () => {
                       <span className='text text-heading fw-500'>Phone</span>
                     </span>
                     <span className='profile-info-list__info'>
-                      +880 15589 236 45
+                      {user?.cus_phone}
                     </span>
                   </li>
                   <li className='profile-info-list__item'>
@@ -94,19 +88,12 @@ const ProfileInner = () => {
                       />
                       <span className='text text-heading fw-500'>Country</span>
                     </span>
-                    <span className='profile-info-list__info'>Bangladesh</span>
-                  </li>
-                  <li className='profile-info-list__item'>
-                    <span className='profile-info-list__content flx-align flex-nowrap gap-2'>
-                      <img
-                        src='assets/images/icons/profile-info-icon5.svg'
-                        alt=''
-                        className='icon'
-                      />
-                      <span className='text text-heading fw-500'>Balance</span>
+                    <span className='profile-info-list__info'>
+                      {" "}
+                      {user?.cus_country}
                     </span>
-                    <span className='profile-info-list__info'>$0.00 USD</span>
                   </li>
+
                   <li className='profile-info-list__item'>
                     <span className='profile-info-list__content flx-align flex-nowrap gap-2'>
                       <img
@@ -119,21 +106,8 @@ const ProfileInner = () => {
                       </span>
                     </span>
                     <span className='profile-info-list__info'>
-                      Jan, 01, 2024
+                      {formatDate(user?.createdAt)}
                     </span>
-                  </li>
-                  <li className='profile-info-list__item'>
-                    <span className='profile-info-list__content flx-align flex-nowrap gap-2'>
-                      <img
-                        src='assets/images/icons/profile-info-icon7.svg'
-                        alt=''
-                        className='icon'
-                      />
-                      <span className='text text-heading fw-500'>
-                        Purchased
-                      </span>
-                    </span>
-                    <span className='profile-info-list__info'>0 items</span>
                   </li>
                 </ul>
               </div>
