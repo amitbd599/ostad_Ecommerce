@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import userStore from "../store/userStore";
-import { baseURLFile } from "../helper/config";
-import { formatDate } from "../helper/helper";
+import { ErrorToast, formatDate, IsEmpty } from "../helper/helper";
 
 const ProfileInner = () => {
   let [data, setData] = useState({
-    email: "",
+    cus_name: "",
     password: "",
     cus_add: "",
     cus_city: "",
     cus_country: "",
     cus_fax: "",
-    cus_name: "",
     cus_phone: "",
     cus_postcode: "",
     cus_state: "",
@@ -22,15 +20,76 @@ const ProfileInner = () => {
     ship_phone: "",
     ship_postcode: "",
     ship_state: "",
-    image: "",
   });
   // api
-  let { user, userRequest } = userStore();
+  let { user, userRequest, userUpdateLoading, userUpdateRequest } = userStore();
   useEffect(() => {
     (async () => {
       await userRequest();
     })();
   }, [userRequest]);
+
+  console.log(data);
+
+  useEffect(() => {
+    if (user) {
+      setData({
+        cus_add: user?.cus_add || "",
+        password: "",
+        cus_city: user?.cus_city || "",
+        cus_country: user?.cus_country || "",
+        cus_fax: user?.cus_fax || "",
+        cus_name: user?.cus_name || "",
+        cus_phone: user?.cus_phone || "",
+        cus_postcode: user?.cus_postcode || "",
+        cus_state: user?.cus_state || "",
+        ship_add: user?.ship_add || "",
+        ship_city: user?.ship_city || "",
+        ship_country: user?.ship_country || "",
+        ship_name: user?.ship_name || "",
+        ship_phone: user?.ship_phone || "",
+        ship_postcode: user?.ship_postcode || "",
+        ship_state: user?.ship_state || "",
+      });
+    }
+  }, [user]);
+
+  // Validation rules
+  const validations = [
+    { field: data.cus_name, message: "Customer name is required!" },
+    { field: data.password, message: "Password is required!" },
+    { field: data.cus_add, message: "Customer address is required!" },
+    { field: data.cus_city, message: "Customer city is required!" },
+    { field: data.cus_country, message: "Customer country is required!" },
+    { field: data.cus_phone, message: "Customer phone is required!" },
+    { field: data.cus_postcode, message: "Customer postcode is required!" },
+    { field: data.cus_state, message: "Customer state is required!" },
+    { field: data.ship_add, message: "Shipping address is required!" },
+    { field: data.ship_city, message: "Shipping city is required!" },
+    { field: data.ship_country, message: "Shipping country is required!" },
+    { field: data.ship_name, message: "Shipping name is required!" },
+    { field: data.ship_phone, message: "Shipping phone is required!" },
+    { field: data.ship_postcode, message: "Shipping postcode is required!" },
+    { field: data.ship_state, message: "Shipping state is required!" },
+  ];
+
+  let userSubmit = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+
+    await userUpdateRequest(data);
+    await userRequest();
+  };
+
+  const handleChange = (e) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <>
@@ -50,23 +109,6 @@ const ProfileInner = () => {
             <div className='col-xxl-3 col-xl-4'>
               <div className='profile-info'>
                 <div className='profile-info__inner mb-40 text-center'>
-                  <div className='avatar-upload mb-24'>
-                    <div className='avatar-edit'>
-                      <input
-                        type='file'
-                        id='imageUpload'
-                        accept='.png, .jpg, .jpeg'
-                      />
-                      <label htmlFor='imageUpload'>
-                        <img src='assets/images/icons/camera.svg' alt='' />
-                      </label>
-                    </div>
-                    <div className='avatar-preview'>
-                      <div id='imagePreview'>
-                        <img src={`${baseURLFile}/${user?.image}`} alt='' />
-                      </div>
-                    </div>
-                  </div>
                   <h5 className='profile-info__name mb-1'>{user?.cus_name}</h5>
                   <span className='profile-info__designation font-14'>
                     Exclusive Author
@@ -134,85 +176,58 @@ const ProfileInner = () => {
             </div>
             <div className='col-xxl-9 col-xl-8'>
               <div className='dashboard-card'>
-                <div className='dashboard-card__header pb-0'>
-                  <ul
-                    className='nav tab-bordered nav-pills'
-                    id='pills-tab'
-                    role='tablist'
-                  >
-                    <li className='nav-item' role='presentation'>
-                      <button
-                        className='nav-link font-18 font-heading active'
-                        id='pills-personalInfo-tab'
-                        data-bs-toggle='pill'
-                        data-bs-target='#pills-personalInfo'
-                        type='button'
-                        role='tab'
-                        aria-controls='pills-personalInfo'
-                        aria-selected='true'
-                      >
-                        Personal Info
-                      </button>
-                    </li>
-
-                    <li className='nav-item' role='presentation'>
-                      <button
-                        className='nav-link font-18 font-heading'
-                        id='pills-changePassword-tab'
-                        data-bs-toggle='pill'
-                        data-bs-target='#pills-changePassword'
-                        type='button'
-                        role='tab'
-                        aria-controls='pills-changePassword'
-                        aria-selected='false'
-                      >
-                        Change Password
-                      </button>
-                    </li>
-                  </ul>
-                </div>
                 <div className='profile-info-content'>
                   <div className='tab-content' id='pills-tabContent'>
-                    <div
-                      className='tab-pane fade show active'
-                      id='pills-personalInfo'
-                      role='tabpanel'
-                      aria-labelledby='pills-personalInfo-tab'
-                      tabIndex={0}
-                    >
-                      <form action='#' autoComplete='off'>
+                    <div className='tab-pane fade show active'>
+                      <div>
                         <div className='row gy-4'>
                           <div className='col-sm-6 col-xs-6'>
                             <label className='form-label mb-2 font-18 font-heading fw-600'>
-                              Email
+                              Customer Name
                             </label>
                             <input
-                              onChange={(e) =>
-                                setData({ ...data, email: e.target.value })
-                              }
-                              type='email'
-                              className='common-input border'
-                              placeholder='Email'
-                            />
-                          </div>
-                          <div className='col-sm-6 col-xs-6'>
-                            <label className='form-label mb-2 font-18 font-heading fw-600'>
-                              Full Name
-                            </label>
-                            <input
-                              onChange={(e) =>
-                                setData({ ...data, cus_name: e.target.value })
-                              }
+                              required
+                              onChange={handleChange}
+                              value={data?.cus_name}
+                              name='cus_name'
                               type='text'
                               className='common-input border'
-                              placeholder='Full Name'
+                              placeholder='Customer Name'
                             />
+                          </div>
+
+                          <div className='col-sm-6 col-xs-6'>
+                            <label
+                              htmlFor='confirm-password'
+                              className='form-label mb-2 font-18 font-heading fw-600'
+                            >
+                              Password
+                            </label>
+                            <div className='position-relative'>
+                              <input
+                                onChange={handleChange}
+                                value={data?.password}
+                                name='password'
+                                type='password'
+                                className='common-input common-input--withIcon common-input--withLeftIcon '
+                              />
+                              <span className='input-icon input-icon--left'>
+                                <img
+                                  src='assets/images/icons/lock-two.svg'
+                                  alt=''
+                                />
+                              </span>
+                            </div>
                           </div>
                           <div className='col-sm-6 col-xs-6'>
                             <label className='form-label mb-2 font-18 font-heading fw-600'>
                               Customer address
                             </label>
                             <input
+                              required
+                              onChange={handleChange}
+                              value={data?.cus_add}
+                              name='cus_add'
                               type='text'
                               className='common-input border'
                               placeholder='Customer address'
@@ -223,10 +238,11 @@ const ProfileInner = () => {
                               Customer city
                             </label>
                             <input
-                              onChange={(e) =>
-                                setData({ ...data, cus_city: e.target.value })
-                              }
-                              type='email'
+                              required
+                              onChange={handleChange}
+                              value={data?.cus_city}
+                              name='cus_city'
+                              type='text'
                               className='common-input border'
                               placeholder='Customer city'
                             />
@@ -236,13 +252,11 @@ const ProfileInner = () => {
                               Customer country
                             </label>
                             <input
-                              onChange={(e) =>
-                                setData({
-                                  ...data,
-                                  cus_country: e.target.value,
-                                })
-                              }
-                              type='email'
+                              required
+                              onChange={handleChange}
+                              value={data?.cus_country}
+                              name='cus_country'
+                              type='text'
                               className='common-input border'
                               placeholder='Customer country'
                             />
@@ -252,198 +266,177 @@ const ProfileInner = () => {
                               Customer fax
                             </label>
                             <input
-                              onChange={(e) =>
-                                setData({
-                                  ...data,
-                                  cus_fax: e.target.value,
-                                })
-                              }
-                              type='email'
+                              required
+                              onChange={handleChange}
+                              value={data?.cus_fax}
+                              name='cus_fax'
+                              type='text'
                               className='common-input border'
                               placeholder='Customer fax'
                             />
                           </div>
-
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='cityyy'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              City
-                            </label>
-                            <div className='select-has-icon'>
-                              <select
-                                className='common-input border'
-                                id='cityyy'
-                                defaultValue={1}
-                              >
-                                <option value={1}>Dhaka</option>
-                                <option value={1}>Chandpur</option>
-                                <option value={1}>Comilla</option>
-                                <option value={1}>Rangpur</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='Stateee'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              State/Region
-                            </label>
-                            <div className='select-has-icon'>
-                              <select
-                                className='common-input border'
-                                id='Stateee'
-                                defaultValue={1}
-                              >
-                                <option value={1}>USA</option>
-                                <option value={1}>Bangladesh</option>
-                                <option value={1}>India</option>
-                                <option value={1}>Pakistan</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='Postcodeee'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Postcode
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Customer phone
                             </label>
                             <input
+                              required
+                              onChange={handleChange}
+                              value={data?.cus_phone}
+                              name='cus_phone'
                               type='text'
                               className='common-input border'
-                              id='Postcodeee'
-                              defaultValue={1219}
-                              placeholder='Post Code'
+                              placeholder='Customer phone'
                             />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='Countryyy'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Country
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Customer postcode
                             </label>
-                            <div className='select-has-icon'>
-                              <select
-                                className='common-input border'
-                                id='Countryyy'
-                                defaultValue={1}
-                              >
-                                <option value={1}>USA</option>
-                                <option value={1}>Bangladesh</option>
-                                <option value={1}>India</option>
-                                <option value={1}>Pakistan</option>
-                              </select>
-                            </div>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.cus_postcode}
+                              name='cus_postcode'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Customer postcode'
+                            />
                           </div>
-                          <div className='col-sm-12 text-end'>
-                            <button className='btn btn-main btn-lg pill mt-4'>
-                              {" "}
-                              Update Profile
-                            </button>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-
-                    <div
-                      className='tab-pane fade'
-                      id='pills-changePassword'
-                      role='tabpanel'
-                      aria-labelledby='pills-changePassword-tab'
-                      tabIndex={0}
-                    >
-                      <form action='#' autoComplete='off'>
-                        <div className='row gy-4'>
                           <div className='col-12'>
-                            <label
-                              htmlFor='current-password'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Current Password
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Customer state
                             </label>
-                            <div className='position-relative'>
-                              <input
-                                type='password'
-                                className='common-input common-input--withIcon common-input--withLeftIcon '
-                                id='current-password'
-                                placeholder='************'
-                              />
-                              <span className='input-icon input-icon--left'>
-                                <img
-                                  src='assets/images/icons/key-icon.svg'
-                                  alt=''
-                                />
-                              </span>
-                              <span
-                                className='input-icon password-show-hide fas fa-eye la-eye-slash toggle-password-two'
-                                id='#current-password'
-                              />
-                            </div>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.cus_state}
+                              name='cus_state'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Customer state'
+                            />
+                          </div>
+
+                          {/* Shipping */}
+
+                          <div>
+                            <p>
+                              -------- 🚚 Shipping Information 🛳️ ----------
+                            </p>
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='new-password'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              New Password
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping name
                             </label>
-                            <div className='position-relative'>
-                              <input
-                                type='password'
-                                className='common-input common-input--withIcon common-input--withLeftIcon '
-                                id='new-password'
-                                placeholder='************'
-                              />
-                              <span className='input-icon input-icon--left'>
-                                <img
-                                  src='assets/images/icons/lock-two.svg'
-                                  alt=''
-                                />
-                              </span>
-                              <span
-                                className='input-icon password-show-hide fas fa-eye la-eye-slash toggle-password-two'
-                                id='#new-password'
-                              />
-                            </div>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.ship_name}
+                              name='ship_name'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping name'
+                            />
                           </div>
                           <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='confirm-password'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Current Password
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping address
                             </label>
-                            <div className='position-relative'>
-                              <input
-                                type='password'
-                                className='common-input common-input--withIcon common-input--withLeftIcon '
-                                id='confirm-password'
-                                placeholder='************'
-                              />
-                              <span className='input-icon input-icon--left'>
-                                <img
-                                  src='assets/images/icons/lock-two.svg'
-                                  alt=''
-                                />
-                              </span>
-                              <span
-                                className='input-icon password-show-hide fas fa-eye la-eye-slash toggle-password-two'
-                                id='#confirm-password'
-                              />
-                            </div>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.ship_add}
+                              name='ship_add'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping address'
+                            />
                           </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping city
+                            </label>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.ship_city}
+                              name='ship_city'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping city'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping country
+                            </label>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.ship_country}
+                              name='ship_country'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping country'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping phone
+                            </label>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.ship_phone}
+                              name='ship_phone'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping phone'
+                            />
+                          </div>
+                          <div className='col-sm-6 col-xs-6'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping postcode
+                            </label>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.ship_postcode}
+                              name='ship_postcode'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping postcode'
+                            />
+                          </div>
+                          <div className='col-12'>
+                            <label className='form-label mb-2 font-18 font-heading fw-600'>
+                              Shipping state
+                            </label>
+                            <input
+                              required
+                              onChange={handleChange}
+                              value={data?.ship_state}
+                              name='ship_state'
+                              type='text'
+                              className='common-input border'
+                              placeholder='Shipping state'
+                            />
+                          </div>
+
                           <div className='col-sm-12 text-end'>
-                            <button className='btn btn-main btn-lg pill mt-4'>
-                              {" "}
-                              Update Password
+                            <button
+                              disabled={userUpdateLoading}
+                              onClick={userSubmit}
+                              className='btn btn-main btn-lg pill mt-4'
+                            >
+                              {userUpdateLoading
+                                ? "🛻 Loading..."
+                                : "Update Profile"}
                             </button>
                           </div>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>

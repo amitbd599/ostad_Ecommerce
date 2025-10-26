@@ -157,15 +157,6 @@ const CreateProduct = () => {
                             ></textarea>
                           </div>
                           <div className='col-12'>
-                            {/* <label className='form-label mb-2 font-18 font-heading fw-600'>
-                              Image
-                            </label>
-                            <textarea
-                              name=''
-                              id=''
-                              className='common-input border'
-                            ></textarea> */}
-
                             <button
                               className='btn btn-main btn-sm pill'
                               data-bs-toggle='modal'

@@ -122,8 +122,8 @@ exports.logout = async (req, res) => {
 //! update user
 exports.update = async (req, res) => {
   try {
+    let email = req.headers.email;
     const {
-      email,
       password,
       image,
       cus_add,

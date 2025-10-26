@@ -2,13 +2,25 @@ import { Link, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 import userStore from "../store/userStore";
 import { useState } from "react";
+import { ErrorToast, IsEmpty } from "../helper/helper";
 
 const Login = () => {
   let { userLoginLoading, userLoginRequest } = userStore();
   const navigate = useNavigate();
   let [data, setData] = useState({ email: "", password: "" });
 
+  // Validation rules
+  const validations = [
+    { field: data.email, message: "Email is required!" },
+    { field: data.password, message: "Password is required!" },
+  ];
+
   let userSubmit = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
     let res = await userLoginRequest(data);
 
     if (res) {

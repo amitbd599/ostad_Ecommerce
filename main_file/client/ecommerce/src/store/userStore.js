@@ -74,6 +74,32 @@ const userStore = create((set) => ({
       return false;
     }
   },
+
+  // user-update
+  userUpdateLoading: false,
+  userUpdateRequest: async (data) => {
+    try {
+      set({ userRegisterLoading: true });
+      let res = await axios.put(baseURL + `/user-update`, data, {
+        withCredentials: true,
+        credentials: "include",
+      });
+
+      if (res?.data?.success === true) {
+        set({ userUpdateLoading: false });
+        SuccessToast(res?.data?.message);
+        return true;
+      } else {
+        set({ userUpdateLoading: false });
+        ErrorToast(res?.data?.message);
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      set({ userUpdateLoading: false });
+      return false;
+    }
+  },
 }));
 
 export default userStore;
