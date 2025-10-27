@@ -25,7 +25,15 @@ function App() {
         {/* all-products/:category_id/:brand_id/:remark/:keyword/:per_page/:page_no */}
         <Route exact path='/all-products' element={<AllProductPage />} />
         <Route exact path='/product-details' element={<ProductDetailsPage />} />
-        <Route exact path='/cart' element={<CartPage />} />
+        <Route
+          exact
+          path='/cart'
+          element={
+            <PrivateRoute>
+              <CartPage />
+            </PrivateRoute>
+          }
+        />
         <Route exact path='/cart-personal' element={<CartPersonalPage />} />
         <Route exact path='/cart-thank-you' element={<CartThankYouPage />} />
 

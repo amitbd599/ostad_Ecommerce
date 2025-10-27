@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 import { Link, NavLink } from "react-router-dom";
+import cartStore from "../store/cartStore";
 const HeaderOne = () => {
   const [active, setActive] = useState(false);
   const [scroll, setScroll] = useState(false);
@@ -45,6 +46,17 @@ const HeaderOne = () => {
   const mobileMenu = () => {
     setActive(!active);
   };
+
+  // api integrate
+  let { allCart, allCartRequest } = cartStore();
+
+  useEffect(() => {
+    (async () => {
+      await allCartRequest();
+    })();
+  }, [allCartRequest]);
+
+  console.log(allCart);
 
   return (
     <>
@@ -191,7 +203,7 @@ const HeaderOne = () => {
                   alt=''
                   className='dark-version'
                 />
-                <span className='qty-badge font-12'>0</span>
+                <span className='qty-badge font-12'>{allCart?.length}</span>
               </Link>
               {/* Light Dark Mode */}
               <ThemeToggle />

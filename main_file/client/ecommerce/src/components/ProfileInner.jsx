@@ -29,8 +29,6 @@ const ProfileInner = () => {
     })();
   }, [userRequest]);
 
-  console.log(data);
-
   useEffect(() => {
     if (user) {
       setData({

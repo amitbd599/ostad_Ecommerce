@@ -10,12 +10,13 @@ import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import productStore from "../store/productStore";
 import { baseURLFile } from "../helper/config";
 import Skeleton from "react-loading-skeleton";
-import { formatDate } from "../helper/helper";
+import { ErrorToast, formatDate, IsEmpty } from "../helper/helper";
+import cartStore from "../store/cartStore";
 
 const ProductDetails = () => {
   const [searchParams] = useSearchParams();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-  let [initData, setInitData] = useState({
+  let [data, setData] = useState({
     size: "",
     color: "",
     qty: 1,
@@ -33,9 +34,36 @@ const ProductDetails = () => {
     })();
   }, [product_id, singleProductsRequest]);
 
-  // let cartSubmit=()=>{
-  //     userRegisterRequest()
-  // }
+  // cart Store
+  let { createCartLoading, createCartRequest, allCartRequest } = cartStore();
+
+  // Validation rules
+  const validations = [
+    { field: product_id, message: "product_id is required!" },
+    { field: singleProduct?.title, message: "title is required!" },
+    { field: data.color, message: "color is required!" },
+    { field: data.qty, message: "qty is required!" },
+    { field: data.size, message: "size is required!" },
+  ];
+  let cartSubmit = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+
+    let submitData = {
+      product_id,
+      product_name: singleProduct?.title,
+      color: data.color,
+      qty: data.qty,
+      size: data.size,
+    };
+    await createCartRequest(submitData);
+    await allCartRequest();
+  };
+
+  console.log(data);
 
   const discount =
     ((singleProduct?.price - singleProduct?.discount_price) /
@@ -385,15 +413,15 @@ const ProductDetails = () => {
                   </div>
 
                   <div className='size py-3'>
-                    <h4>Size: {initData?.size}</h4>
+                    <h4>Size: {data?.size}</h4>
                     <div className='size_varient'>
                       {singleProduct?.size?.map((item, index) => (
                         <button
-                          className={initData?.activeSize === index && "active"}
+                          className={data?.activeSize === index && "active"}
                           key={index}
                           onClick={() => {
-                            setInitData({
-                              ...initData,
+                            setData({
+                              ...data,
                               size: item,
                               activeSize: index,
                             });
@@ -406,17 +434,15 @@ const ProductDetails = () => {
                   </div>
 
                   <div className='color py-3'>
-                    <h4>Color: {initData?.color}</h4>
+                    <h4>Color: {data?.color}</h4>
                     <div className='size_varient'>
                       {singleProduct?.color?.map((item, index) => (
                         <button
-                          className={
-                            initData?.activeColor === index && "active"
-                          }
+                          className={data?.activeColor === index && "active"}
                           key={index}
                           onClick={() => {
-                            setInitData({
-                              ...initData,
+                            setData({
+                              ...data,
                               color: item,
                               activeColor: index,
                             });
@@ -433,20 +459,20 @@ const ProductDetails = () => {
                         <button
                           className='btn-quantity btn-decrease'
                           onClick={() =>
-                            setInitData({
-                              ...initData,
-                              qty: initData.qty > 1 ? initData.qty - 1 : 1,
+                            setData({
+                              ...data,
+                              qty: data.qty > 1 ? data.qty - 1 : 1,
                             })
                           }
                         >
                           -
                         </button>
-                        <span className='quantity-product'>{initData.qty}</span>
+                        <span className='quantity-product'>{data.qty}</span>
                         <button
                           onClick={() =>
-                            setInitData({
-                              ...initData,
-                              qty: initData.qty + 1,
+                            setData({
+                              ...data,
+                              qty: data.qty + 1,
                             })
                           }
                           className='btn-quantity btn-increase'
@@ -457,11 +483,13 @@ const ProductDetails = () => {
                     </div>
                     <div className='w-100'>
                       <button
-                        type='button'
+                        disabled={createCartLoading}
+                        onClick={cartSubmit}
                         className='btn btn-main d-flex w-100 justify-content-center align-items-center gap-2 pill px-sm-5 '
                       >
                         <img src='assets/images/icons/add-to-cart.svg' alt='' />
-                        Add To Cart
+
+                        {createCartLoading ? "Loading..." : "Add To Cart"}
                       </button>
                     </div>
                   </div>
