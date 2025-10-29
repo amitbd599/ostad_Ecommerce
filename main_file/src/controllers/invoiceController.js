@@ -12,6 +12,8 @@ exports.createInvoice = async (req, res) => {
   try {
     let user_id = new ObjectId(req.headers._id);
     let cus_email = req.headers.email;
+    let vat = totalAmount * 0.05; // 5% vat
+    let shipping = 75;
 
     // =========== Step-1: Calculate total payable & vat =============
 
@@ -49,9 +51,6 @@ exports.createInvoice = async (req, res) => {
         }
         totalAmount = totalAmount + parseFloat(item?.qty) * price;
       });
-
-      let vat = totalAmount * 0.05; // 5% vat
-      let shipping = 75;
 
       // console.log(totalAmount, vat, shipping);
 

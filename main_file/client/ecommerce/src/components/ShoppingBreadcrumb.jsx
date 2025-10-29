@@ -1,6 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const ShoppingBreadcrumb = () => {
+  const location = useLocation();
+
+  console.log(location);
+
   return (
     <section className='breadcrumb breadcrumb-four padding-static-y-60 section-bg position-relative z-index-1 overflow-hidden'>
       <img
@@ -46,7 +50,11 @@ const ShoppingBreadcrumb = () => {
                 </li>
               </ul>
               <ul className='process-list'>
-                <li className='process-list__item activePage'>
+                <li
+                  className={`process-list__item ${
+                    location.pathname === "/cart" && "activePage"
+                  } `}
+                >
                   <span className='process-list__link'>
                     <div className='icons'>
                       <span className='icon white'>
@@ -55,11 +63,18 @@ const ShoppingBreadcrumb = () => {
                           alt=''
                         />
                       </span>
+                      <span className='icon colored'>
+                        <img src='assets/images/icons/process1.svg' alt='' />
+                      </span>
                     </div>
                     <span className='text'>Shopping Cart</span>
                   </span>
                 </li>
-                <li className='process-list__item activePage'>
+                <li
+                  className={`process-list__item ${
+                    location.pathname === "/cart-personal" && "activePage"
+                  } `}
+                >
                   <span className='process-list__link'>
                     <div className='icons'>
                       <span className='icon white'>
@@ -76,7 +91,11 @@ const ShoppingBreadcrumb = () => {
                   </span>
                 </li>
 
-                <li className='process-list__item'>
+                <li
+                  className={`process-list__item ${
+                    location.pathname === "/cart-thank-you" && "activePage"
+                  } `}
+                >
                   <span className='process-list__link'>
                     <div className='icons'>
                       <span className='icon white'>

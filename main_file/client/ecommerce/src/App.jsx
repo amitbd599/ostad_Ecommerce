@@ -34,8 +34,16 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route exact path='/cart-personal' element={<CartPersonalPage />} />
-        <Route exact path='/cart-thank-you' element={<CartThankYouPage />} />
+        <Route
+          exact
+          path='/cart-personal'
+          element={
+            <PrivateRoute>
+              <CartPersonalPage />
+            </PrivateRoute>
+          }
+        />
+        <Route exact path='/cart-thank-you' element={<PrivateRoute><CartThankYouPage /></PrivateRoute>} />
 
         <Route exact path='/contact' element={<ContactPage />} />
 

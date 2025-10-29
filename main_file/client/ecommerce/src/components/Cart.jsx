@@ -58,7 +58,7 @@ const Cart = () => {
                             <div className='cart-item__thumb'>
                               <Link to='/product-details' className='link'>
                                 <img
-                                  src={`${baseURLFile}/${item?.category?.category_img}`}
+                                  src={`${baseURLFile}/${item?.product?.images?.[0]}`}
                                   alt=''
                                   className='cover-img'
                                 />
@@ -172,7 +172,7 @@ const Cart = () => {
           {allCart?.length > 0 && (
             <div className='cart-content__bottom flx-between gap-2'>
               <Link
-                to='/all-product'
+                to='/all-products?category_id=0&brand_id=0&remark=0&keyword=0&per_page=12&page_no=1'
                 className='btn btn-outline-light flx-align gap-2 pill btn-lg'
               >
                 <span className='icon line-height-1 font-20'>

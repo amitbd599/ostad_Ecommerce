@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 import { Link, NavLink } from "react-router-dom";
+import { FaHouse } from "react-icons/fa6";
+
 import cartStore from "../store/cartStore";
+import userStore from "../store/userStore";
 const HeaderOne = () => {
   const [active, setActive] = useState(false);
   const [scroll, setScroll] = useState(false);
@@ -49,14 +52,16 @@ const HeaderOne = () => {
 
   // api integrate
   let { allCart, allCartRequest } = cartStore();
+  let { user, userRequest } = userStore();
+
+  console.log(user);
 
   useEffect(() => {
     (async () => {
       await allCartRequest();
+      await userRequest();
     })();
-  }, [allCartRequest]);
-
-  console.log(allCart);
+  }, [allCartRequest, userRequest]);
 
   return (
     <>
@@ -209,12 +214,21 @@ const HeaderOne = () => {
               <ThemeToggle />
               {/* Light Dark Mode */}
               <div className='header-right__inner gap-3 flx-align d-lg-flex d-none'>
-                <Link to='/register' className='btn btn-main pill'>
-                  <span className='icon-left icon'>
-                    <img src='assets/images/icons/user.svg' alt='' />
-                  </span>
-                  Create Account
-                </Link>
+                {user !== null ? (
+                  <Link to='/dashboard-profile' className='btn btn-main pill'>
+                    <span className='icon-left icon'>
+                      <FaHouse className='mb-1' />
+                    </span>
+                    Dashboard
+                  </Link>
+                ) : (
+                  <Link to='/register' className='btn btn-main pill'>
+                    <span className='icon-left icon'>
+                      <img src='assets/images/icons/user.svg' alt='' />
+                    </span>
+                    Create Account
+                  </Link>
+                )}
               </div>
               <button
                 type='button'
