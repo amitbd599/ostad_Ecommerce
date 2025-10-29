@@ -50,7 +50,7 @@ exports.createInvoice = async (req, res) => {
         totalAmount = totalAmount + parseFloat(item?.qty) * price;
       });
 
-      let vat = totalAmount * 0.05; // 5% vat
+      let vat = totalAmount * 0.15; // 15% vat
       let shipping = 75; // 75tk
 
       // console.log(totalAmount, vat, shipping);
@@ -152,14 +152,14 @@ exports.createInvoice = async (req, res) => {
       // =========== Step-7: Prepare SSL Payment =============
 
       let paymentSetting = {
-        store_id: "theme664dfb04bfaf4",
-        store_passwd: "theme664dfb04bfaf4@ssl",
-        currency: "BDT",
-        success_url: "/payment-success",
-        fail_url: "/payment-fail",
-        cancel_url: "/payment-cancel",
-        ipn_url: "/api/v1",
-        init_url: "https://sandbox.sslcommerz.com/gwprocess/v3/api.php",
+        store_id: process.env.SSLCZ_STORE_ID,
+        store_passwd: process.env.SSLCZ_STORE_PASSWD,
+        currency: process.env.SSLCZ_CURRENCY,
+        success_url: process.env.SSLCZ_SUCCESS_URL,
+        fail_url: process.env.SSLCZ_FAIL_URL,
+        cancel_url: process.env.SSLCZ_CANCEL_URL,
+        ipn_url: process.env.SSLCZ_IPN_URL,
+        init_url: process.env.SSLCZ_INIT_URL,
       };
 
       let form = new FormData();
@@ -417,6 +417,86 @@ exports.allOrderList = async (req, res) => {
       success: true,
       message: "Invoice fetched successfully",
       data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! payment-success
+exports.paymentSuccess = async (req, res) => {
+  try {
+    let trx_id = req.params.trx_id;
+
+    await invoiceModel.updateOne(
+      { tran_id: trx_id },
+      { payment_status: "success" }
+    );
+
+    res.redirect(process.env.Origin_HOST + "/cart-thank-you");
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! payment-cancel
+exports.paymentCancel = async (req, res) => {
+  try {
+    let trx_id = req.params.trx_id;
+
+    await invoiceModel.updateOne(
+      { tran_id: trx_id },
+      { payment_status: "cancel" }
+    );
+
+    res.redirect(process.env.Origin_HOST + "/cart-thank-you");
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! payment-fail
+exports.paymentFail = async (req, res) => {
+  try {
+    let trx_id = req.params.trx_id;
+
+    await invoiceModel.updateOne(
+      { tran_id: trx_id },
+      { payment_status: "fail" }
+    );
+
+    res.redirect(process.env.Origin_HOST + "/cart-thank-you");
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! payment-ipn
+exports.paymentIpn = async (req, res) => {
+  try {
+    let trx_id = req.params.trx_id;
+
+    // Here do something you have to need . . .  .
+
+    res.status(200).json({
+      success: true,
+      message: "Here do something you have to need . . .  .",
     });
   } catch (error) {
     res.status(500).json({

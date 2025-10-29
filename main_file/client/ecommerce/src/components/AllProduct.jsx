@@ -309,7 +309,7 @@ const AllProduct = () => {
                             <div className='product-item section-bg'>
                               <div className='product-item__thumb d-flex'>
                                 <Link
-                                  to='/product-details'
+                                  to={`/product-details?product_id=${item?._id}`}
                                   className='link w-100'
                                 >
                                   <img
@@ -321,7 +321,10 @@ const AllProduct = () => {
                               </div>
                               <div className='product-item__content'>
                                 <h6 className='product-item__title'>
-                                  <Link to='/product-details' className='link'>
+                                  <Link
+                                    to={`/product-details?product_id=${item?._id}`}
+                                    className='link'
+                                  >
                                     {item?.title}
                                   </Link>
                                 </h6>

@@ -9,7 +9,7 @@ const CartPersonal = () => {
   let { allCart, allCartRequest } = cartStore();
   let { createInvoiceLoading, createInvoiceRequest } = invoiceStore();
   let { user } = userStore();
-  let vat = 0.05; // 5% vat
+  let vat = 0.15; // 15% vat
   let shipping = 75;
 
   useEffect(() => {
@@ -361,7 +361,7 @@ const CartPersonal = () => {
                   </span>
                 </li>
                 <li className='billing-list__item flx-between'>
-                  <span className='text text-heading fw-500'>Vat</span>
+                  <span className='text text-heading fw-500'>Vat(15%)</span>
                   <span className='amount text-body'>৳{subTotal * vat}</span>
                 </li>
                 <li className='billing-list__item flx-between'>

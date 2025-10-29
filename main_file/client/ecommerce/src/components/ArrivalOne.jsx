@@ -13,8 +13,6 @@ const ArrivalOne = () => {
     })();
   }, [newArrivalProductsRequest]);
 
-  console.log(allNewArrivalProducts);
-
   return (
     <section className='arrival-product padding-y-120 section-bg position-relative z-index-1'>
       <img
@@ -49,7 +47,10 @@ const ArrivalOne = () => {
                 <div key={index} className='col-xl-3 col-lg-4 col-sm-6'>
                   <div className='product-item'>
                     <div className='product-item__thumb d-flex'>
-                      <Link to='/product-details' className='link w-100'>
+                      <Link
+                        to={`/product-details?product_id=${item?._id}`}
+                        className='link w-100'
+                      >
                         <img
                           src={`${baseURLFile}/${item?.images?.[0]}`}
                           alt=''
@@ -59,7 +60,10 @@ const ArrivalOne = () => {
                     </div>
                     <div className='product-item__content'>
                       <h6 className='product-item__title'>
-                        <Link to='/product-details' className='link'>
+                        <Link
+                          to={`/product-details?product_id=${item?._id}`}
+                          className='link'
+                        >
                           {item?.title}
                         </Link>
                       </h6>
@@ -84,7 +88,7 @@ const ArrivalOne = () => {
                           </span>
                         </div>
                         <Link
-                          to='/product-details'
+                          to={`/product-details?product_id=${item?._id}`}
                           className='btn btn-outline-light btn-sm pill'
                         >
                           View Product

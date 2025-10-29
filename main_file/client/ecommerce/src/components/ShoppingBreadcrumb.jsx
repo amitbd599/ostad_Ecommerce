@@ -3,8 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 const ShoppingBreadcrumb = () => {
   const location = useLocation();
 
-  console.log(location);
-
   return (
     <section className='breadcrumb breadcrumb-four padding-static-y-60 section-bg position-relative z-index-1 overflow-hidden'>
       <img

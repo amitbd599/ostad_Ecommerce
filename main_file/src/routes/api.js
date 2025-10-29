@@ -161,6 +161,11 @@ router.get(
   invoiceController.allOrderList
 );
 
+router.post("/payment-success/:trx_id", invoiceController.paymentSuccess);
+router.post("/payment-cancel/:trx_id", invoiceController.paymentCancel);
+router.post("/payment-fail/:trx_id", invoiceController.paymentFail);
+router.post("/payment-ipn/:trx_id", invoiceController.paymentIpn);
+
 // ! File Uploads
 router.post(
   "/file-upload",
