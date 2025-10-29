@@ -18,10 +18,6 @@ const invoiceStore = create((set) => ({
         }
       );
 
-      //  if (res?.data?.success === true) {
-      //   window.location.href = res?.data?.data?.GatewayPageURL;
-      // }
-
       if (res?.data?.success === true) {
         set({ createInvoiceLoading: false });
         SuccessToast(res?.data?.message);
@@ -39,17 +35,38 @@ const invoiceStore = create((set) => ({
     }
   },
 
-  // read-cart
-  allCart: null,
-  allCartRequest: async () => {
+  // read-all-invoice-single-user
+  readAllInvoiceSingleUser: null,
+  allInvoiceSingleUserRequest: async () => {
     try {
-      let res = await axios.get(baseURL + `/read-cart`, {
+      let res = await axios.get(baseURL + `/read-all-invoice-single-user`, {
         withCredentials: true,
         credentials: "include",
       });
 
       if (res?.data?.success === true) {
-        set({ allCart: res?.data?.data });
+        set({ readAllInvoiceSingleUser: res?.data?.data });
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
+
+  // read-single-invoice-single-user
+  readSingleInvoiceSingleUser: null,
+  singleInvoiceSingleUserRequest: async (id) => {
+    try {
+      let res = await axios.get(
+        baseURL + `/read-single-invoice-single-user/${id}`,
+        {
+          withCredentials: true,
+          credentials: "include",
+        }
+      );
+
+      if (res?.data?.success === true) {
+        set({ readSingleInvoiceSingleUser: res?.data?.data });
       }
     } catch (error) {
       console.log(error);

@@ -133,11 +133,11 @@ router.get(
   authVerificationUser,
   invoiceController.readAllInvoiceSingleUser
 );
-router.get(
-  "/read-all-invoice-all-user",
-  authVerificationAdmin,
-  invoiceController.readAllInvoiceAllUser
-);
+// router.get(
+//   "/read-all-invoice-all-user",
+//   authVerificationAdmin,
+//   invoiceController.readAllInvoiceAllUser
+// );
 
 router.get(
   "/read-single-invoice-single-user/:invoice_id",
@@ -155,11 +155,11 @@ router.get(
   authVerificationUser,
   invoiceController.readOrderList
 );
-router.get(
-  "/all-order-list",
-  authVerificationAdmin,
-  invoiceController.allOrderList
-);
+// router.get(
+//   "/all-order-list",
+//   authVerificationAdmin,
+//   invoiceController.allOrderList
+// );
 
 router.post("/payment-success/:trx_id", invoiceController.paymentSuccess);
 router.post("/payment-cancel/:trx_id", invoiceController.paymentCancel);

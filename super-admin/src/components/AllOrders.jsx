@@ -43,7 +43,6 @@ const AllOrders = () => {
   });
   return (
     <>
-      {/* Cover Photo Start */}
       <div className='cover-photo  overflow-hidden '>
         <div className='avatar-upload p-5'>
           <h2>Supper Admin</h2>

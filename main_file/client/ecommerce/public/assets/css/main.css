@@ -9628,5 +9628,12 @@ input[type="number"] {
   color: #fff;
   border: 1px solid #4d57f2;
 }
+
+.modal-dialog {
+  min-width: 70vw;
+}
+.order_item .modal-dialog {
+  min-width: 60vw !important;
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */
