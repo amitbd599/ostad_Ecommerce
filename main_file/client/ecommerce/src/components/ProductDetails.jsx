@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import parse from "html-react-parser";
 import "swiper/css";
@@ -16,6 +16,7 @@ import cartStore from "../store/cartStore";
 const ProductDetails = () => {
   const [searchParams] = useSearchParams();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const navigate = useNavigate();
   let [data, setData] = useState({
     size: "",
     color: "",
@@ -59,7 +60,10 @@ const ProductDetails = () => {
       qty: data.qty,
       size: data.size,
     };
-    await createCartRequest(submitData);
+    let res = await createCartRequest(submitData);
+    if (res === 401) {
+      navigate("/login");
+    }
     await allCartRequest();
   };
 

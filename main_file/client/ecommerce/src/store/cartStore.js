@@ -25,6 +25,9 @@ const cartStore = create((set) => ({
       }
     } catch (error) {
       console.log(error);
+      if (error?.status === 401) {
+        return 401;
+      }
       set({ createCartLoading: false });
       return false;
     }
