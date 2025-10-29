@@ -3,9 +3,11 @@ import cartStore from "../store/cartStore";
 import { useEffect } from "react";
 import userStore from "../store/userStore";
 import { formatDate } from "../helper/helper";
+import invoiceStore from "../store/invoiceStore";
 
 const CartPersonal = () => {
   let { allCart, allCartRequest } = cartStore();
+  let { createInvoiceLoading, createInvoiceRequest } = invoiceStore();
   let { user } = userStore();
   let vat = 0.05; // 5% vat
   let shipping = 75;
@@ -28,8 +30,9 @@ const CartPersonal = () => {
     0
   );
 
-  console.log(subTotal);
-  console.log(allCart);
+  let paySubmit = async () => {
+    createInvoiceRequest();
+  };
 
   return (
     <section className='cart-personal padding-y-120'>
@@ -335,12 +338,13 @@ const CartPersonal = () => {
                 </span>
                 Back
               </Link>
-              <Link
-                to='/cart-payment'
+              <button
+                disabled={createInvoiceLoading}
+                onClick={paySubmit}
                 className='btn btn-main flx-align gap-2 pill btn-lg'
               >
-                Proceed To Payment
-              </Link>
+                {createInvoiceLoading ? "🛻 Loading..." : "Proceed To Payment"}
+              </button>
             </div>
           </div>
           <div className='col-lg-4'>

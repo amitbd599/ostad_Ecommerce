@@ -12,8 +12,6 @@ exports.createInvoice = async (req, res) => {
   try {
     let user_id = new ObjectId(req.headers._id);
     let cus_email = req.headers.email;
-    let vat = totalAmount * 0.05; // 5% vat
-    let shipping = 75;
 
     // =========== Step-1: Calculate total payable & vat =============
 
@@ -44,13 +42,16 @@ exports.createInvoice = async (req, res) => {
       cartProducts.forEach((item) => {
         let price;
 
-        if (item?.product?.discount === true) {
-          price = parseFloat(item.product.discountPrice); //20
+        if (item?.product?.is_discount === true) {
+          price = parseFloat(item.product.discount_price); //20
         } else {
           price = parseFloat(item.product.price); //200
         }
         totalAmount = totalAmount + parseFloat(item?.qty) * price;
       });
+
+      let vat = totalAmount * 0.05; // 5% vat
+      let shipping = 75; // 75tk
 
       // console.log(totalAmount, vat, shipping);
 
@@ -154,9 +155,9 @@ exports.createInvoice = async (req, res) => {
         store_id: "theme664dfb04bfaf4",
         store_passwd: "theme664dfb04bfaf4@ssl",
         currency: "BDT",
-        success_url: "/api/v1/payment-success",
-        fail_url: "/api/v1/payment-fail",
-        cancel_url: "/api/v1/payment-cancel",
+        success_url: "/payment-success",
+        fail_url: "/payment-fail",
+        cancel_url: "/payment-cancel",
         ipn_url: "/api/v1",
         init_url: "https://sandbox.sslcommerz.com/gwprocess/v3/api.php",
       };

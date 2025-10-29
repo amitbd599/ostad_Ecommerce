@@ -31,8 +31,6 @@ const Cart = () => {
     await allCartRequest();
   };
 
-  console.log(allCart?.length);
-
   return (
     <div className='cart padding-y-120'>
       <div className='container'>
