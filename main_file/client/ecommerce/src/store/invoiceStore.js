@@ -73,6 +73,30 @@ const invoiceStore = create((set) => ({
       return false;
     }
   },
+
+  // read-invoice-product-list-single-user
+  totalInvoiceProduct: null,
+  readInvoiceProductListSingleUser: null,
+  readInvoiceProductListSingleUserRequest: async (per_page, page_no) => {
+    try {
+      let res = await axios.get(
+        baseURL +
+          `/read-invoice-product-list-single-user/${per_page}/${page_no}`,
+        {
+          withCredentials: true,
+          credentials: "include",
+        }
+      );
+
+      if (res?.data?.success === true) {
+        set({ readInvoiceProductListSingleUser: res?.data?.data?.products });
+        set({ totalInvoiceProduct: res?.data?.data?.totalCount?.[0]?.count });
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
 }));
 
 export default invoiceStore;

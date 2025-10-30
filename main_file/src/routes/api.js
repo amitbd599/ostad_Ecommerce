@@ -146,7 +146,7 @@ router.get(
 );
 
 router.get(
-  "/read-invoice-product-list-single-user/:invoice_id",
+  "/read-invoice-product-list-single-user/:per_page/:page_no",
   authVerificationUser,
   invoiceController.readInvoiceProductListSingleUser
 );

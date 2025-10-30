@@ -9630,10 +9630,10 @@ input[type="number"] {
 }
 
 .modal-dialog {
-  min-width: 70vw;
+  max-width: 1140px !important;
 }
 .order_item .modal-dialog {
-  min-width: 60vw !important;
+  max-width: 1140px !important;
 }
 
 .invoice .table {

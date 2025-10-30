@@ -271,7 +271,7 @@ const MasterLayout = ({ children }) => {
 
                 <li className='sidebar-list__item'>
                   <NavLink
-                    to='/dashboard-review'
+                    to='/dashboard-review?&page_no=1'
                     className={(navData) =>
                       navData.isActive
                         ? "sidebar-list__link activePage"
@@ -290,7 +290,7 @@ const MasterLayout = ({ children }) => {
                         className='icon icon-active'
                       />
                     </span>
-                    <span className='text'>Reviews</span>
+                    <span className='text'>All orders products</span>
                   </NavLink>
                 </li>
 

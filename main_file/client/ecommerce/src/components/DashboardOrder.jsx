@@ -45,7 +45,7 @@ const DashboardOrder = () => {
       -webkit-print-color-adjust: exact !important;
       color-adjust: exact !important;
       font-family: Arial, sans-serif;
-      padding: 20px;
+      padding: 0px;
     }
     table {
       border-collapse: collapse !important;
@@ -327,7 +327,7 @@ const DashboardOrder = () => {
 
                           {/* Summary */}
                           <div className='row justify-content-end'>
-                            <div className='col-md-8'>
+                            <div className='col-8'>
                               <p className='text-danger small fst-italic'>
                                 {toWords.convert(
                                   Number(
@@ -336,7 +336,7 @@ const DashboardOrder = () => {
                                 )}
                               </p>
                             </div>
-                            <div className='col-md-4'>
+                            <div className='col-4'>
                               <ul className='list-unstyled'>
                                 <li className='d-flex justify-content-between mb-2'>
                                   <span>Subtotal:</span>{" "}
