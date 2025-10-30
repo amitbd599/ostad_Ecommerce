@@ -9635,5 +9635,19 @@ input[type="number"] {
 .order_item .modal-dialog {
   min-width: 60vw !important;
 }
+
+.invoice .table {
+  border-spacing: 0 10px;
+  /* border: 1px solid hsl(var(--gray-five)); */
+}
+.invoice .table tbody tr td {
+  padding: 10px 20px;
+  border: none;
+  border-bottom: 1px solid hsl(var(--gray-five));
+}
+
+.invoice .table tbody tr td {
+  border-radius: 0;
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */

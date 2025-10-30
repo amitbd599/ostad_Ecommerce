@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
+import { ToWords } from "to-words";
 import invoiceStore from "../store/invoiceStore";
 import { useEffect } from "react";
 import { formatDate } from "../helper/helper";
 import { useCallback, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import userStore from "../store/userStore";
 
 const DashboardOrder = () => {
   let {
@@ -14,14 +13,11 @@ const DashboardOrder = () => {
     singleInvoiceSingleUserRequest,
   } = invoiceStore();
 
-  let { userRequest, user } = userStore();
-
   useEffect(() => {
     (async () => {
-      await userRequest();
       await allInvoiceSingleUserRequest();
     })();
-  }, [allInvoiceSingleUserRequest, userRequest]);
+  }, [allInvoiceSingleUserRequest]);
 
   const componentRef = useRef(null);
 
@@ -65,6 +61,29 @@ const DashboardOrder = () => {
   let viewOrder = (id) => {
     singleInvoiceSingleUserRequest(id);
   };
+
+  const toWords = new ToWords({
+    localeCode: "en-IN",
+    converterOptions: {
+      currency: true,
+      ignoreDecimal: false,
+      ignoreZeroCurrency: false,
+      doNotAddOnly: false,
+      currencyOptions: {
+        // can be used to override defaults for the selected locale
+        name: "Taka",
+        plural: "Taka",
+        symbol: "Tk.",
+        fractionalUnit: {
+          name: "Paisa",
+          plural: "Paisa",
+          symbol: "",
+        },
+      },
+    },
+  });
+
+  console.log(readSingleInvoiceSingleUser);
 
   return (
     <div className='dashboard-body__content'>
@@ -178,10 +197,17 @@ const DashboardOrder = () => {
                             <div className='col-sm-6'>
                               <h2 className='fw-bold'>INVOICE</h2>
                               <p className='mb-0'>
-                                #INV-
-                                {readSingleInvoiceSingleUser?.[0]?.invoice_id}
+                                #INV no: {readSingleInvoiceSingleUser?._id}
                               </p>
-                              <small>Date: Oct 03, 2025</small>
+                              <p className='mb-0'>
+                                #TRA no: {readSingleInvoiceSingleUser?.tran_id}
+                              </p>
+                              <small>
+                                Date:{" "}
+                                {formatDate(
+                                  readSingleInvoiceSingleUser?.createdAt
+                                )}
+                              </small>
                             </div>
                             <div className='col-sm-6 text-end'>
                               <h5 className='fw-bold'>PixBO</h5>
@@ -195,72 +221,144 @@ const DashboardOrder = () => {
                           <div className='row mb-4'>
                             <div className='col-sm-6'>
                               <h6 className='fw-bold'>Bill To:</h6>
-                              <p className='mb-0'>{user?.cus_name}</p>
-                              <p className='mb-0'>{user?.cus_add}</p>
                               <p className='mb-0'>
-                                {user?.cus_state}, {user?.cus_country}
+                                {
+                                  readSingleInvoiceSingleUser?.cus_details?.[0]
+                                    ?.Name
+                                }
                               </p>
-                              <p className='mb-0'>{user?.email}</p>
+
+                              <p className='mb-0'>
+                                {
+                                  readSingleInvoiceSingleUser?.cus_details?.[0]
+                                    ?.Email
+                                }
+                              </p>
+                              <p className='mb-0'>
+                                {
+                                  readSingleInvoiceSingleUser?.cus_details?.[0]
+                                    ?.Phone
+                                }
+                              </p>
+                              <p className='mb-0'>
+                                {
+                                  readSingleInvoiceSingleUser?.cus_details?.[0]
+                                    ?.Address
+                                }
+                              </p>
                             </div>
                             <div className='col-sm-6 text-end'>
-                              <h6 className='fw-bold'>
-                                Payment status:{" "}
-                                {
-                                  readSingleInvoiceSingleUser?.[0]
-                                    ?.payment_status
-                                }
-                              </h6>
-                              <p className='mb-0'>Credit Card</p>
-                              <p className='mb-0'>Visa ending **** 5678</p>
+                              <h6 className='fw-bold'>Payment information: </h6>
+                              <p className='mb-1'>
+                                Payment Status:{" "}
+                                <span
+                                  className={`fw-bold text-uppercase ${
+                                    readSingleInvoiceSingleUser?.payment_status ===
+                                    "success"
+                                      ? "text-success"
+                                      : readSingleInvoiceSingleUser?.payment_status ===
+                                        "cancel"
+                                      ? "text-warning"
+                                      : "text-danger"
+                                  }`}
+                                >
+                                  {readSingleInvoiceSingleUser?.payment_status}
+                                </span>
+                              </p>
+                              <p className='mb-1'>
+                                Deliver Status:{" "}
+                                <span
+                                  className={`fw-bold text-uppercase ${
+                                    readSingleInvoiceSingleUser?.deliver_status ===
+                                    "delivered"
+                                      ? "text-success"
+                                      : readSingleInvoiceSingleUser?.deliver_status ===
+                                        "pending"
+                                      ? "text-warning"
+                                      : "text-danger"
+                                  }`}
+                                >
+                                  {readSingleInvoiceSingleUser?.deliver_status}
+                                </span>
+                              </p>
+                              <p className='mb-0'>
+                                Total payable:{" "}
+                                <span className='fw-bold text-uppercase'>
+                                  {readSingleInvoiceSingleUser?.payable} tk.
+                                </span>
+                              </p>
                             </div>
                           </div>
 
                           {/* Table */}
-                          <div className='table-responsive mb-4'>
-                            <table className='table table-bordered align-middle'>
+                          <div className='table-responsive invoice mb-4'>
+                            <table className='table  align-middle'>
                               <thead className='table-light'>
                                 <tr>
-                                  <th>Item</th>
+                                  <th>Product</th>
+                                  <th className='text-center'>Color</th>
+                                  <th className='text-center'>Size</th>
                                   <th className='text-center'>Quantity</th>
-                                  <th className='text-end'>Price</th>
+                                  <th className='text-center'>Price</th>
                                   <th className='text-end'>Total</th>
                                 </tr>
                               </thead>
-                              <tbody>
-                                <tr>
-                                  <td>Nike Sneakers</td>
-                                  <td className='text-center'>2</td>
-                                  <td className='text-end'>$120</td>
-                                  <td className='text-end'>$240</td>
-                                </tr>
-                                <tr>
-                                  <td>T-Shirt</td>
-                                  <td className='text-center'>3</td>
-                                  <td className='text-end'>$25</td>
-                                  <td className='text-end'>$75</td>
-                                </tr>
-                                <tr>
-                                  <td>Backpack</td>
-                                  <td className='text-center'>1</td>
-                                  <td className='text-end'>$80</td>
-                                  <td className='text-end'>$80</td>
-                                </tr>
+                              <tbody className='text-dark'>
+                                {readSingleInvoiceSingleUser?.invoiceProducts?.map(
+                                  (item, index) => (
+                                    <tr key={index}>
+                                      <td className='text-start'>
+                                        {item?.product_name}
+                                      </td>
+
+                                      <td>{item?.color}</td>
+                                      <td>{item?.size}</td>
+                                      <td>{item?.qty}</td>
+                                      <td>{item?.price} Tk.</td>
+                                      <td className='text-end'>
+                                        {item?.qty * item?.price} Tk.
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
                               </tbody>
                             </table>
                           </div>
 
                           {/* Summary */}
                           <div className='row justify-content-end'>
+                            <div className='col-md-8'>
+                              <p className='text-danger small fst-italic'>
+                                {toWords.convert(
+                                  Number(
+                                    readSingleInvoiceSingleUser?.payable || 0
+                                  )
+                                )}
+                              </p>
+                            </div>
                             <div className='col-md-4'>
                               <ul className='list-unstyled'>
                                 <li className='d-flex justify-content-between mb-2'>
-                                  <span>Subtotal:</span> <span>$395</span>
+                                  <span>Subtotal:</span>{" "}
+                                  <span>
+                                    {readSingleInvoiceSingleUser?.total} Tk.
+                                  </span>
                                 </li>
                                 <li className='d-flex justify-content-between mb-2'>
-                                  <span>Tax (5%):</span> <span>$19.75</span>
+                                  <span>Vat (15%):</span>{" "}
+                                  <span>
+                                    {readSingleInvoiceSingleUser?.vat} Tk.
+                                  </span>
+                                </li>
+                                <li className='d-flex justify-content-between mb-2'>
+                                  <span>Shipping cost:</span>{" "}
+                                  <span>75 Tk.</span>
                                 </li>
                                 <li className='d-flex justify-content-between border-top pt-2 fw-bold'>
-                                  <span>Total:</span> <span>$414.75</span>
+                                  <span>Total:</span>{" "}
+                                  <span>
+                                    {readSingleInvoiceSingleUser?.payable} Tk.
+                                  </span>
                                 </li>
                               </ul>
                             </div>

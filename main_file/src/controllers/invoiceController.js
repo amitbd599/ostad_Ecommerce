@@ -352,36 +352,10 @@ exports.readSingleInvoiceSingleUser = async (req, res) => {
         as: "invoiceProducts",
       },
     };
-    let joinStageWithInvoice = {
-      $lookup: {
-        from: "invoices",
-        localField: "invoice_id",
-        foreignField: "_id",
-        as: "invoices",
-      },
-    };
-    let projectionStage = {
-      $project: {
-        product_id: 1,
-        qty: 1,
-        price: 1,
-        color: 1,
-        size: 1,
-        invoice_id: 1,
-
-        "product.title": 1,
-      },
-    };
-
-    let unwindStage = { $unwind: "$product" };
 
     let data = await invoiceModel.aggregate([
       matchStage,
       joinStageWithInvoiceProduct,
-      // joinStageWithProduct,
-      // joinStageWithInvoice,
-      // unwindStage,
-      // projectionStage,
     ]);
 
     res.status(200).json({
