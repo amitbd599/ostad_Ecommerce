@@ -52,6 +52,24 @@ const reviewStore = create((set) => ({
       return false;
     }
   },
+
+  // single-review
+  singleReview: null,
+  singleReviewRequest: async (data) => {
+    try {
+      let res = await axios.post(baseURL + `/single-review`, data, {
+        withCredentials: true,
+        credentials: "include",
+      });
+
+      if (res?.data?.success === true) {
+        set({ singleReview: res?.data?.data?.[0] });
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
 }));
 
 export default reviewStore;

@@ -1,13 +1,15 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import reviewStore from "../store/reviewStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
+import ReactStars from "react-stars";
 import invoiceStore from "../store/invoiceStore";
-import { formatDate } from "../helper/helper";
+import { ErrorToast, formatDate, IsEmpty } from "../helper/helper";
 import { baseURLFile } from "../helper/config";
 
 const DashboardReview = () => {
   const [searchParams] = useSearchParams();
+
   const navigate = useNavigate();
   const per_page = 12;
   const page_no = searchParams.get("page_no") || 1;
@@ -15,7 +17,6 @@ const DashboardReview = () => {
     createReviewRequest,
     createReviewLoading,
     allReviewRequest,
-    allReview,
     totalReview,
   } = reviewStore();
 
@@ -36,14 +37,44 @@ const DashboardReview = () => {
     navigate(`/dashboard-review?page_no=${page_no + 1}`);
   };
 
-  let submitReview = () => {
-    createReviewRequest(per_page, page_no);
-  };
+  // For Rating work start
+  let [rating, setRating] = useState(0);
+  let [data, setData] = useState({
+    des: "",
+    rating: "",
+    product_id: "",
+    invoice_id: "",
+  });
 
-  console.log(readInvoiceProductListSingleUser);
+  const ratingChanged = (newRating) => {
+    setRating(newRating);
+    setData({
+      ...data,
+      rating: newRating,
+    });
+  };
+  // Validation rules
+  const validations = [
+    { field: data.des, message: "Description is required!" },
+    { field: data.rating, message: "Rating is required!" },
+  ];
+  let submitReview = (invoice_id, product_id) => {
+    setData({ ...data, invoice_id, product_id });
+    // setData({ ...data, product_id });
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+    createReviewRequest(data);
+  };
+  // For Rating work end
+
+  console.log(data);
 
   return (
     <div className='dashboard-body__content'>
+      point
       {/* ===================== Review Section Start ========================== */}
       <div className='card common-card border border-gray-five'>
         <div className='card-body'>
@@ -104,9 +135,20 @@ const DashboardReview = () => {
                     </td>
 
                     <td>
-                      <Link to='#' className='btn btn-main'>
+                      <button
+                        data-bs-toggle='modal'
+                        data-bs-target={`#exampleModal_1`}
+                        className='btn btn-main'
+                        onClick={() =>
+                          setData({
+                            ...data,
+                            invoice_id: item?._id,
+                            product_id: item?.product?._id,
+                          })
+                        }
+                      >
                         Make a review
-                      </Link>
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -129,7 +171,7 @@ const DashboardReview = () => {
                       nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
                       activeLinkClassName=' pagination active'
                       breakLabel='...'
-                      pageCount={totalProducts / per_page}
+                      pageCount={totalReview / per_page}
                       initialPage={page_no - 1}
                       pageRangeDisplayed={3}
                       onPageChange={handelPageClick}
@@ -145,6 +187,96 @@ const DashboardReview = () => {
         </div>
       </div>
       {/* ===================== Review Section End ========================== */}
+      {/*  */}
+      <>
+        <div
+          className='modal fade order_item'
+          id={`exampleModal_1`}
+          tabIndex={-1}
+          aria-labelledby='exampleModalLabel'
+          aria-hidden='true'
+        >
+          <div className='modal-dialog'>
+            <div className='modal-content'>
+              <div className='modal-header'>
+                <h6 className='modal-title fs-5' id='exampleModalLabel'>
+                  Product Review
+                </h6>
+                <button
+                  type='button'
+                  className='btn-close'
+                  data-bs-dismiss='modal'
+                  aria-label='Close'
+                />
+              </div>
+
+              <div className='modal-body'>
+                <div className='profile'>
+                  <div className='row gy-4'>
+                    <div className='col-12'>
+                      <div className='dashboard-card'>
+                        <div className='profile-info-content'>
+                          <div className='tab-content' id='pills-tabContent'>
+                            <div className='tab-pane fade show active'>
+                              <form action='#' autoComplete='off'>
+                                <div className='row gy-4'>
+                                  <div className='col-12'>
+                                    <label className='form-label mb-2 font-18 font-heading fw-600'>
+                                      Add Feedback
+                                    </label>
+                                    <textarea
+                                      className='common-input border'
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          des: e.target.value,
+                                        })
+                                      }
+                                    ></textarea>
+                                  </div>
+                                  <div className='col-12'>
+                                    <label className='form-label mb-2 font-18 font-heading fw-600'>
+                                      Add Review
+                                    </label>
+                                    <ReactStars
+                                      count={5}
+                                      onChange={ratingChanged}
+                                      size={34}
+                                      color2={"#ffd700"}
+                                      value={rating}
+                                      half={false}
+                                    />
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className='modal-footer'>
+                <button
+                  type='button'
+                  className='btn btn-secondary'
+                  data-bs-dismiss='modal'
+                >
+                  Close
+                </button>
+                <button
+                  data-bs-dismiss='modal'
+                  onClick={() => submitReview()}
+                  className='btn btn-primary'
+                >
+                  Submit review
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
     </div>
   );
 };

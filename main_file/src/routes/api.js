@@ -96,17 +96,21 @@ router.post(
   reviewController.createReview
 );
 router.get("/all-review/:per_page/:page_no", reviewController.allReview);
-router.get("/single-review/:id", reviewController.singleReview);
-router.put(
-  "/update-review/:id",
+router.post(
+  "/single-review",
   authVerificationUser,
-  reviewController.updateReview
+  reviewController.singleReview
 );
-router.delete(
-  "/delete-review/:id",
-  authVerificationUser,
-  reviewController.deleteReview
-);
+// router.put(
+//   "/update-review/:id",
+//   authVerificationUser,
+//   reviewController.updateReview
+// );
+// router.delete(
+//   "/delete-review/:id",
+//   authVerificationUser,
+//   reviewController.deleteReview
+// );
 
 //! ============== For cart ==================
 router.post("/create-cart", authVerificationUser, cartController.createCart);
