@@ -19,6 +19,7 @@ const fileController = require("../controllers/fileController.js");
 router.post("/admin-register", adminController.register);
 router.post("/admin-login", adminController.login);
 router.get("/admin", authVerificationAdmin, adminController.admin);
+router.get("/admin-verify", authVerificationAdmin, adminController.adminVerify);
 router.get("/admin-logout", authVerificationAdmin, adminController.logout);
 router.put("/admin-update", authVerificationAdmin, adminController.update);
 

@@ -10,6 +10,7 @@ import BrandPage from "./pages/BrandPage";
 import AllOrdersPage from "./pages/AllOrdersPage";
 import AllReviewPage from "./pages/AllReviewPage";
 import FileManagerPage from "./pages/FileManagerPage";
+import PrivateRoute from "./layout/PrivateRoute";
 
 function App() {
   return (
@@ -17,11 +18,25 @@ function App() {
       <RouteScrollToTop />
       <ScrollToTop smooth color='#A847F0' />
       <Routes>
-        <Route exact path='/login' element={<LoginPage />} />
-
         {/* dashboard */}
-        <Route exact path='/' element={<DashboardProfilePage />} />
-        <Route exact path='/create-product' element={<CreateProductPage />} />
+        <Route
+          exact
+          path='/'
+          element={
+            <PrivateRoute>
+              <DashboardProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          exact
+          path='/create-product'
+          element={
+            <PrivateRoute>
+              <CreateProductPage />
+            </PrivateRoute>
+          }
+        />
 
         <Route exact path='/all-product' element={<AllProductPage />} />
         <Route exact path='/all-reviews' element={<AllReviewPage />} />
@@ -29,6 +44,8 @@ function App() {
         <Route exact path='/brand' element={<BrandPage />} />
         <Route exact path='/all-orders' element={<AllOrdersPage />} />
         <Route exact path='/file-manager' element={<FileManagerPage />} />
+
+        <Route exact path='/login' element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );

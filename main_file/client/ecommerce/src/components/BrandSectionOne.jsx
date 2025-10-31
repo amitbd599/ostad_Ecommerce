@@ -1,6 +1,18 @@
-
 import Slider from "react-slick";
+import brandStore from "../store/brandStore";
+import { useEffect } from "react";
+import { baseURLFile } from "../helper/config";
 const BrandSectionOne = () => {
+  let { allBrandRequest, allBrand } = brandStore();
+
+  useEffect(() => {
+    (() => {
+      allBrandRequest(100, 1);
+    })();
+  }, [allBrandRequest]);
+
+  console.log(allBrand);
+
   const settings = {
     dots: false,
     arrows: false,
@@ -37,7 +49,7 @@ const BrandSectionOne = () => {
           arrows: false,
         },
       },
-       {
+      {
         breakpoint: 576,
         settings: {
           slidesToShow: 2,
@@ -48,82 +60,19 @@ const BrandSectionOne = () => {
     ],
   };
   return (
-    <div className="brand">
-      <div className="container container">
-        <div className="brand-slider">
+    <div className='brand'>
+      <div className='container container'>
+        <div className='brand-slider'>
           <Slider {...settings}>
-            <div className="brand-item d-flex align-items-center justify-content-center">
-              <img
-                src="assets/images/thumbs/brand-img1.png"
-                alt=""
-                className="white-version"
-              />
-              <img
-                src="assets/images/thumbs/brand-white-img1.png"
-                alt=""
-                className="dark-version"
-              />
-            </div>
-            <div className="brand-item d-flex align-items-center justify-content-center">
-              <img
-                src="assets/images/thumbs/brand-img2.png"
-                alt=""
-                className="white-version"
-              />
-              <img
-                src="assets/images/thumbs/brand-white-img2.png"
-                alt=""
-                className="dark-version"
-              />
-            </div>
-            <div className="brand-item d-flex align-items-center justify-content-center">
-              <img
-                src="assets/images/thumbs/brand-img3.png"
-                alt=""
-                className="white-version"
-              />
-              <img
-                src="assets/images/thumbs/brand-white-img3.png"
-                alt=""
-                className="dark-version"
-              />
-            </div>
-            <div className="brand-item d-flex align-items-center justify-content-center">
-              <img
-                src="assets/images/thumbs/brand-img4.png"
-                alt=""
-                className="white-version"
-              />
-              <img
-                src="assets/images/thumbs/brand-white-img4.png"
-                alt=""
-                className="dark-version"
-              />
-            </div>
-            <div className="brand-item d-flex align-items-center justify-content-center">
-              <img
-                src="assets/images/thumbs/brand-img5.png"
-                alt=""
-                className="white-version"
-              />
-              <img
-                src="assets/images/thumbs/brand-white-img5.png"
-                alt=""
-                className="dark-version"
-              />
-            </div>
-            <div className="brand-item d-flex align-items-center justify-content-center">
-              <img
-                src="assets/images/thumbs/brand-img3.png"
-                alt=""
-                className="white-version"
-              />
-              <img
-                src="assets/images/thumbs/brand-white-img3.png"
-                alt=""
-                className="dark-version"
-              />
-            </div>
+            {allBrand?.map((item, index) => (
+              <div
+                key={index}
+                className='brand-item inner d-grid gap-2 text-center align-items-center justify-content-center'
+              >
+                <img src={`${baseURLFile}/${item?.brand_img}`} alt='' />
+                <p>{item?.brand_name}</p>
+              </div>
+            ))}
           </Slider>
         </div>
       </div>

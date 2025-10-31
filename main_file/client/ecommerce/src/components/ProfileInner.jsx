@@ -23,11 +23,6 @@ const ProfileInner = () => {
   });
   // api
   let { user, userRequest, userUpdateLoading, userUpdateRequest } = userStore();
-  useEffect(() => {
-    (async () => {
-      await userRequest();
-    })();
-  }, [userRequest]);
 
   useEffect(() => {
     if (user) {

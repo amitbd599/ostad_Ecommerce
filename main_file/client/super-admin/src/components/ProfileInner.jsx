@@ -1,4 +1,35 @@
+import { useEffect, useState } from "react";
+import adminStore from "../store/adminStore";
+import { ErrorToast, IsEmpty, SuccessToast } from "../helper/helper";
+
 const ProfileInner = () => {
+  let { adminUpdateRequest, adminUpdateLoading, admin } = adminStore();
+
+  let [data, setData] = useState({ email: "", password: "" });
+
+  // Validation rules
+  const validations = [
+    { field: data.email, message: "Email is required!" },
+    { field: data.password, message: "Password is required!" },
+  ];
+
+  useEffect(() => {
+    if (admin) {
+      setData({
+        email: admin?.email || "",
+        password: "",
+      });
+    }
+  }, [admin]);
+
+  let adminSubmit = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+    await adminUpdateRequest(data);
+  };
   return (
     <>
       {/* Cover Photo Start */}
@@ -26,14 +57,17 @@ const ProfileInner = () => {
                 <div className='profile-info-content'>
                   <div>
                     <div>
-                      <form action='#' autoComplete='off'>
+                      <div>
                         <div className='row gy-4'>
-                          <div className='col-12'>
+                          <div className='col-sm-6 col-xs-6'>
                             <label className='form-label mb-2 font-18 font-heading fw-600'>
                               Email
                             </label>
                             <div className='position-relative'>
                               <input
+                                onChange={(e) =>
+                                  setData({ ...data, email: e.target.value })
+                                }
                                 type='email'
                                 className='common-input common-input--withIcon common-input--withLeftIcon '
                               />
@@ -54,57 +88,29 @@ const ProfileInner = () => {
                             </label>
                             <div className='position-relative'>
                               <input
+                                onChange={(e) =>
+                                  setData({ ...data, password: e.target.value })
+                                }
                                 type='password'
                                 className='common-input common-input--withIcon common-input--withLeftIcon '
                                 id='new-password'
-                                placeholder='************'
-                              />
-                              <span className='input-icon input-icon--left'>
-                                <img
-                                  src='assets/images/icons/lock-two.svg'
-                                  alt=''
-                                />
-                              </span>
-                              <span
-                                className='input-icon password-show-hide fas fa-eye la-eye-slash toggle-password-two'
-                                id='#new-password'
                               />
                             </div>
                           </div>
-                          <div className='col-sm-6 col-xs-6'>
-                            <label
-                              htmlFor='confirm-password'
-                              className='form-label mb-2 font-18 font-heading fw-600'
-                            >
-                              Current Password
-                            </label>
-                            <div className='position-relative'>
-                              <input
-                                type='password'
-                                className='common-input common-input--withIcon common-input--withLeftIcon '
-                                id='confirm-password'
-                                placeholder='************'
-                              />
-                              <span className='input-icon input-icon--left'>
-                                <img
-                                  src='assets/images/icons/lock-two.svg'
-                                  alt=''
-                                />
-                              </span>
-                              <span
-                                className='input-icon password-show-hide fas fa-eye la-eye-slash toggle-password-two'
-                                id='#confirm-password'
-                              />
-                            </div>
-                          </div>
+
                           <div className='col-sm-12 text-end'>
-                            <button className='btn btn-main btn-lg pill mt-4'>
-                              {" "}
-                              Update Password
+                            <button
+                              disabled={adminUpdateLoading}
+                              onClick={adminSubmit}
+                              className='btn btn-main btn-lg  pill'
+                            >
+                              {adminUpdateLoading
+                                ? "🛻 Loading..."
+                                : "Update Profile"}
                             </button>
                           </div>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>

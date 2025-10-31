@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { getToken } from "../helper/helper";
-import userStore from "../store/userStore";
+import adminStore from "../store/adminStore";
 const PrivateRoute = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state
 
-  let { userRequest } = userStore();
-
+  let { adminVerifyRequest } = adminStore();
   useEffect(() => {
     (async () => {
       try {
-        await userRequest();
+        await adminVerifyRequest();
         let result = getToken();
         if (result) {
           setIsLogin(true);
@@ -26,7 +25,7 @@ const PrivateRoute = ({ children }) => {
         setLoading(false); // Set loading to false after verification
       }
     })();
-  }, [userRequest]);
+  }, []);
 
   if (loading) {
     return <></>;

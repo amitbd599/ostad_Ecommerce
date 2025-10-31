@@ -9659,5 +9659,15 @@ input[type="number"] {
   font-size: 18px;
   color: rgb(255, 215, 0);
 }
+
+.brand-item.inner {
+  img {
+    width: 100px;
+  }
+}
+
+.brand-slider {
+  padding: 0px 80px;
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */

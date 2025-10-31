@@ -3,64 +3,82 @@ import { create } from "zustand";
 import { baseURL } from "../helper/config";
 import { ErrorToast, SuccessToast } from "../helper/helper";
 
-const userStore = create((set) => ({
-  // user-register
-  userRegisterLoading: false,
-  userRegisterRequest: async (data) => {
+const adminStore = create((set) => ({
+  // admin-register
+  adminRegisterLoading: false,
+  adminRegisterRequest: async (data) => {
     try {
       set({ userRegisterLoading: true });
-      let res = await axios.post(baseURL + `/user-register`, data, {
+      let res = await axios.post(baseURL + `/admin-register`, data, {
         withCredentials: true,
         credentials: "include",
       });
 
       if (res?.data?.success === true) {
-        set({ userRegisterLoading: false });
+        set({ adminRegisterLoading: false });
         SuccessToast(res?.data?.message);
         return true;
       } else {
-        set({ userRegisterLoading: false });
+        set({ adminRegisterLoading: false });
         ErrorToast(res?.data?.message);
         return false;
       }
     } catch (error) {
       console.log(error);
-      set({ userRegisterLoading: false });
+      set({ adminRegisterLoading: false });
       return false;
     }
   },
 
-  // user-login
-  userLoginLoading: false,
-  userLoginRequest: async (data) => {
+  // admin-login
+  adminLoginLoading: false,
+  adminLoginRequest: async (data) => {
     try {
-      set({ userLoginLoading: true });
-      let res = await axios.post(baseURL + `/user-login`, data, {
+      set({ adminLoginLoading: true });
+      let res = await axios.post(baseURL + `/admin-login`, data, {
         withCredentials: true,
         credentials: "include",
       });
 
       if (res?.data?.success === true) {
-        set({ userLoginLoading: false });
+        set({ adminLoginLoading: false });
         SuccessToast(res?.data?.message);
         return true;
       } else {
-        set({ userLoginLoading: false });
+        set({ adminLoginLoading: false });
         ErrorToast(res?.data?.message);
         return false;
       }
     } catch (error) {
       console.log(error);
-      set({ userLoginLoading: false });
+      set({ adminLoginLoading: false });
       return false;
     }
   },
 
-  // user
-  user: null,
-  userRequest: async () => {
+  // admin-verify
+  adminVerifyRequest: async () => {
     try {
-      let res = await axios.get(baseURL + `/user`, {
+      await axios.get(baseURL + `/admin-verify`, {
+        withCredentials: true,
+        credentials: "include",
+      });
+
+      return true;
+    } catch (error) {
+      console.log(error);
+      if (error?.status === 401) {
+        window.location.href = "/super-admin/login";
+      }
+      return false;
+    }
+  },
+
+  // admin
+  admin: null,
+  adminRequest: async () => {
+    try {
+      let res = await axios.get(baseURL + `/admin`, {
         withCredentials: true,
         credentials: "include",
       });
@@ -72,43 +90,40 @@ const userStore = create((set) => ({
       }
     } catch (error) {
       console.log(error);
-      if (error?.status === 401) {
-        window.location.href = "/login";
-      }
       return false;
     }
   },
 
-  // user-update
-  userUpdateLoading: false,
-  userUpdateRequest: async (data) => {
+  // admin-update
+  adminUpdateLoading: false,
+  adminUpdateRequest: async (data) => {
     try {
-      set({ userRegisterLoading: true });
-      let res = await axios.put(baseURL + `/user-update`, data, {
+      set({ adminUpdateLoading: true });
+      let res = await axios.put(baseURL + `/admin-update`, data, {
         withCredentials: true,
         credentials: "include",
       });
 
       if (res?.data?.success === true) {
-        set({ userUpdateLoading: false });
+        set({ adminUpdateLoading: false });
         SuccessToast(res?.data?.message);
         return true;
       } else {
-        set({ userUpdateLoading: false });
+        set({ adminUpdateLoading: false });
         ErrorToast(res?.data?.message);
         return false;
       }
     } catch (error) {
       console.log(error);
-      set({ userUpdateLoading: false });
+      set({ adminUpdateLoading: false });
       return false;
     }
   },
 
-  // user-logout
-  userLogoutRequest: async () => {
+  // admin-logout
+  adminLogoutRequest: async () => {
     try {
-      let res = await axios.get(baseURL + `/user-logout`, {
+      let res = await axios.get(baseURL + `/admin-logout`, {
         withCredentials: true,
         credentials: "include",
       });
@@ -123,4 +138,4 @@ const userStore = create((set) => ({
   },
 }));
 
-export default userStore;
+export default adminStore;

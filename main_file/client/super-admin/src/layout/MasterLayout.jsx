@@ -1,11 +1,23 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import { FaAngleRight } from "react-icons/fa";
+import adminStore from "../store/adminStore";
 
 const MasterLayout = ({ children }) => {
   let [active, setActive] = useState(false);
   let [show, setShow] = useState(false);
+  const navigate = useNavigate();
+
+  let { adminLogoutRequest } = adminStore();
+
+  let logout = () => {
+    let res = adminLogoutRequest();
+    if (res) {
+      navigate("/login");
+    }
+  };
+
   let dashboardControl = () => {
     setActive(!active);
   };
@@ -421,7 +433,10 @@ const MasterLayout = ({ children }) => {
                         </li>
 
                         <li className='sidebar-list__item'>
-                          <Link to='/login' className='sidebar-list__link'>
+                          <button
+                            onClick={logout}
+                            className='sidebar-list__link'
+                          >
                             <span className='sidebar-list__icon'>
                               <img
                                 src='assets/images/icons/sidebar-icon13.svg'
@@ -435,27 +450,9 @@ const MasterLayout = ({ children }) => {
                               />
                             </span>
                             <span className='text'>Logout</span>
-                          </Link>
+                          </button>
                         </li>
                       </ul>
-                    </div>
-                    <div className='language-select flx-align select-has-icon'>
-                      <img
-                        src='assets/images/icons/globe.svg'
-                        alt=''
-                        className='globe-icon white-version'
-                      />
-                      <img
-                        src='assets/images/icons/globe-white.svg'
-                        alt=''
-                        className='globe-icon dark-version'
-                      />
-                      <select className='select py-0 ps-2 border-0 fw-500'>
-                        <option value={1}>Eng</option>
-                        <option value={2}>Bn</option>
-                        <option value={3}>Eur</option>
-                        <option value={4}>Urd</option>
-                      </select>
                     </div>
                   </div>
                 </div>
@@ -469,7 +466,7 @@ const MasterLayout = ({ children }) => {
               <div className='bottom-footer__inner flx-between gap-3'>
                 <p className='bottom-footer__text font-14'>
                   {" "}
-                  Copyright © 2025 Pixbo, All rights reserved.
+                  Copyright © 2025-2026 Pixbo, All rights reserved.
                 </p>
                 <div className='footer-links gap-4'>
                   <Link

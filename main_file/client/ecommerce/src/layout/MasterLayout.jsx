@@ -420,7 +420,7 @@ const MasterLayout = ({ children }) => {
               <div className='bottom-footer__inner flx-between gap-3'>
                 <p className='bottom-footer__text font-14'>
                   {" "}
-                  Copyright © 2024 DPmarket, All rights reserved.
+                  Copyright © 2025-2026 PIXBO, All rights reserved.
                 </p>
                 <div className='footer-links gap-4'>
                   <Link
