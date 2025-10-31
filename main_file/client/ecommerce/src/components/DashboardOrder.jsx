@@ -4,20 +4,37 @@ import { useEffect } from "react";
 import { formatDate } from "../helper/helper";
 import { useCallback, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 const DashboardOrder = () => {
+  const [searchParams] = useSearchParams();
+
+  const navigate = useNavigate();
+  const per_page = 6;
+  const page_no = searchParams.get("page_no") || 1;
+
   let {
     readAllInvoiceSingleUser,
     allInvoiceSingleUserRequest,
     readSingleInvoiceSingleUser,
     singleInvoiceSingleUserRequest,
+    totalInvoiceSingleUser,
   } = invoiceStore();
 
   useEffect(() => {
     (async () => {
-      await allInvoiceSingleUserRequest();
+      await allInvoiceSingleUserRequest(per_page, page_no);
     })();
-  }, [allInvoiceSingleUserRequest]);
+  }, [allInvoiceSingleUserRequest, page_no]);
+
+  //! pagination function
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allInvoiceSingleUserRequest(per_page, page_no + 1);
+
+    navigate(`/dashboard-all-orders?page_no=${page_no + 1}`);
+  };
 
   const componentRef = useRef(null);
 
@@ -82,8 +99,6 @@ const DashboardOrder = () => {
       },
     },
   });
-
-  console.log(readSingleInvoiceSingleUser);
 
   return (
     <div className='dashboard-body__content'>
@@ -156,6 +171,35 @@ const DashboardOrder = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div className='flx-between justify-content-end gap-2'>
+                <nav aria-label='Page navigation example'>
+                  {totalInvoiceSingleUser > per_page ? (
+                    <div>
+                      <ReactPaginate
+                        className='pagination common-pagination'
+                        previousLabel='<'
+                        nextLabel='>'
+                        pageClassName='page-item'
+                        activeClassName='pagination'
+                        pageLinkClassName=' page-link'
+                        previousClassName='page-item'
+                        previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                        nextClassName='page-item'
+                        nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                        activeLinkClassName=' pagination active'
+                        breakLabel='...'
+                        pageCount={totalInvoiceSingleUser / per_page}
+                        initialPage={page_no - 1}
+                        pageRangeDisplayed={3}
+                        onPageChange={handelPageClick}
+                        type='button'
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </nav>
               </div>
             </div>
           </div>

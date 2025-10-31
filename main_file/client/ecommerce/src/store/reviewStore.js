@@ -42,7 +42,6 @@ const reviewStore = create((set) => ({
           credentials: "include",
         }
       );
-
       if (res?.data?.success === true) {
         set({ allReview: res?.data?.data?.data });
         set({ totalReview: res?.data?.data?.totalCount?.[0]?.count });
@@ -64,6 +63,24 @@ const reviewStore = create((set) => ({
 
       if (res?.data?.success === true) {
         set({ singleReview: res?.data?.data?.[0] });
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
+
+  // all-review-by-product
+  allReviewByProduct: null,
+  allReviewByProductRequest: async (id) => {
+    try {
+      let res = await axios.get(baseURL + `/all-review-by-product/${id}`, {
+        withCredentials: true,
+        credentials: "include",
+      });
+
+      if (res?.data?.success === true) {
+        set({ allReviewByProduct: res?.data?.data });
       }
     } catch (error) {
       console.log(error);

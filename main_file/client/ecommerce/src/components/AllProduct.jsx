@@ -385,7 +385,7 @@ const AllProduct = () => {
                           activeLinkClassName=' pagination active'
                           breakLabel='...'
                           pageCount={totalProducts / per_page}
-                          initialPage={page_no - 1}
+                          // initialPage={page_no - 1}
                           pageRangeDisplayed={3}
                           onPageChange={handelPageClick}
                           type='button'

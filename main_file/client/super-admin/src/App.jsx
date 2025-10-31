@@ -13,7 +13,7 @@ import FileManagerPage from "./pages/FileManagerPage";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/super-admin'>
       <RouteScrollToTop />
       <ScrollToTop smooth color='#A847F0' />
       <Routes>

@@ -54,8 +54,6 @@ const HeaderOne = () => {
   let { allCart, allCartRequest } = cartStore();
   let { user, userRequest } = userStore();
 
-  console.log(user);
-
   useEffect(() => {
     (async () => {
       await allCartRequest();
@@ -94,94 +92,8 @@ const HeaderOne = () => {
                     to='/all-products?category_id=0&brand_id=0&remark=0&keyword=0&per_page=12&page_no=1'
                     className='nav-submenu__link'
                   >
-                    Products
+                    All Products
                   </NavLink>
-                </li>
-                <li className='nav-menu__item has-submenu '>
-                  <Link to='#' className='nav-menu__link'>
-                    All Category
-                  </Link>
-                  <ul className='nav-submenu'>
-                    <li className='nav-submenu__item'>
-                      <NavLink to='/profile' className='nav-submenu__link'>
-                        Profile
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink to='/cart' className='nav-submenu__link'>
-                        Shopping Cart
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink
-                        to='/cart-personal'
-                        className='nav-submenu__link'
-                      >
-                        Mailing Address
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink to='/cart-payment' className='nav-submenu__link'>
-                        Payment Method
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink
-                        to='/cart-thank-you'
-                        className='nav-submenu__link'
-                      >
-                        Preview Order
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink to='/dashboard' className='nav-submenu__link'>
-                        Dashboard
-                      </NavLink>
-                    </li>
-                  </ul>
-                </li>
-                <li className='nav-menu__item has-submenu '>
-                  <Link to='#' className='nav-menu__link'>
-                    All Brand
-                  </Link>
-                  <ul className='nav-submenu'>
-                    <li className='nav-submenu__item'>
-                      <NavLink to='/profile' className='nav-submenu__link'>
-                        Profile
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink to='/cart' className='nav-submenu__link'>
-                        Shopping Cart
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink
-                        to='/cart-personal'
-                        className='nav-submenu__link'
-                      >
-                        Mailing Address
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink to='/cart-payment' className='nav-submenu__link'>
-                        Payment Method
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink
-                        to='/cart-thank-you'
-                        className='nav-submenu__link'
-                      >
-                        Preview Order
-                      </NavLink>
-                    </li>
-                    <li className='nav-submenu__item'>
-                      <NavLink to='/dashboard' className='nav-submenu__link'>
-                        Dashboard
-                      </NavLink>
-                    </li>
-                  </ul>
                 </li>
 
                 <li className='nav-menu__item'>

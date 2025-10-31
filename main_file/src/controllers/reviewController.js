@@ -103,6 +103,62 @@ exports.singleReview = async (req, res) => {
   }
 };
 
+//!  Get Review by products
+exports.allReviewByProducts = async (req, res) => {
+  try {
+    let product_id = new ObjectId(req.params.product_id);
+    let matchingStage = {
+      $match: {
+        product_id,
+      },
+    };
+
+    let joinWithUser = {
+      $lookup: {
+        from: "users",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user",
+      },
+    };
+
+    let unwindUseStage = { $unwind: "$user" };
+
+    let project = {
+      $project: {
+        createdAt: 1,
+        updatedAt: 1,
+        des: 1,
+        rating: 1,
+        "user.cus_name": 1,
+        "user.email": 1,
+      },
+    };
+
+    let data = await reviewModel.aggregate([
+      matchingStage,
+      joinWithUser,
+      unwindUseStage,
+      project,
+    ]);
+
+    // let data = await reviewModel.find(
+    //   { product_id }
+    // );
+    res.status(200).json({
+      success: true,
+      message: "Review fetched successfully",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
 //! Review update single
 exports.updateReview = async (req, res) => {
   try {

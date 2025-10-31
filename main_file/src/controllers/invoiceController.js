@@ -225,16 +225,73 @@ exports.createInvoice = async (req, res) => {
 };
 
 //! read all invoice single user
+// exports.readAllInvoiceSingleUser = async (req, res) => {
+//   try {
+//     let user_id = new ObjectId(req.headers._id);
+
+//     let data = await invoiceModel.find({ user_id });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Invoice fetched successfully",
+//       data,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       error: error.toString(),
+//       message: "Something went wrong.",
+//     });
+//   }
+// };
 exports.readAllInvoiceSingleUser = async (req, res) => {
   try {
     let user_id = new ObjectId(req.headers._id);
+    let page_no = Number(req.params.page_no);
+    let per_page = Number(req.params.per_page);
+    let skipRow = (page_no - 1) * per_page;
 
-    let data = await invoiceModel.find({ user_id });
+    let matchStage = {
+      $match: {
+        user_id: user_id,
+      },
+    };
+    let sortStage = { createdAt: -1 };
 
+    let unwindStage = { $unwind: "$product" };
+
+    let projectionStage = {
+      $project: {
+        product_name: 1,
+        qty: 1,
+        price: 1,
+        color: 1,
+        size: 1,
+        size: 1,
+        createdAt: 1,
+        "product._id": 1,
+        "product.images": 1,
+      },
+    };
+
+    let facetStage = {
+      $facet: {
+        totalCount: [{ $count: "count" }],
+        data: [
+          { $sort: sortStage },
+          { $skip: skipRow },
+          { $limit: per_page },
+          // projectionStage,
+          // unwindStage,
+        ],
+      },
+    };
+
+    let products = await invoiceModel.aggregate([matchStage, facetStage]);
     res.status(200).json({
       success: true,
       message: "Invoice fetched successfully",
-      data,
+      data: products[0],
     });
   } catch (error) {
     res.status(500).json({

@@ -100,6 +100,23 @@ const userStore = create((set) => ({
       return false;
     }
   },
+
+  // user-logout
+  userLogoutRequest: async () => {
+    try {
+      let res = await axios.get(baseURL + `/user-logout`, {
+        withCredentials: true,
+        credentials: "include",
+      });
+
+      if (res?.data?.success === true) {
+        return true;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
 }));
 
 export default userStore;

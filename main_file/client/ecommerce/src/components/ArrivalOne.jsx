@@ -103,7 +103,10 @@ const ArrivalOne = () => {
         </div>
 
         <div className='text-center mt-64'>
-          <Link to='/all-product' className='btn btn-main btn-lg pill fw-300'>
+          <Link
+            to='/all-products?category_id=0&brand_id=0&remark=0&keyword=0&per_page=12&page_no=1'
+            className='btn btn-main btn-lg pill fw-300'
+          >
             View All Products
           </Link>
         </div>

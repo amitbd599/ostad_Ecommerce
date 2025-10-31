@@ -36,16 +36,23 @@ const invoiceStore = create((set) => ({
   },
 
   // read-all-invoice-single-user
+  totalInvoiceSingleUser: null,
   readAllInvoiceSingleUser: null,
-  allInvoiceSingleUserRequest: async () => {
+  allInvoiceSingleUserRequest: async (per_page, page_no) => {
     try {
-      let res = await axios.get(baseURL + `/read-all-invoice-single-user`, {
-        withCredentials: true,
-        credentials: "include",
-      });
+      let res = await axios.get(
+        baseURL + `/read-all-invoice-single-user/${per_page}/${page_no}`,
+        {
+          withCredentials: true,
+          credentials: "include",
+        }
+      );
 
       if (res?.data?.success === true) {
-        set({ readAllInvoiceSingleUser: res?.data?.data });
+        set({ readAllInvoiceSingleUser: res?.data?.data?.data });
+        set({
+          totalInvoiceSingleUser: res?.data?.data?.totalCount?.[0]?.count,
+        });
       }
     } catch (error) {
       console.log(error);

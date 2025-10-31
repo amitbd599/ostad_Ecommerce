@@ -11,18 +11,14 @@ const DashboardReview = () => {
   const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
-  const per_page = 12;
+  const per_page = 6;
   const page_no = searchParams.get("page_no") || 1;
-  let {
-    createReviewRequest,
-    createReviewLoading,
-    allReviewRequest,
-    totalReview,
-  } = reviewStore();
+  let { createReviewRequest } = reviewStore();
 
   let {
     readInvoiceProductListSingleUserRequest,
     readInvoiceProductListSingleUser,
+    totalInvoiceProduct,
   } = invoiceStore();
 
   useEffect(() => {
@@ -32,7 +28,7 @@ const DashboardReview = () => {
   //! pagination function
   const handelPageClick = async (event) => {
     let page_no = event.selected;
-    await allReviewRequest(per_page, page_no + 1);
+    await readInvoiceProductListSingleUserRequest(per_page, page_no + 1);
 
     navigate(`/dashboard-review?page_no=${page_no + 1}`);
   };
@@ -70,8 +66,6 @@ const DashboardReview = () => {
   };
   // For Rating work end
 
-  console.log(data);
-
   return (
     <div className='dashboard-body__content'>
       point
@@ -85,6 +79,7 @@ const DashboardReview = () => {
                   <th>Product | Date</th>
                   <th>Color</th>
                   <th>Size</th>
+                  <th>QTY</th>
                   <th>Price</th>
                   <th>Action</th>
                 </tr>
@@ -102,7 +97,11 @@ const DashboardReview = () => {
                         </div>
                         <div className='review-product__content'>
                           <h6 className='review-product__name font-15 fw-500 mb-0'>
-                            <Link to='/profile' className='link'>
+                            <Link
+                              target='_blank'
+                              to={`/product-details?product_id=${item?.product?._id}`}
+                              className='link'
+                            >
                               {item?.product_name}
                             </Link>
                           </h6>
@@ -113,22 +112,29 @@ const DashboardReview = () => {
                       </div>
                     </td>
                     <td>
-                      <div className='product-user font-12'>
-                        <strong className='fw-600 text-heading d-block'>
+                      <div className='product-user font-16'>
+                        <strong className='fw-600 badge bg-dark text-capitalize'>
                           {item?.color}
                         </strong>
                       </div>
                     </td>
                     <td>
-                      <div className='product-user font-12'>
-                        <strong className='fw-600 text-heading d-block'>
+                      <div className='product-user font-16'>
+                        <strong className='fw-600 badge bg-dark text-uppercase'>
                           {item?.size}
                         </strong>
                       </div>
                     </td>
                     <td>
-                      <div className='product-user font-12'>
-                        <strong className='fw-600 text-heading d-block'>
+                      <div className='product-user font-16'>
+                        <strong className='fw-600 badge bg-dark'>
+                          {item?.qty}
+                        </strong>
+                      </div>
+                    </td>
+                    <td>
+                      <div className='product-user font-16'>
+                        <strong className='fw-600 badge bg-danger '>
                           {item?.price}
                         </strong>
                       </div>
@@ -154,9 +160,9 @@ const DashboardReview = () => {
                 ))}
               </tbody>
             </table>
-            <div className='flx-between gap-2'>
+            <div className='flx-between justify-content-end gap-2'>
               <nav aria-label='Page navigation example'>
-                {totalReview > per_page ? (
+                {totalInvoiceProduct > per_page ? (
                   <div>
                     <ReactPaginate
                       className='pagination common-pagination'
@@ -171,7 +177,7 @@ const DashboardReview = () => {
                       nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
                       activeLinkClassName=' pagination active'
                       breakLabel='...'
-                      pageCount={totalReview / per_page}
+                      pageCount={totalInvoiceProduct / per_page}
                       initialPage={page_no - 1}
                       pageRangeDisplayed={3}
                       onPageChange={handelPageClick}

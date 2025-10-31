@@ -96,6 +96,10 @@ router.post(
   reviewController.createReview
 );
 router.get("/all-review/:per_page/:page_no", reviewController.allReview);
+router.get(
+  "/all-review-by-product/:product_id",
+  reviewController.allReviewByProducts
+);
 router.post(
   "/single-review",
   authVerificationUser,
@@ -133,7 +137,7 @@ router.post(
   invoiceController.createInvoice
 );
 router.get(
-  "/read-all-invoice-single-user",
+  "/read-all-invoice-single-user/:per_page/:page_no",
   authVerificationUser,
   invoiceController.readAllInvoiceSingleUser
 );

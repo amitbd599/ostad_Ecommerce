@@ -12,6 +12,14 @@ import { baseURLFile } from "../helper/config";
 import Skeleton from "react-loading-skeleton";
 import { ErrorToast, formatDate, IsEmpty } from "../helper/helper";
 import cartStore from "../store/cartStore";
+import reviewStore from "../store/reviewStore";
+import {
+  FaMinus,
+  FaPlus,
+  FaRegStar,
+  FaStar,
+  FaStarHalfAlt,
+} from "react-icons/fa";
 
 const ProductDetails = () => {
   const [searchParams] = useSearchParams();
@@ -67,12 +75,35 @@ const ProductDetails = () => {
     await allCartRequest();
   };
 
-  console.log(data);
+  // Review Store
+  let { allReviewByProductRequest, allReviewByProduct } = reviewStore();
+  useEffect(() => {
+    (async () => {
+      await allReviewByProductRequest(product_id);
+    })();
+  }, [product_id, allReviewByProductRequest]);
+
+  const StarRating = ({ star }) => {
+    star = parseInt(star);
+    const totalStars = 5;
+    const filledStars = Array(star).fill(<FaStar />);
+    const emptyStars = Array(totalStars - star).fill(<FaRegStar />);
+
+    return (
+      <div className='star'>
+        {filledStars.concat(emptyStars).map((star, index) => (
+          <span key={index}>{star}</span>
+        ))}
+      </div>
+    );
+  };
 
   const discount =
     ((singleProduct?.price - singleProduct?.discount_price) /
       singleProduct?.price) *
     100;
+
+  console.log(allReviewByProduct);
 
   return (
     <div className='product-details mt-32 padding-b-120'>
@@ -156,222 +187,40 @@ const ProductDetails = () => {
                   tabIndex={0}
                 >
                   <div className='product-review-wrapper'>
-                    <div className='product-review'>
-                      <div className='product-review__top flx-between'>
-                        <div className='product-review__rating flx-align'>
-                          <div className='d-flex align-items-center gap-1'>
-                            <ul className='star-rating'>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                            </ul>
-                            <span className='star-rating__text text-body'>
-                              {" "}
-                              5.0
-                            </span>
-                          </div>
-                          <span className='product-review__reason'>
-                            For{" "}
-                            <span className='product-review__subject'>
-                              Customer Support
-                            </span>{" "}
-                          </span>
-                        </div>
-                        <div className='product-review__date'>
-                          by{" "}
-                          <Link
-                            to='#'
-                            className='product-review__user text--base'
-                          >
-                            John Doe{" "}
-                          </Link>{" "}
-                          2 month ago
-                        </div>
-                      </div>
-                      <div className='product-review__body'>
-                        <p className='product-review__desc'>
-                          Lorem ipsum, dolor sit amet consectetur adipisicing
-                          elit. Quibusdam itaque vitae ex possimus delectus?
-                          Voluptas expedita accusantium aperiam quo quod dolore
-                          dignissimos rerum praesentium deserunt libero
-                          recusandae quisquam est accusamus eos dolorum sit
-                          explicabo, sapiente pariatur voluptates veniam aut
-                          veritatis, magnam velit similique! Ex similique magni
-                          labore aperiam, eius quas molestiae accusantium porro
-                          eaque esse minus amet doloribus quo odit illo
-                          doloremque.
-                        </p>
-                      </div>
-                    </div>
-                    <div className='product-review'>
-                      <div className='product-review__top flx-between'>
-                        <div className='product-review__rating flx-align'>
-                          <div className='d-flex align-items-center gap-1'>
-                            <ul className='star-rating'>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                              <li className='star-rating__item font-11'>
-                                <i className='fas fa-star' />
-                              </li>
-                            </ul>
-                            <span className='star-rating__text text-body'>
-                              {" "}
-                              5.0
-                            </span>
-                          </div>
-                          <span className='product-review__reason'>
-                            For{" "}
-                            <span className='product-review__subject'>
-                              Customer Support
-                            </span>{" "}
-                          </span>
-                        </div>
-                        <div className='product-review__date'>
-                          by{" "}
-                          <Link
-                            to='#'
-                            className='product-review__user text--base'
-                          >
-                            John Doe{" "}
-                          </Link>{" "}
-                          2 month ago
-                        </div>
-                      </div>
-                      <div className='product-review__body'>
-                        <p className='product-review__desc'>
-                          Lorem ipsum, dolor sit amet consectetur adipisicing
-                          elit. Quibusdam itaque vitae ex possimus delectus?
-                          Voluptas expedita accusantium aperiam quo quod dolore
-                          dignissimos rerum praesentium deserunt libero
-                          recusandae quisquam est accusamus eos dolorum sit
-                          explicabo, sapiente pariatur voluptates veniam aut
-                          veritatis, magnam velit similique! Ex similique magni
-                          labore aperiam, eius quas molestiae accusantium porro
-                          eaque esse minus amet doloribus quo odit illo
-                          doloremque.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className='tab-pane fade'
-                  id='pills-comments'
-                  role='tabpanel'
-                  aria-labelledby='pills-comments-tab'
-                  tabIndex={0}
-                >
-                  {/* Comment Start */}
-                  <div className='comment mt-64 mb-64'>
-                    <h5 className='mb-32'>2 Comments</h5>
-                    <ul className='comment-list'>
-                      <li className='comment-list__item d-flex align-items-start gap-sm-4 gap-3'>
-                        <div className='comment-list__thumb flex-shrink-0'>
-                          <img
-                            src='assets/images/thumbs/comment1.png'
-                            className='cover-img'
-                            alt=''
-                          />
-                        </div>
-                        <div className='comment-list__content'>
-                          <div className='flx-between gap-2 align-items-start'>
-                            <div>
-                              <h6 className='comment-list__name font-18 mb-sm-2 mb-1'>
-                                Jenny Wilson
-                              </h6>
-                              <span className='comment-list__date font-14'>
-                                Jan 21, 2024 at 11:25 pm
-                              </span>
-                            </div>
-                            <Link
-                              className='comment-list__reply fw-500 flx-align gap-2 hover-text-decoration-underline'
-                              to='#comment-box'
-                            >
-                              Reply
-                              <span className='icon'>
-                                <img
-                                  src='assets/images/icons/reply-icon.svg'
-                                  alt=''
-                                />
-                              </span>
-                            </Link>
-                          </div>
-                          <p className='comment-list__desc mt-3'>
-                            Lorem ipsum dolor sit amet consectetur. Nec nunc
-                            pellentesque massa pretium. Quam sapien nec
-                            venenatis vivamus sed cras faucibus mi viverra. Quam
-                            faucibus morbi cras vitae neque. Necnunc
-                            pellentesque massa pretium.
-                          </p>
-                        </div>
-                      </li>
-                      <li>
-                        <ul className='comment-list comment-list--two'>
-                          <li className='comment-list__item d-flex align-items-start gap-sm-4 gap-3'>
-                            <div className='comment-list__thumb flex-shrink-0'>
-                              <img
-                                src='assets/images/thumbs/comment2.png'
-                                className='cover-img'
-                                alt=''
-                              />
-                            </div>
-                            <div className='comment-list__content'>
-                              <div className='flx-between gap-2 align-items-start'>
-                                <div>
-                                  <h6 className='comment-list__name font-18 mb-sm-2 mb-1'>
-                                    Courtney Henry
-                                  </h6>
-                                  <span className='comment-list__date font-14'>
-                                    Jan 21, 2024 at 11:25 pm
-                                  </span>
-                                </div>
-                                <Link
-                                  className='comment-list__reply fw-500 flx-align gap-2 hover-text-decoration-underline'
-                                  to='#comment-box'
-                                >
-                                  Reply
-                                  <span className='icon'>
-                                    <img
-                                      src='assets/images/icons/reply-icon.svg'
-                                      alt=''
-                                    />
-                                  </span>
-                                </Link>
+                    {allReviewByProduct?.map((item, index) => (
+                      <div key={index} className='product-review'>
+                        <div className='product-review__top flx-between'>
+                          <div className='product-review__rating flx-align'>
+                            <div className='d-flex align-items-center gap-1'>
+                              <div className='star'>
+                                <StarRating star={item?.rating} />
                               </div>
-                              <p className='comment-list__desc mt-3'>
-                                Lorem ipsum dolor sit amet consectetur. Nec nunc
-                                pellentesque massa pretium. Quam sapien nec
-                                venenatis vivamus sed cras faucibus.
-                              </p>
+                              <span className='star-rating__text text-body'>
+                                {" "}
+                                {item?.rating}.0
+                              </span>
                             </div>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
+                            <span className='product-review__reason'>
+                              For{" "}
+                              <span className='product-review__subject'>
+                                Customer Support
+                              </span>{" "}
+                            </span>
+                          </div>
+                          <div className='product-review__date'>
+                            by{" "}
+                            <strong className='product-review__user text--base'>
+                              {item?.user?.cus_name}
+                            </strong>{" "}
+                            ({formatDate(item?.updatedAt)})
+                          </div>
+                        </div>
+                        <div className='product-review__body'>
+                          <p className='product-review__desc'>{item?.des}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  {/* Comment End */}
                 </div>
               </div>
             </div>

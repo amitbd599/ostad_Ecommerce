@@ -55,14 +55,27 @@ app.use("/api/v1", router);
 
 app.use("/api/v1/get-file", express.static("uploads"));
 
-// ✅ Serve static files from Vite's dist folder
-app.use(express.static(path.join(__dirname, "client", "ecommerce", "dist")));
-
 // Add React Front End Routing supper admin
-app.get("/super-admin", function (req, res) {
-  res.sendFile(path.resolve(__dirname, "client", "super-admin", "index.html"));
+// app.get("/super-admin", function (req, res) {
+//   res.sendFile(path.resolve(__dirname, "client", "super-admin", "index.html"));
+// });
+
+app.use(
+  "/super-admin",
+  express.static(path.join(__dirname, "client", "super-admin", "dist"), {
+    index: false, // important! prevents redirect 301
+  })
+);
+app.get("/super-admin/*", (req, res) => {
+  console.log("hello");
+
+  res.sendFile(
+    path.resolve(__dirname, "client", "super-admin", "dist", "index.html")
+  );
 });
 
+// ✅ Serve static files from Vite's dist folder
+app.use(express.static(path.join(__dirname, "client", "ecommerce", "dist")));
 // Add React Front End Routing
 app.get("*", function (req, res) {
   res.sendFile(

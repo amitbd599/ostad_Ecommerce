@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import userStore from "../store/userStore";
 import { baseURLFile } from "../helper/config";
@@ -7,9 +7,10 @@ import { baseURLFile } from "../helper/config";
 const MasterLayout = ({ children }) => {
   let [active, setActive] = useState(false);
   let [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   // api
-  let { user, userRequest } = userStore();
+  let { user, userRequest, userLogoutRequest } = userStore();
   useEffect(() => {
     (async () => {
       await userRequest();
@@ -21,6 +22,13 @@ const MasterLayout = ({ children }) => {
   };
   let showProfileControl = () => {
     setShow(!show);
+  };
+
+  let logout = async () => {
+    let res = await userLogoutRequest();
+    if (res) {
+      navigate("/login");
+    }
   };
 
   return (
@@ -202,7 +210,7 @@ const MasterLayout = ({ children }) => {
               <i className='las la-times' />
             </button>
             <div className='dashboard-sidebar__inner'>
-              <Link to='/' className='logo mb-48'>
+              <Link to='/dashboard-profile' className='logo mb-48'>
                 <img
                   src='assets/images/logo/logo.png'
                   alt=''
@@ -293,31 +301,6 @@ const MasterLayout = ({ children }) => {
                     <span className='text'>All orders products</span>
                   </NavLink>
                 </li>
-
-                <li className='sidebar-list__item'>
-                  <NavLink
-                    to='/login'
-                    className={(navData) =>
-                      navData.isActive
-                        ? "sidebar-list__link activePage"
-                        : "sidebar-list__link"
-                    }
-                  >
-                    <span className='sidebar-list__icon'>
-                      <img
-                        src='assets/images/icons/sidebar-icon13.svg'
-                        alt=''
-                        className='icon'
-                      />
-                      <img
-                        src='assets/images/icons/sidebar-icon-active13.svg'
-                        alt=''
-                        className='icon icon-active'
-                      />
-                    </span>
-                    <span className='text'>Logout</span>
-                  </NavLink>
-                </li>
               </ul>
               {/* Sidebar List End */}
             </div>
@@ -404,7 +387,10 @@ const MasterLayout = ({ children }) => {
                         </li>
 
                         <li className='sidebar-list__item'>
-                          <Link to='/login' className='sidebar-list__link'>
+                          <button
+                            onClick={logout}
+                            className='sidebar-list__link'
+                          >
                             <span className='sidebar-list__icon'>
                               <img
                                 src='assets/images/icons/sidebar-icon13.svg'
@@ -418,7 +404,7 @@ const MasterLayout = ({ children }) => {
                               />
                             </span>
                             <span className='text'>Logout</span>
-                          </Link>
+                          </button>
                         </li>
                       </ul>
                     </div>

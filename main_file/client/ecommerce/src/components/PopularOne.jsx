@@ -79,7 +79,10 @@ const PopularOne = () => {
           <Slider {...settings}>
             {allCategory?.map((item, index) => (
               <div key={index}>
-                <Link to='/all-product' className='popular-item w-100'>
+                <Link
+                  to={`all-products?category_id=${item?._id}&brand_id=0&remark=0&keyword=0&per_page=12&page_no=1`}
+                  className='popular-item w-100'
+                >
                   <span className='popular-item__icon'>
                     <img src={`${baseURLFile}/${item?.category_img}`} alt='' />{" "}
                   </span>

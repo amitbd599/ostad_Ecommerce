@@ -9649,5 +9649,15 @@ input[type="number"] {
 .invoice .table tbody tr td {
   border-radius: 0;
 }
+
+.sidebar-list__link.activePage {
+  color: hsl(var(--heading-color));
+  background-color: hsl(var(--gray-seven));
+}
+
+.star svg {
+  font-size: 18px;
+  color: rgb(255, 215, 0);
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */
