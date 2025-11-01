@@ -18,6 +18,7 @@ const Category = () => {
     allCategory,
     totalCategory,
     deleteCategoryRequest,
+    updateCategoryRequest,
   } = categoryStore();
   let [data, setData] = useState({
     category_name: "",
@@ -47,9 +48,25 @@ const Category = () => {
     })();
   }, [allCategoryRequest, page_no]);
 
-  // Delete Category
+  // update Category
   let deleteCategory = async (_id) => {
     let res = await DeleteAlert(deleteCategoryRequest, _id);
+    if (res) {
+      await allCategoryRequest(per_page, page_no);
+    }
+  };
+
+  // read single Category
+  let updateCategory = async (_id) => {
+    let res = await updateCategoryRequest(_id);
+    if (res) {
+      await allCategoryRequest(per_page, page_no);
+    }
+  };
+
+  // update Category
+  let updateCategory = async (_id) => {
+    let res = await updateCategoryRequest(_id);
     if (res) {
       await allCategoryRequest(per_page, page_no);
     }
