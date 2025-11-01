@@ -45,8 +45,6 @@ const FileManager = () => {
   };
 
   let deleteFile = async (_id, filename) => {
-    console.log(_id, filename);
-
     let res = await DeleteAlertFile(fileRemoveRequest, _id, filename);
     if (res) {
       await allFileRequest(per_page, page_no);

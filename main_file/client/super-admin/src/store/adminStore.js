@@ -25,6 +25,7 @@ const adminStore = create((set) => ({
       }
     } catch (error) {
       console.log(error);
+      ErrorToast("Something went wrong");
       set({ adminRegisterLoading: false });
       return false;
     }
@@ -51,6 +52,7 @@ const adminStore = create((set) => ({
       }
     } catch (error) {
       console.log(error);
+      ErrorToast("Something went wrong");
       set({ adminLoginLoading: false });
       return false;
     }
@@ -70,6 +72,7 @@ const adminStore = create((set) => ({
       if (error?.status === 401) {
         window.location.href = "/super-admin/login";
       }
+      ErrorToast("Something went wrong");
       return false;
     }
   },
@@ -90,6 +93,7 @@ const adminStore = create((set) => ({
       }
     } catch (error) {
       console.log(error);
+      ErrorToast("Something went wrong");
       return false;
     }
   },
@@ -116,6 +120,7 @@ const adminStore = create((set) => ({
     } catch (error) {
       console.log(error);
       set({ adminUpdateLoading: false });
+      ErrorToast("Something went wrong");
       return false;
     }
   },
@@ -133,6 +138,7 @@ const adminStore = create((set) => ({
       }
     } catch (error) {
       console.log(error);
+      ErrorToast("Something went wrong");
       return false;
     }
   },

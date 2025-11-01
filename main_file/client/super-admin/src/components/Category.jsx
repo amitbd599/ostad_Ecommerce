@@ -1,11 +1,24 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ErrorToast, IsEmpty } from "../helper/helper";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { DeleteAlert, ErrorToast, IsEmpty } from "../helper/helper";
 import categoryStore from "../store/categoryStore";
+import ReactPaginate from "react-paginate";
+import Skeleton from "react-loading-skeleton";
+import { baseURLFile } from "../helper/config";
 
 const Category = () => {
   const navigate = useNavigate();
-  let { createCategoryRequest, createCategoryLoading } = categoryStore();
+  const [searchParams] = useSearchParams();
+  const per_page = 12;
+  const page_no = searchParams.get("page_no") || 1;
+  let {
+    createCategoryRequest,
+    createCategoryLoading,
+    allCategoryRequest,
+    allCategory,
+    totalCategory,
+    deleteCategoryRequest,
+  } = categoryStore();
   let [data, setData] = useState({
     category_name: "",
     category_img: "",
@@ -24,6 +37,30 @@ const Category = () => {
       }
     }
     await createCategoryRequest(data);
+    await allCategoryRequest(per_page, page_no);
+  };
+
+  // all Category
+  useEffect(() => {
+    (async () => {
+      await allCategoryRequest(per_page, page_no);
+    })();
+  }, [allCategoryRequest, page_no]);
+
+  // Delete Category
+  let deleteCategory = async (_id) => {
+    let res = await DeleteAlert(deleteCategoryRequest, _id);
+    if (res) {
+      await allCategoryRequest(per_page, page_no);
+    }
+  };
+
+  //! pagination function
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allCategoryRequest(per_page, page_no + 1);
+
+    navigate(`/category?page_no=${page_no + 1}`);
   };
 
   return (
@@ -81,10 +118,12 @@ const Category = () => {
                           <div className='col-sm-12 text-end'>
                             <button
                               onClick={categorySubmit}
-                              className='btn btn-main btn-lg pill mt-4'
+                              disabled={createCategoryLoading}
+                              className='btn btn-main btn-lg pill mt-4 '
                             >
-                              {" "}
-                              Create Category
+                              {createCategoryLoading
+                                ? "Uploading..."
+                                : "Create Category"}
                             </button>
                           </div>
                         </div>
@@ -101,101 +140,88 @@ const Category = () => {
                     <table className='table text-body '>
                       <thead>
                         <tr>
+                          <th>Image</th>
                           <th>Category Name</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>Mobile</td>
-                          <td>
-                            <div className='d-flex justify-content-end gap-2'>
-                              <button
-                                className='btn btn-success'
-                                data-bs-toggle='modal'
-                                data-bs-target={`#exampleModal_${1}`}
-                              >
-                                Edit
-                              </button>
-                              <button className='btn btn-danger'>Delete</button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Mobile</td>
-                          <td>
-                            <div className='d-flex justify-content-end gap-2'>
-                              <button className='btn btn-success'>Edit</button>
-                              <button className='btn btn-danger'>Delete</button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Mobile</td>
-                          <td>
-                            <div className='d-flex justify-content-end gap-2'>
-                              <button className='btn btn-success'>Edit</button>
-                              <button className='btn btn-danger'>Delete</button>
-                            </div>
-                          </td>
-                        </tr>
+                        {allCategory === null ? (
+                          <>
+                            {[...Array(4)].map(() => (
+                              <tr>
+                                <td className='Skeleton'>
+                                  <Skeleton count={2} />
+                                </td>
+                                <td className='Skeleton'>
+                                  <Skeleton count={2} />
+                                </td>
+                              </tr>
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            {allCategory.map((item, index) => (
+                              <tr key={index}>
+                                <td>
+                                  <div className='img-100'>
+                                    <img
+                                      src={`${baseURLFile}/${item?.category_img}`}
+                                      alt=''
+                                    />
+                                  </div>
+                                </td>
+                                <td>{item?.category_name}</td>
+                                <td>
+                                  <div className='d-flex justify-content-end gap-2'>
+                                    <button
+                                      className='btn btn-success'
+                                      data-bs-toggle='modal'
+                                      data-bs-target={`#exampleModal_${1}`}
+                                    >
+                                      Edit
+                                    </button>
+                                    <button
+                                      onClick={() => deleteCategory(item?._id)}
+                                      className='btn btn-danger'
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </>
+                        )}
                       </tbody>
                     </table>
                     <div className='flx-between gap-2'>
-                      <div className='paginate-content flx-align flex-nowrap gap-3'>
-                        <select
-                          className='select common-input py-2 px-3 w-auto'
-                          defaultValue={1}
-                        >
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                          <option value={9}>9</option>
-                          <option value={10}>10</option>
-                        </select>
-                        <span className='paginate-content__text fs-14'>
-                          Showing 1 - 10 of 100
-                        </span>
-                      </div>
                       <nav aria-label='Page navigation example'>
-                        <ul className='pagination common-pagination mt-0'>
-                          <li className='page-item'>
-                            <Link className='page-link' to='#'>
-                              1
-                            </Link>
-                          </li>
-                          <li className='page-item active'>
-                            <Link className='page-link' to='#'>
-                              2
-                            </Link>
-                          </li>
-                          <li className='page-item'>
-                            <Link className='page-link' to='#'>
-                              3
-                            </Link>
-                          </li>
-                          <li className='page-item'>
-                            <Link className='page-link' to='#'>
-                              4
-                            </Link>
-                          </li>
-                          <li className='page-item'>
-                            <Link
-                              className='page-link flx-align gap-2 flex-nowrap'
-                              to='#'
-                            >
-                              Next
-                              <span className='icon line-height-1 font-20'>
-                                <i className='las la-arrow-right' />
-                              </span>
-                            </Link>
-                          </li>
-                        </ul>
+                        {totalCategory > per_page ? (
+                          <div>
+                            <ReactPaginate
+                              className='pagination common-pagination'
+                              previousLabel='<'
+                              nextLabel='>'
+                              pageClassName='page-item'
+                              activeClassName='pagination'
+                              pageLinkClassName=' page-link'
+                              previousClassName='page-item'
+                              previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                              nextClassName='page-item'
+                              nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                              activeLinkClassName=' pagination active'
+                              breakLabel='...'
+                              pageCount={totalCategory / per_page}
+                              // initialPage={page_no - 1}
+                              pageRangeDisplayed={3}
+                              onPageChange={handelPageClick}
+                              type='button'
+                            />
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </nav>
                     </div>
                   </div>

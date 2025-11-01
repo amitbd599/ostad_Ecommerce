@@ -25,24 +25,94 @@ const categoryStore = create((set) => ({
       }
     } catch (error) {
       console.log(error);
+      ErrorToast("Something went wrong");
       set({ createCategoryLoading: false });
       return false;
     }
   },
 
   // all-category
+  totalCategory: null,
   allCategory: null,
   allCategoryRequest: async (per_page, page_no) => {
-    let res = await axios.get(
-      baseURL + `/all-category/${per_page}/${page_no}`,
-      {
+    try {
+      let res = await axios.get(
+        baseURL + `/all-category/${per_page}/${page_no}`,
+        {
+          withCredentials: true,
+          credentials: "include",
+        }
+      );
+
+      if (res?.data?.success === true) {
+        set({ allCategory: res?.data?.data?.categories });
+        set({ totalCategory: res?.data?.data?.totalCount?.[0]?.count });
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorToast("Something went wrong");
+      return false;
+    }
+  },
+
+  // single-category
+  singleCategory: null,
+  singleCategoryRequest: async (id) => {
+    try {
+      let res = await axios.get(baseURL + `/single-category/${id}`, {
         withCredentials: true,
         credentials: "include",
-      }
-    );
+      });
 
-    if (res?.data?.success === true) {
-      set({ allCategory: res?.data?.data?.categories });
+      if (res?.data?.success === true) {
+        set({ allCategory: res?.data?.data?.categories });
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorToast("Something went wrong");
+      return false;
+    }
+  },
+
+  //! delete-category
+  deleteCategoryRequest: async (id) => {
+    try {
+      let res = await axios.delete(baseURL + `/delete-category/${id}`, {
+        withCredentials: true,
+        credentials: "include",
+      });
+      if (res?.data?.success === true) {
+        SuccessToast(res?.data?.message);
+        return true;
+      } else {
+        ErrorToast(res?.data?.message);
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorToast("Something went wrong");
+      return false;
+    }
+  },
+
+  //! update-category
+  updateCategoryRequest: async (id) => {
+    try {
+      let res = await axios.delete(baseURL + `/update-category/${id}`, {
+        withCredentials: true,
+        credentials: "include",
+      });
+      if (res?.data?.success === true) {
+        SuccessToast(res?.data?.message);
+        return true;
+      } else {
+        ErrorToast(res?.data?.message);
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorToast("Something went wrong");
+      return false;
     }
   },
 }));
