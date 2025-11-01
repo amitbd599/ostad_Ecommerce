@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import RouteScrollToTop from "./helper/RouteScrollToTop";
 import ScrollToTop from "react-scroll-to-top";
 import LoginPage from "./pages/LoginPage";
 import DashboardProfilePage from "./pages/DashboardProfilePage";
@@ -15,7 +14,6 @@ import PrivateRoute from "./layout/PrivateRoute";
 function App() {
   return (
     <BrowserRouter basename='/super-admin'>
-      <RouteScrollToTop />
       <ScrollToTop smooth color='#A847F0' />
       <Routes>
         {/* dashboard */}

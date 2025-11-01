@@ -27,7 +27,7 @@ exports.fileUpload = async (req, res) => {
 //! File Remove
 exports.fileRemove = async (req, res) => {
   try {
-    let _id = new ObjectId(req.body._id);
+    let _id = req.body?._id;
     let filename = req.body?.filename;
 
     const filePath = path.join(__dirname, `../../uploads/${filename}`);
@@ -36,6 +36,7 @@ exports.fileRemove = async (req, res) => {
         console.log(err);
       }
     });
+    
 
     const data = await fileModel.deleteOne({ _id, filename });
 
@@ -65,7 +66,7 @@ exports.allFile = async (req, res) => {
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
-        Categories: [
+        files: [
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },

@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 
 const ThemeToggle = () => {
@@ -25,25 +23,25 @@ const ThemeToggle = () => {
   };
 
   return (
-    <div className="theme-switch-wrapper position-relative">
-      <label className="theme-switch" htmlFor="checkbox">
+    <div className='theme-switch-wrapper position-relative'>
+      <label className='theme-switch' htmlFor='checkbox'>
         {isDarkMode ? (
           <>
-            <input type="checkbox" className="d-none" id="checkbox" />
+            <input type='checkbox' className='d-none' id='checkbox' />
             <span
-              className="slider text-black header-right__button white-version"
+              className='slider text-black header-right__button white-version'
               onClick={toggleTheme}
             >
-              <img src="assets/images/icons/sun.svg" alt="" />
+              <img src='/super-admin/assets/images/icons/sun.svg' alt='' />
             </span>
           </>
         ) : (
           <>
             <span
-              className="slider text-black header-right__button dark-version"
+              className='slider text-black header-right__button dark-version'
               onClick={toggleTheme}
             >
-              <img src="assets/images/icons/moon.svg" alt="" />
+              <img src='/super-admin/assets/images/icons/moon.svg' alt='' />
             </span>
           </>
         )}

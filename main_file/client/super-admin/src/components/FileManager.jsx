@@ -1,37 +1,59 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import fileStore from "../store/fileStore";
+import ReactPaginate from "react-paginate";
+import { DeleteAlertFile, ErrorToast, SuccessToast } from "../helper/helper";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { baseURLFile } from "../helper/config";
+import Skeleton from "react-loading-skeleton";
 const FileManager = () => {
-  const [files, setFiles] = useState([]);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [file, setFile] = useState(null);
+  const {
+    fileUploadRequest,
+    fileUploadLoading,
+    allFile,
+    allFileRequest,
+    totalFile,
+    fileRemoveRequest,
+  } = fileStore();
 
-  // Handle file selection
-  const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
+  const per_page = 12;
+  const page_no = searchParams.get("page_no") || 1;
 
-    // Append new files to existing
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+  useEffect(() => {
+    (async () => {
+      await allFileRequest(per_page, page_no);
+    })();
+  }, [allFileRequest, page_no]);
+
+  const handleUpload = async () => {
+    if (!file) {
+      ErrorToast("Please select a file first!");
+      return;
+    }
+    await fileUploadRequest(file);
+    await allFileRequest(per_page, page_no);
   };
 
-  // Remove file
-  const handleRemove = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  //! pagination function
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allFileRequest(per_page, page_no + 1);
+
+    navigate(`/file-manager?page_no=${page_no + 1}`);
   };
 
-  const [images, setImages] = useState([
-    {
-      id: 1,
-      name: "Image 1",
-      url: "https://img.freepik.com/free-vector/isometric-mobile-phone-background-template_52683-7075.jpg?t=st=1759498647~exp=1759502247~hmac=57a4712b22c5a4a169b6590fad079602fd961fc6c0daf95384fa6c7d578cf961&w=1480",
-    },
-    { id: 2, name: "Image 2", url: "https://via.placeholder.com/300x200" },
-    { id: 3, name: "Image 3", url: "https://via.placeholder.com/300x200" },
-    { id: 4, name: "Image 4", url: "https://via.placeholder.com/300x200" },
-  ]);
+  let deleteFile = async (_id, filename) => {
+    console.log(_id, filename);
 
-  // Remove image by ID
-  const handleDelete = (id) => {
-    setImages((prev) => prev.filter((img) => img.id !== id));
+    let res = await DeleteAlertFile(fileRemoveRequest, _id, filename);
+    if (res) {
+      await allFileRequest(per_page, page_no);
+    }
   };
+
+  console.log(allFile);
 
   return (
     <>
@@ -51,72 +73,25 @@ const FileManager = () => {
               <div className='profile-info'>
                 <div className='container my-5 p-4 border rounded shadow-sm bg-white'>
                   <h4 className='mb-3'>Upload Files</h4>
-
                   {/* Upload Input */}
                   <div className='mb-3'>
                     <input
                       type='file'
                       className='form-control'
                       multiple
-                      onChange={handleFileChange}
+                      onChange={(e) => setFile(e.target.files[0])}
                     />
                   </div>
 
-                  {/* Preview Section */}
-                  {files.length > 0 && (
-                    <div className='mt-4'>
-                      <h6 className='fw-bold mb-3'>Preview:</h6>
-                      <div className='row g-3'>
-                        {files.map((file, index) => {
-                          const isImage = file.type.startsWith("image/");
-                          const fileUrl = URL.createObjectURL(file);
-
-                          return (
-                            <div
-                              key={index}
-                              className='col-md-3 col-sm-4 col-6 d-flex flex-column align-items-center'
-                            >
-                              {/* File Preview */}
-                              {isImage ? (
-                                <img
-                                  src={fileUrl}
-                                  alt={file.name}
-                                  className='img-thumbnail mb-2'
-                                  style={{
-                                    height: "120px",
-                                    objectFit: "cover",
-                                  }}
-                                />
-                              ) : (
-                                <div className='bg-light border rounded p-3 text-center mb-2 w-100'>
-                                  <i className='bi bi-file-earmark-text fs-2 text-secondary'></i>
-                                  <p className='small text-truncate mb-0'>
-                                    {file.name}
-                                  </p>
-                                </div>
-                              )}
-
-                              {/* File name + remove button */}
-                              <div className='text-center'>
-                                <p
-                                  className='small mb-1 text-truncate'
-                                  style={{ maxWidth: "120px" }}
-                                >
-                                  {file.name}
-                                </p>
-                                <button
-                                  className='btn btn-sm btn-danger'
-                                  onClick={() => handleRemove(index)}
-                                >
-                                  Remove
-                                </button>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+                  <div>
+                    <button
+                      onClick={handleUpload}
+                      disabled={fileUploadLoading}
+                      className='btn btn-danger '
+                    >
+                      {fileUploadLoading ? "Uploading..." : "Upload File"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -125,45 +100,97 @@ const FileManager = () => {
                 <div className=' p-5'>
                   <h4 className='mb-3'>Image Gallery</h4>
                   <div className='row g-3'>
-                    {images.map((img) => (
-                      <div className='col-2' key={img.id}>
-                        <div className='card shadow-sm position-relative'>
-                          {/* Delete button */}
-                          <button
-                            className='btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle'
-                            onClick={() => handleDelete(img.id)}
-                          >
-                            &times;
-                          </button>
-
-                          {/* Image */}
-                          <img
-                            src={img.url}
-                            alt={img.name}
-                            className='card-img-top'
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                            }}
-                          />
-
-                          {/* Card body */}
-                          <div className='card-body p-2 text-center'>
-                            <p className='small text-truncate mb-0'>
-                              {img.name}
-                            </p>
+                    {allFile === null ? (
+                      <>
+                        {[...Array(6)].map(() => (
+                          <div className='col-2 mb-5'>
+                            <div className='Skeleton'>
+                              <Skeleton count={8} />
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    ))}
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {allFile?.map((item, index) => (
+                          <div className='col-2 mb-5' key={index}>
+                            <div className='card img_g shadow-sm position-relative'>
+                              {/* Delete button */}
+                              <button
+                                onClick={() =>
+                                  deleteFile(item?._id, item?.filename)
+                                }
+                                className='btn  btn-danger position-absolute top-0 end-0 m-1 rounded-circle'
+                              >
+                                &times;
+                              </button>
 
-                    {images.length === 0 && (
+                              {/* Image */}
+                              <img
+                                src={`${baseURLFile}/${item?.filename}`}
+                                className='card-img-top'
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                }}
+                              />
+
+                              {/* Card body */}
+                              <div className='card-body p-2 text-center'>
+                                <p
+                                  className='small text-truncate mb-0 text-primary'
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(
+                                      item.filename
+                                    );
+                                    SuccessToast("Copied: " + item.filename);
+                                  }}
+                                  title='Click to copy'
+                                >
+                                  {item.filename}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
+
+                    {allFile?.length === 0 && (
                       <p className='text-muted text-center'>
                         No images available.
                       </p>
                     )}
                   </div>
+                  <nav aria-label='Page navigation example'>
+                    {totalFile > per_page ? (
+                      <div>
+                        <ReactPaginate
+                          className='pagination common-pagination'
+                          previousLabel='<'
+                          nextLabel='>'
+                          pageClassName='page-item'
+                          activeClassName='pagination'
+                          pageLinkClassName=' page-link'
+                          previousClassName='page-item'
+                          previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                          nextClassName='page-item'
+                          nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                          activeLinkClassName=' pagination active'
+                          breakLabel='...'
+                          pageCount={totalFile / per_page}
+                          // initialPage={page_no - 1}
+                          pageRangeDisplayed={3}
+                          onPageChange={handelPageClick}
+                          type='button'
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </nav>
                 </div>
               </div>
             </div>

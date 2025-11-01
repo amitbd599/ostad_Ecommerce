@@ -1,8 +1,35 @@
 import axios from "axios";
 import { create } from "zustand";
 import { baseURL } from "../helper/config";
+import { ErrorToast, SuccessToast } from "../helper/helper";
 
 const productStore = create((set) => ({
+  // create-product
+  createProductLoading: false,
+  createProductRequest: async (data) => {
+    try {
+      set({ userRegisterLoading: true });
+      let res = await axios.post(baseURL + `/create-product`, data, {
+        withCredentials: true,
+        credentials: "include",
+      });
+
+      if (res?.data?.success === true) {
+        set({ createProductLoading: false });
+        SuccessToast(res?.data?.message);
+        return true;
+      } else {
+        set({ createProductLoading: false });
+        ErrorToast(res?.data?.message);
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      set({ createProductLoading: false });
+      return false;
+    }
+  },
+
   // all Products
   totalProducts: null,
   allProducts: null,

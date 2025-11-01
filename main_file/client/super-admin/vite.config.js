@@ -5,6 +5,10 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "/super-admin",
+  build: {
+    outDir: "build",
+    assetsDir: "assets",
+  },
   server: {
     proxy: {
       "/api/": {

@@ -8816,14 +8816,22 @@ input[type="number"] {
 }
 
 .avatar-upload .avatar-preview {
-  width: 116px;
-  height: 116px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+
   position: relative;
-  border-radius: 100%;
-  background-image: url(../images/thumbs/profile-info-img.png);
+  /* background-image: url(../images/thumbs/profile-info-img.png); */
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+}
+#imagePreview img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
 }
 
 .avatar-upload .avatar-preview > div {
@@ -9580,16 +9588,105 @@ input[type="number"] {
   }
 }
 
+.Skeleton span {
+  width: 100% !important;
+}
+
+.category_title {
+  background: #4664f1;
+  color: #fff !important;
+  padding: 3px 16px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pagination.active {
+  background-color: rgba(0, 4, 36, 0.992) !important;
+  color: #fff !important;
+}
+
+.courser {
+  cursor: pointer;
+}
+
+.pill.category {
+  padding: 8px 22px;
+}
+
+@media (min-width: 424px) and (max-width: 575px) {
+  .product-item {
+    display: block;
+  }
+  .list-view .list-grid-wrapper .product-item {
+    display: block;
+  }
+}
+
+.size_varient .active {
+  background: #4d57f2;
+  color: #fff;
+  border: 1px solid #4d57f2;
+}
+
+.modal-dialog {
+  max-width: 1140px !important;
+}
+.order_item .modal-dialog {
+  max-width: 1140px !important;
+}
+
+.invoice .table {
+  border-spacing: 0 10px;
+  /* border: 1px solid hsl(var(--gray-five)); */
+}
+.invoice .table tbody tr td {
+  padding: 10px 20px;
+  border: none;
+  border-bottom: 1px solid hsl(var(--gray-five));
+}
+
+.invoice .table tbody tr td {
+  border-radius: 0;
+}
+
 .sidebar-list__link.activePage {
   color: hsl(var(--heading-color));
   background-color: hsl(var(--gray-seven));
 }
 
-.modal-dialog {
-  min-width: 70vw;
+.star svg {
+  font-size: 18px;
+  color: rgb(255, 215, 0);
 }
-.order_item .modal-dialog {
-  min-width: 60vw !important;
+
+.brand-item.inner {
+  img {
+    width: 100px;
+  }
+}
+
+.brand-slider {
+  padding: 0px 80px;
+}
+
+.user-profile__thumb.inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  svg {
+    width: 30px;
+  }
+}
+.img_g {
+  width: 200px;
+  height: 200px;
+}
+
+.Skeleton span {
+  width: 100% !important;
 }
 
 /* ============================ Dark Version Css End =============================== */

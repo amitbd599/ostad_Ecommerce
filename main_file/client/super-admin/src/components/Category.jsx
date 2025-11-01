@@ -1,7 +1,35 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ErrorToast, IsEmpty } from "../helper/helper";
+import categoryStore from "../store/categoryStore";
 
 const Category = () => {
+  const navigate = useNavigate();
+  let { createCategoryRequest, createCategoryLoading } = categoryStore();
+  let [data, setData] = useState({
+    category_name: "",
+    category_img: "",
+  });
+
+  // Validation rules
+  const validations = [
+    { field: data.category_name, message: "Category name is required!" },
+    { field: data.category_img, message: "Category name is required!" },
+  ];
+
+  let categorySubmit = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+    let res = await createCategoryRequest(data);
+
+    // if (res) {
+    //   navigate("/dashboard-profile");
+    // }
+  };
+
   return (
     <>
       {/* Cover Photo Start */}
@@ -28,6 +56,12 @@ const Category = () => {
                               Category name
                             </label>
                             <input
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  category_name: e.target.value,
+                                })
+                              }
                               type='text'
                               className='common-input border'
                             />
@@ -37,13 +71,22 @@ const Category = () => {
                               Image Single
                             </label>
                             <input
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  category_img: e.target.value,
+                                })
+                              }
                               type='text'
                               className='common-input border'
                             />
                           </div>
 
                           <div className='col-sm-12 text-end'>
-                            <button className='btn btn-main btn-lg pill mt-4'>
+                            <button
+                              onClick={categorySubmit}
+                              className='btn btn-main btn-lg pill mt-4'
+                            >
                               {" "}
                               Create Category
                             </button>

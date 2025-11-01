@@ -182,7 +182,7 @@ router.post(
   fileUploads.single("file"),
   fileController.fileUpload
 );
-router.delete("/file-remove", authVerificationAdmin, fileController.fileRemove);
+router.post("/file-remove", authVerificationAdmin, fileController.fileRemove);
 router.get("/all-file/:per_page/:page_no", fileController.allFile);
 
 module.exports = router;

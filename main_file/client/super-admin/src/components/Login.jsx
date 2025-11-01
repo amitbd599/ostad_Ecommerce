@@ -32,18 +32,21 @@ const Login = () => {
       {/* ================================== Account Page Start =========================== */}
       <section className='account d-flex'>
         <img
-          src='assets/images/thumbs/account-img.png'
+          src='/super-admin/assets/images/thumbs/account-img.png'
           alt=''
           className='account__img'
         />
         <div className='account__left d-md-flex d-none flx-align section-bg position-relative z-index-1 overflow-hidden'>
           <img
-            src='assets/images/shapes/pattern-curve-seven.png'
+            src='/super-admin/assets/images/shapes/pattern-curve-seven.png'
             alt=''
             className='position-absolute end-0 top-0 z-index--1 h-100'
           />
           <div className='account-thumb'>
-            <img src='assets/images/thumbs/banner-img.png' alt='' />
+            <img
+              src='/super-admin/assets/images/thumbs/banner-img.png'
+              alt=''
+            />
             <div className='statistics animation bg-main text-center'>
               <h5 className='statistics__amount text-white'>50k</h5>
               <span className='statistics__text text-white font-14'>
@@ -60,12 +63,12 @@ const Login = () => {
           <div className='account-content'>
             <Link to='/' className='logo mb-64'>
               <img
-                src='assets/images/logo/logo.png'
+                src='/super-admin/assets/images/logo/logo.png'
                 alt=''
                 className='white-version'
               />
               <img
-                src='assets/images/logo/white-logo-two.png'
+                src='/super-admin/assets/images/logo/white-logo-two.png'
                 alt=''
                 className='dark-version'
               />
@@ -94,7 +97,10 @@ const Login = () => {
                       placeholder='infoname@mail.com'
                     />
                     <span className='input-icon'>
-                      <img src='assets/images/icons/envelope-icon.svg' alt='' />
+                      <img
+                        src='/super-admin/assets/images/icons/envelope-icon.svg'
+                        alt=''
+                      />
                     </span>
                   </div>
                 </div>
@@ -120,7 +126,10 @@ const Login = () => {
                       className='input-icon toggle-password cursor-pointer'
                       id='#your-password'
                     >
-                      <img src='assets/images/icons/lock-icon.svg' alt='' />
+                      <img
+                        src='/super-admin/assets/images/icons/lock-icon.svg'
+                        alt=''
+                      />
                     </span>
                   </div>
                 </div>

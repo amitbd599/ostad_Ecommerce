@@ -73,7 +73,7 @@ const ProfileInner = () => {
                               />
                               <span className='input-icon input-icon--left'>
                                 <img
-                                  src='assets/images/icons/profile-info-icon2.svg'
+                                  src='/super-admin/assets/images/icons/profile-info-icon2.svg'
                                   alt=''
                                 />
                               </span>

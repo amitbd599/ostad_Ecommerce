@@ -90,7 +90,7 @@ class FormHelper {
     });
   }
 
-  DeleteAlertFile(apiFun, id, filename) {
+  DeleteAlertFile(apiFun, _id, filename) {
     return MySwal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -102,7 +102,7 @@ class FormHelper {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        return apiFun(id, filename).then((result) => {
+        return apiFun({ _id, filename }).then((result) => {
           return result;
         });
       }
