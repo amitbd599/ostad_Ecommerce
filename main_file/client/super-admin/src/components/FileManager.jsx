@@ -53,8 +53,6 @@ const FileManager = () => {
     }
   };
 
-  console.log(allFile);
-
   return (
     <>
       {/* Cover Photo Start */}

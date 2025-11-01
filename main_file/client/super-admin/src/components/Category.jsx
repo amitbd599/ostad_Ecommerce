@@ -23,11 +23,7 @@ const Category = () => {
         return ErrorToast(message);
       }
     }
-    let res = await createCategoryRequest(data);
-
-    // if (res) {
-    //   navigate("/dashboard-profile");
-    // }
+    await createCategoryRequest(data);
   };
 
   return (
@@ -49,7 +45,7 @@ const Category = () => {
                 <div className='profile-info-content'>
                   <div className='tab-content' id='pills-tabContent'>
                     <div className='tab-pane fade show active'>
-                      <form action='#' autoComplete='off'>
+                      <div>
                         <div className='row gy-4'>
                           <div className='col-md-6'>
                             <label className='form-label mb-2 font-18 font-heading fw-600'>
@@ -92,7 +88,7 @@ const Category = () => {
                             </button>
                           </div>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>
