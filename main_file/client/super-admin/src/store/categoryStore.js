@@ -65,7 +65,8 @@ const categoryStore = create((set) => ({
       });
 
       if (res?.data?.success === true) {
-        set({ allCategory: res?.data?.data?.categories });
+        set({ singleCategory: res?.data?.data });
+        return res?.data?.data;
       }
     } catch (error) {
       console.log(error);
@@ -96,9 +97,9 @@ const categoryStore = create((set) => ({
   },
 
   //! update-category
-  updateCategoryRequest: async (id) => {
+  updateCategoryRequest: async (id, data) => {
     try {
-      let res = await axios.delete(baseURL + `/update-category/${id}`, {
+      let res = await axios.put(baseURL + `/update-category/${id}`, data, {
         withCredentials: true,
         credentials: "include",
       });

@@ -18,6 +18,8 @@ const Category = () => {
     allCategory,
     totalCategory,
     deleteCategoryRequest,
+    singleCategoryRequest,
+
     updateCategoryRequest,
   } = categoryStore();
   let [data, setData] = useState({
@@ -41,6 +43,21 @@ const Category = () => {
     await allCategoryRequest(per_page, page_no);
   };
 
+  // read single Category
+  let [_id, setId] = useState("");
+  let readSingleCategory = async (_id) => {
+    let res = await singleCategoryRequest(_id);
+    if (res) {
+      setId(res?._id);
+      setData({
+        category_name: res?.category_name,
+        category_img: res?.category_img,
+      });
+    }
+  };
+
+  console.log(_id);
+
   // all Category
   useEffect(() => {
     (async () => {
@@ -56,17 +73,9 @@ const Category = () => {
     }
   };
 
-  // read single Category
-  let updateCategory = async (_id) => {
-    let res = await updateCategoryRequest(_id);
-    if (res) {
-      await allCategoryRequest(per_page, page_no);
-    }
-  };
-
   // update Category
-  let updateCategory = async (_id) => {
-    let res = await updateCategoryRequest(_id);
+  let updateCategory = async () => {
+    let res = await updateCategoryRequest(_id, data);
     if (res) {
       await allCategoryRequest(per_page, page_no);
     }
@@ -178,7 +187,7 @@ const Category = () => {
                           </>
                         ) : (
                           <>
-                            {allCategory.map((item, index) => (
+                            {allCategory?.map((item, index) => (
                               <tr key={index}>
                                 <td>
                                   <div className='img-100'>
@@ -195,6 +204,9 @@ const Category = () => {
                                       className='btn btn-success'
                                       data-bs-toggle='modal'
                                       data-bs-target={`#exampleModal_${1}`}
+                                      onClick={() =>
+                                        readSingleCategory(item?._id)
+                                      }
                                     >
                                       Edit
                                     </button>
@@ -263,7 +275,7 @@ const Category = () => {
             <div className='modal-content'>
               <div className='modal-header'>
                 <h6 className='modal-title fs-5' id='exampleModalLabel'>
-                  Update Category Name
+                  Update Category
                 </h6>
                 <button
                   type='button'
@@ -277,13 +289,20 @@ const Category = () => {
                   <div className='profile-info-content'>
                     <div className='tab-content' id='pills-tabContent'>
                       <div className='tab-pane fade show active'>
-                        <form action='#' autoComplete='off'>
+                        <div>
                           <div className='row gy-4'>
                             <div className='col-md-6'>
                               <label className='form-label mb-2 font-18 font-heading fw-600'>
                                 Category name
                               </label>
                               <input
+                                onChange={(e) =>
+                                  setData({
+                                    ...data,
+                                    category_name: e.target.value,
+                                  })
+                                }
+                                value={data.category_name}
                                 type='text'
                                 className='common-input border'
                               />
@@ -293,12 +312,19 @@ const Category = () => {
                                 Image Single
                               </label>
                               <input
+                                onChange={(e) =>
+                                  setData({
+                                    ...data,
+                                    category_img: e.target.value,
+                                  })
+                                }
+                                value={data.category_img}
                                 type='text'
                                 className='common-input border'
                               />
                             </div>
                           </div>
-                        </form>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -312,7 +338,12 @@ const Category = () => {
                 >
                   Close
                 </button>
-                <button type='button' className='btn btn-primary'>
+                <button
+                  onClick={() => updateCategory()}
+                  type='button'
+                  className='btn btn-primary'
+                  data-bs-dismiss='modal'
+                >
                   Update Category
                 </button>
               </div>
