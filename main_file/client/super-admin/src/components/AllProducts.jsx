@@ -1,6 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import productStore from "../store/productStore";
+import { useEffect } from "react";
+import Paginate from "../helper/Paginate";
+import Skeleton from "react-loading-skeleton";
+import { baseURLFile, hostURL } from "../helper/config";
 
 const AllProducts = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  let { allProducts, totalProducts, allProductsRequest } = productStore();
+  const per_page = 12;
+  const page_no = searchParams.get("page_no") || 1;
+
+  // all Category
+  useEffect(() => {
+    (async () => {
+      await allProductsRequest(0, 0, 0, 0, per_page, page_no);
+    })();
+  }, [allProductsRequest, page_no]);
+
+  //! pagination function
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allProductsRequest(0, 0, 0, 0, per_page, page_no + 1); //"/:category_id/:brand_id/:remark/:keyword/:per_page/:page_no",
+
+    navigate(`/all-products?page_no=${page_no + 1}`);
+  };
+
+  console.log(allProducts);
+
   return (
     <>
       {/* Cover Photo Start */}
@@ -20,6 +48,7 @@ const AllProducts = () => {
                   <table className='table text-body '>
                     <thead>
                       <tr>
+                        <th>Image</th>
                         <th>Title</th>
                         <th>Price</th>
                         <th>Is Discount</th>
@@ -28,81 +57,84 @@ const AllProducts = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Title</td>
-                        <td>1254 </td>
-                        <td> Yes/No</td>
-                        <td> 100</td>
-                        <td>
-                          <div className='d-flex justify-content-end gap-2'>
-                            <button
-                              className='btn btn-success'
-                              data-bs-toggle='modal'
-                              data-bs-target={`#exampleModal_${1}`}
-                            >
-                              Edit
-                            </button>
-                            <button className='btn btn-danger'>Delete</button>
-                          </div>
-                        </td>
-                      </tr>
+                      {allProducts === null ? (
+                        <>
+                          {[...Array(4)].map(() => (
+                            <div className='col-xl-4 col-sm-6'>
+                              <div className='Skeleton'>
+                                <Skeleton count={8} />
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {allProducts?.map((item, index) => (
+                            <tr key={index} className='super_admin_all-product'>
+                              <td>
+                                <img
+                                  src={`${baseURLFile}/${item?.images?.[0]}`}
+                                  alt=''
+                                  className='cover-img'
+                                />
+                              </td>
+                              <td>
+                                {" "}
+                                <h6 className='product-item__title'>
+                                  <Link
+                                    to={`${hostURL}/product-details?product_id=${item?._id}`}
+                                    className='link'
+                                  >
+                                    {item?.title}
+                                  </Link>
+                                </h6>
+                              </td>
+                              <td>
+                                <div className='flx-align gap-2'>
+                                  <h6 className='product-item__price mb-0'>
+                                    {item?.is_discount === false
+                                      ? `৳${item?.price}`
+                                      : `৳${item?.discount_price}`}
+                                  </h6>
+                                  <span className='product-item__prevPrice text-decoration-line-through'>
+                                    {item?.is_discount === false
+                                      ? ""
+                                      : `৳${item?.price}`}
+                                  </span>
+                                </div>{" "}
+                              </td>
+                              <td> {item?.is_discount ? "Yes" : "No"}</td>
+                              <td> {item?.stock}</td>
+                              <td>
+                                <div className='d-flex justify-content-end gap-2'>
+                                  <button
+                                    className='btn btn-success'
+                                    data-bs-toggle='modal'
+                                    data-bs-target={`#exampleModal_${1}`}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button className='btn btn-danger'>
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </>
+                      )}
                     </tbody>
                   </table>
-                  <div className='flx-between gap-2'>
-                    <div className='paginate-content flx-align flex-nowrap gap-3'>
-                      <select
-                        className='select common-input py-2 px-3 w-auto'
-                        defaultValue={1}
-                      >
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
-                      </select>
-                      <span className='paginate-content__text fs-14'>
-                        Showing 1 - 10 of 100
-                      </span>
-                    </div>
+                  <div className='flx-between justify-content-end gap-2'>
                     <nav aria-label='Page navigation example'>
-                      <ul className='pagination common-pagination mt-0'>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            1
-                          </Link>
-                        </li>
-                        <li className='page-item active'>
-                          <Link className='page-link' to='#'>
-                            2
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            3
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            4
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link
-                            className='page-link flx-align gap-2 flex-nowrap'
-                            to='#'
-                          >
-                            Next
-                            <span className='icon line-height-1 font-20'>
-                              <i className='las la-arrow-right' />
-                            </span>
-                          </Link>
-                        </li>
-                      </ul>
+                      <div>
+                        <Paginate
+                          handelPageClick={handelPageClick}
+                          page_no={page_no}
+                          per_page={per_page}
+                          totalCount={totalProducts}
+                        />
+                      </div>
                     </nav>
                   </div>
                 </div>

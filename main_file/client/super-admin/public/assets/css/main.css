@@ -9697,6 +9697,14 @@ input[type="number"] {
     width: 100%;
   }
 }
-
+.super_admin_all-product {
+  img {
+    width: 40px;
+    height: auto;
+  }
+  td {
+    padding: 6px 14px !important;
+  }
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */

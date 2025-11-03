@@ -126,7 +126,9 @@ const CreateProduct = () => {
                               onChange={(e) =>
                                 setData({
                                   ...data,
-                                  images: [e.target.value],
+                                  images: e.target.value
+                                    .split(",")
+                                    .map((item) => item.trim()),
                                 })
                               }
                               name=''
@@ -156,7 +158,6 @@ const CreateProduct = () => {
                             <div className='select-has-icon'>
                               <select
                                 className='common-input border'
-                                // value={data?.is_discount}
                                 onChange={(e) =>
                                   setData({
                                     ...data,
@@ -238,7 +239,7 @@ const CreateProduct = () => {
                           </div>
                           <div className='col-sm-4 col-xs-4'>
                             <label className='form-label mb-2 font-18 font-heading fw-600'>
-                              Remark (Ex: New, Old, Business)
+                              Remark (Ex: New)
                             </label>
                             <input
                               onChange={(e) =>
@@ -274,7 +275,9 @@ const CreateProduct = () => {
                               onChange={(e) =>
                                 setData({
                                   ...data,
-                                  color: [e.target.value],
+                                  color: e.target.value
+                                    .split(",")
+                                    .map((item) => item.trim()),
                                 })
                               }
                               type='text'
@@ -290,7 +293,9 @@ const CreateProduct = () => {
                               onChange={(e) =>
                                 setData({
                                   ...data,
-                                  size: [e.target.value],
+                                  size: e.target.value
+                                    .split(",")
+                                    .map((item) => item.trim()),
                                 })
                               }
                               type='text'

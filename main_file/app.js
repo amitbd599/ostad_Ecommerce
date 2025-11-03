@@ -67,8 +67,6 @@ app.use(
   })
 );
 app.get("/super-admin/*", (req, res) => {
-  console.log("hello");
-
   res.sendFile(
     path.resolve(__dirname, "client", "super-admin", "dist", "index.html")
   );
