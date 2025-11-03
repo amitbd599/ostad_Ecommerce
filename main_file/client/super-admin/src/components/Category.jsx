@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { DeleteAlert, ErrorToast, IsEmpty } from "../helper/helper";
 import categoryStore from "../store/categoryStore";
-import ReactPaginate from "react-paginate";
 import Skeleton from "react-loading-skeleton";
 import { baseURLFile } from "../helper/config";
+import Paginate from "../helper/Paginate";
 
 const Category = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const per_page = 12;
+  const per_page = 6;
   const page_no = searchParams.get("page_no") || 1;
   let {
     createCategoryRequest,
@@ -55,8 +55,6 @@ const Category = () => {
       });
     }
   };
-
-  console.log(_id);
 
   // all Category
   useEffect(() => {
@@ -224,33 +222,16 @@ const Category = () => {
                         )}
                       </tbody>
                     </table>
-                    <div className='flx-between gap-2'>
+                    <div className='flx-between justify-content-end gap-2'>
                       <nav aria-label='Page navigation example'>
-                        {totalCategory > per_page ? (
-                          <div>
-                            <ReactPaginate
-                              className='pagination common-pagination'
-                              previousLabel='<'
-                              nextLabel='>'
-                              pageClassName='page-item'
-                              activeClassName='pagination'
-                              pageLinkClassName=' page-link'
-                              previousClassName='page-item'
-                              previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                              nextClassName='page-item'
-                              nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                              activeLinkClassName=' pagination active'
-                              breakLabel='...'
-                              pageCount={totalCategory / per_page}
-                              // initialPage={page_no - 1}
-                              pageRangeDisplayed={3}
-                              onPageChange={handelPageClick}
-                              type='button'
-                            />
-                          </div>
-                        ) : (
-                          ""
-                        )}
+                        <div>
+                          <Paginate
+                            handelPageClick={handelPageClick}
+                            page_no={page_no}
+                            per_page={per_page}
+                            totalCount={totalCategory}
+                          />
+                        </div>
                       </nav>
                     </div>
                   </div>

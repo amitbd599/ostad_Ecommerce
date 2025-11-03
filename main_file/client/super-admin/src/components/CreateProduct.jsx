@@ -1,9 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileManagerPopup from "./FileManagerPopup";
 import productStore from "../store/productStore";
+import categoryStore from "../store/categoryStore";
+import brandStore from "../store/brandStore";
+import { ErrorToast, IsEmpty } from "../helper/helper";
+import { useNavigate } from "react-router-dom";
 
 const CreateProduct = () => {
+  const navigate = useNavigate();
   let { createProductRequest } = productStore();
+  let { allCategoryRequest, allCategory } = categoryStore();
+  let { allBrandRequest, allBrand } = brandStore();
+
+  // all Category
+  useEffect(() => {
+    (async () => {
+      await allCategoryRequest(100, 1);
+      await allBrandRequest(100, 1);
+    })();
+  }, [allCategoryRequest, allBrandRequest]);
+
+  console.log(allBrand);
+
   let [data, setData] = useState({
     title: "",
     images: [],
@@ -19,6 +37,35 @@ const CreateProduct = () => {
     category_id: "",
     brand_id: "",
   });
+
+  // Validation rules
+  const validations = [
+    { field: data.title, message: "Title is required!" },
+    { field: data.images, message: "Images is required!" },
+    { field: data.sort_description, message: "Sort description is required!" },
+    { field: data.price, message: "Price is required!" },
+    { field: data.is_discount, message: "Discount is required!" },
+    { field: data.discount_price, message: "Discount price is required!" },
+    { field: data.remark, message: "Remark is required!" },
+    { field: data.stock, message: "Stock is required!" },
+    { field: data.color, message: "Color is required!" },
+    { field: data.size, message: "Size is required!" },
+    { field: data.description, message: "Description is required!" },
+    { field: data.category_id, message: "Category is required!" },
+    { field: data.brand_id, message: "Brand is required!" },
+  ];
+
+  let productSubmit = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+    let res = await createProductRequest(data);
+    if (res) {
+      navigate("/all-product");
+    }
+  };
 
   console.log(data);
 
@@ -93,7 +140,10 @@ const CreateProduct = () => {
                             </label>
                             <input
                               onChange={(e) =>
-                                setData({ ...data, price: e.target.value })
+                                setData({
+                                  ...data,
+                                  price: Number(e.target.value),
+                                })
                               }
                               type='number'
                               className='common-input border'
@@ -127,7 +177,7 @@ const CreateProduct = () => {
                               onChange={(e) =>
                                 setData({
                                   ...data,
-                                  discount_price: e.target.value,
+                                  discount_price: Number(e.target.value),
                                 })
                               }
                               type='number'
@@ -150,12 +200,14 @@ const CreateProduct = () => {
                                   })
                                 }
                               >
-                                <option value={"455sd5sdd5sdd5sd"}>
-                                  455sd5sdd5sdd5sd
+                                <option value={""}>
+                                  Please Select A Category **
                                 </option>
-                                <option value={"sdfsdfdsfdsf"}>
-                                  455sd5sdd5sdd5sd
-                                </option>
+                                {allCategory?.map((item, index) => (
+                                  <option key={index} value={item?._id}>
+                                    {item?.category_name}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>
@@ -173,8 +225,14 @@ const CreateProduct = () => {
                                   })
                                 }
                               >
-                                <option value={true}>True</option>
-                                <option value={false}>False</option>
+                                <option value={""}>
+                                  Please Select A Brand **
+                                </option>
+                                {allBrand?.map((item, index) => (
+                                  <option key={index} value={item?._id}>
+                                    {item?.brand_name}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>
@@ -186,7 +244,7 @@ const CreateProduct = () => {
                               onChange={(e) =>
                                 setData({
                                   ...data,
-                                  remark: [e.target.value],
+                                  remark: e.target.value,
                                 })
                               }
                               type='text'
@@ -201,7 +259,7 @@ const CreateProduct = () => {
                               onChange={(e) =>
                                 setData({
                                   ...data,
-                                  stock: e.target.value,
+                                  stock: Number(e.target.value),
                                 })
                               }
                               type='number'
@@ -258,8 +316,10 @@ const CreateProduct = () => {
                           </div>
 
                           <div className='col-sm-12 text-end'>
-                            <button className='btn btn-main btn-lg pill mt-4'>
-                              {" "}
+                            <button
+                              onClick={productSubmit}
+                              className='btn btn-main btn-lg pill mt-4'
+                            >
                               Create Product
                             </button>
                           </div>
@@ -274,56 +334,6 @@ const CreateProduct = () => {
         </div>
         {/* Profile Content End */}
       </div>
-
-      {/*  */}
-      <>
-        <div
-          className='modal fade'
-          id={`exampleModal_${1}`}
-          tabIndex={-1}
-          aria-labelledby='exampleModalLabel'
-          aria-hidden='true'
-        >
-          <div className='modal-dialog'>
-            <div className='modal-content'>
-              <div className='modal-header'>
-                <h6 className='modal-title fs-5' id='exampleModalLabel'>
-                  Update Product
-                </h6>
-                <button
-                  type='button'
-                  className='btn-close'
-                  data-bs-dismiss='modal'
-                  aria-label='Close'
-                />
-              </div>
-              <div className='modal-body'>
-                <div className='profile'>
-                  <div className='row gy-4'>
-                    <div className='col-12'>
-                      <div className='dashboard-card'>
-                        <FileManagerPopup />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className='modal-footer'>
-                <button
-                  type='button'
-                  className='btn btn-secondary'
-                  data-bs-dismiss='modal'
-                >
-                  Close
-                </button>
-                <button type='button' className='btn btn-primary'>
-                  Update Product
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
     </>
   );
 };

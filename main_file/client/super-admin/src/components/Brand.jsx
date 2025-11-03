@@ -1,6 +1,92 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { DeleteAlert, ErrorToast, IsEmpty } from "../helper/helper";
+import brandStore from "../store/brandStore";
+import Skeleton from "react-loading-skeleton";
+import { baseURLFile } from "../helper/config";
+import Paginate from "../helper/Paginate";
 
 const Brand = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const per_page = 6;
+  const page_no = searchParams.get("page_no") || 1;
+  let {
+    createBrandRequest,
+    createBrandLoading,
+    allBrandRequest,
+    allBrand,
+    totalBrand,
+    deleteBrandRequest,
+    singleBrandRequest,
+
+    updateBrandRequest,
+  } = brandStore();
+  let [data, setData] = useState({
+    brand_name: "",
+    brand_img: "",
+  });
+
+  // Validation rules
+  const validations = [
+    { field: data.brand_name, message: "Brand name is required!" },
+    { field: data.brand_img, message: "Brand name is required!" },
+  ];
+
+  let brandSubmit = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+    await createBrandRequest(data);
+    await allBrandRequest(per_page, page_no);
+  };
+
+  // read single Brand
+  let [_id, setId] = useState("");
+  let readSingleBrand = async (_id) => {
+    let res = await singleBrandRequest(_id);
+    if (res) {
+      setId(res?._id);
+      setData({
+        brand_name: res?.brand_name,
+        brand_img: res?.brand_img,
+      });
+    }
+  };
+
+  // all Brand
+  useEffect(() => {
+    (async () => {
+      await allBrandRequest(per_page, page_no);
+    })();
+  }, [allBrandRequest, page_no]);
+
+  // update Brand
+  let deleteBrand = async (_id) => {
+    let res = await DeleteAlert(deleteBrandRequest, _id);
+    if (res) {
+      await allBrandRequest(per_page, page_no);
+    }
+  };
+
+  // update Brand
+  let updateBrand = async () => {
+    let res = await updateBrandRequest(_id, data);
+    if (res) {
+      await allBrandRequest(per_page, page_no);
+    }
+  };
+
+  //! pagination function
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allBrandRequest(per_page, page_no + 1);
+
+    navigate(`/brand?page_no=${page_no + 1}`);
+  };
+
   return (
     <>
       {/* Cover Photo Start */}
@@ -20,35 +106,52 @@ const Brand = () => {
                 <div className='profile-info-content'>
                   <div className='tab-content' id='pills-tabContent'>
                     <div className='tab-pane fade show active'>
-                      <form action='#' autoComplete='off'>
+                      <div>
                         <div className='row gy-4'>
                           <div className='col-md-6'>
                             <label className='form-label mb-2 font-18 font-heading fw-600'>
                               Brand name
                             </label>
                             <input
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  brand_name: e.target.value,
+                                })
+                              }
                               type='text'
                               className='common-input border'
                             />
                           </div>
                           <div className='col-md-6'>
                             <label className='form-label mb-2 font-18 font-heading fw-600'>
-                              Image single
+                              Image Single
                             </label>
                             <input
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  brand_img: e.target.value,
+                                })
+                              }
                               type='text'
                               className='common-input border'
                             />
                           </div>
 
                           <div className='col-sm-12 text-end'>
-                            <button className='btn btn-main btn-lg pill mt-4'>
-                              {" "}
-                              Create Brand
+                            <button
+                              onClick={brandSubmit}
+                              disabled={createBrandLoading}
+                              className='btn btn-main btn-lg pill mt-4 '
+                            >
+                              {createBrandLoading
+                                ? "Uploading..."
+                                : "Create Brand"}
                             </button>
                           </div>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -61,101 +164,72 @@ const Brand = () => {
                     <table className='table text-body '>
                       <thead>
                         <tr>
+                          <th>Image</th>
                           <th>Brand Name</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>Mobile</td>
-                          <td>
-                            <div className='d-flex justify-content-end gap-2'>
-                              <button
-                                className='btn btn-success'
-                                data-bs-toggle='modal'
-                                data-bs-target={`#exampleModal_${1}`}
-                              >
-                                Edit
-                              </button>
-                              <button className='btn btn-danger'>Delete</button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Mobile</td>
-                          <td>
-                            <div className='d-flex justify-content-end gap-2'>
-                              <button className='btn btn-success'>Edit</button>
-                              <button className='btn btn-danger'>Delete</button>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Mobile</td>
-                          <td>
-                            <div className='d-flex justify-content-end gap-2'>
-                              <button className='btn btn-success'>Edit</button>
-                              <button className='btn btn-danger'>Delete</button>
-                            </div>
-                          </td>
-                        </tr>
+                        {allBrand === null ? (
+                          <>
+                            {[...Array(4)].map(() => (
+                              <tr>
+                                <td className='Skeleton'>
+                                  <Skeleton count={2} />
+                                </td>
+                                <td className='Skeleton'>
+                                  <Skeleton count={2} />
+                                </td>
+                              </tr>
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            {allBrand?.map((item, index) => (
+                              <tr key={index}>
+                                <td>
+                                  <div className='img-100'>
+                                    <img
+                                      src={`${baseURLFile}/${item?.brand_img}`}
+                                      alt=''
+                                    />
+                                  </div>
+                                </td>
+                                <td>{item?.brand_name}</td>
+                                <td>
+                                  <div className='d-flex justify-content-end gap-2'>
+                                    <button
+                                      className='btn btn-success'
+                                      data-bs-toggle='modal'
+                                      data-bs-target={`#exampleModal_${1}`}
+                                      onClick={() => readSingleBrand(item?._id)}
+                                    >
+                                      Edit
+                                    </button>
+                                    <button
+                                      onClick={() => deleteBrand(item?._id)}
+                                      className='btn btn-danger'
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </>
+                        )}
                       </tbody>
                     </table>
-                    <div className='flx-between gap-2'>
-                      <div className='paginate-content flx-align flex-nowrap gap-3'>
-                        <select
-                          className='select common-input py-2 px-3 w-auto'
-                          defaultValue={1}
-                        >
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                          <option value={9}>9</option>
-                          <option value={10}>10</option>
-                        </select>
-                        <span className='paginate-content__text fs-14'>
-                          Showing 1 - 10 of 100
-                        </span>
-                      </div>
+                    <div className='flx-between justify-content-end gap-2'>
                       <nav aria-label='Page navigation example'>
-                        <ul className='pagination common-pagination mt-0'>
-                          <li className='page-item'>
-                            <Link className='page-link' to='#'>
-                              1
-                            </Link>
-                          </li>
-                          <li className='page-item active'>
-                            <Link className='page-link' to='#'>
-                              2
-                            </Link>
-                          </li>
-                          <li className='page-item'>
-                            <Link className='page-link' to='#'>
-                              3
-                            </Link>
-                          </li>
-                          <li className='page-item'>
-                            <Link className='page-link' to='#'>
-                              4
-                            </Link>
-                          </li>
-                          <li className='page-item'>
-                            <Link
-                              className='page-link flx-align gap-2 flex-nowrap'
-                              to='#'
-                            >
-                              Next
-                              <span className='icon line-height-1 font-20'>
-                                <i className='las la-arrow-right' />
-                              </span>
-                            </Link>
-                          </li>
-                        </ul>
+                        <div>
+                          <Paginate
+                            handelPageClick={handelPageClick}
+                            page_no={page_no}
+                            per_page={per_page}
+                            totalCount={totalBrand}
+                          />
+                        </div>
                       </nav>
                     </div>
                   </div>
@@ -180,7 +254,7 @@ const Brand = () => {
             <div className='modal-content'>
               <div className='modal-header'>
                 <h6 className='modal-title fs-5' id='exampleModalLabel'>
-                  Update Brand Name
+                  Update Brand
                 </h6>
                 <button
                   type='button'
@@ -194,28 +268,42 @@ const Brand = () => {
                   <div className='profile-info-content'>
                     <div className='tab-content' id='pills-tabContent'>
                       <div className='tab-pane fade show active'>
-                        <form action='#' autoComplete='off'>
+                        <div>
                           <div className='row gy-4'>
                             <div className='col-md-6'>
                               <label className='form-label mb-2 font-18 font-heading fw-600'>
                                 Brand name
                               </label>
                               <input
+                                onChange={(e) =>
+                                  setData({
+                                    ...data,
+                                    brand_name: e.target.value,
+                                  })
+                                }
+                                value={data.brand_name}
                                 type='text'
                                 className='common-input border'
                               />
                             </div>
                             <div className='col-md-6'>
                               <label className='form-label mb-2 font-18 font-heading fw-600'>
-                                Image single
+                                Image Single
                               </label>
                               <input
+                                onChange={(e) =>
+                                  setData({
+                                    ...data,
+                                    brand_img: e.target.value,
+                                  })
+                                }
+                                value={data.brand_img}
                                 type='text'
                                 className='common-input border'
                               />
                             </div>
                           </div>
-                        </form>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -229,7 +317,12 @@ const Brand = () => {
                 >
                   Close
                 </button>
-                <button type='button' className='btn btn-primary'>
+                <button
+                  onClick={() => updateBrand()}
+                  type='button'
+                  className='btn btn-primary'
+                  data-bs-dismiss='modal'
+                >
                   Update Brand
                 </button>
               </div>
