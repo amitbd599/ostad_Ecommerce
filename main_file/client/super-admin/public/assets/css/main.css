@@ -9706,5 +9706,12 @@ input[type="number"] {
     padding: 6px 14px !important;
   }
 }
+
+.common-input.border.custom {
+  border: none !important;
+  border-bottom: 1px solid #ddd !important;
+  padding: 5px 16px;
+  border-radius: 0;
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */

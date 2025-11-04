@@ -131,11 +131,11 @@ const AllOrders = () => {
                       <th>Date</th>
                       <th>Transaction ID</th>
                       <th>Order ID</th>
-                      <th>Deliver status</th>
                       <th>Payment status</th>
+                      <th>Deliver status</th>
+                      <th>Action</th>
                       <th>Total Payable</th>
                       <th>Invoice</th>
-                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -145,19 +145,6 @@ const AllOrders = () => {
                         <td>{item?.tran_id}</td>
                         <td>
                           <span>{item?._id}</span>
-                        </td>
-                        <td>
-                          <span
-                            className={`badge rounded-pill ${
-                              item?.deliver_status === "delivered"
-                                ? "bg-success"
-                                : item?.deliver_status === "pending"
-                                ? "bg-warning"
-                                : "bg-danger"
-                            }`}
-                          >
-                            {item?.deliver_status}
-                          </span>
                         </td>
                         <td>
                           <span
@@ -173,22 +160,22 @@ const AllOrders = () => {
                           </span>{" "}
                         </td>
                         <td>
-                          <p> {item?.payable}</p>
-                        </td>
-                        <td>
-                          <button
-                            className='btn btn-success'
-                            data-bs-toggle='modal'
-                            data-bs-target={`#exampleModal_1`}
-                            onClick={() => viewOrder(item?._id)}
+                          <span
+                            className={`badge rounded-pill ${
+                              item?.deliver_status === "delivered"
+                                ? "bg-success"
+                                : item?.deliver_status === "pending"
+                                ? "bg-warning"
+                                : "bg-danger"
+                            }`}
                           >
-                            View
-                          </button>
+                            {item?.deliver_status}
+                          </span>
                         </td>
                         <td>
                           <button>
                             <select
-                              className=' border'
+                              className=' common-input border custom'
                               onChange={(e) =>
                                 setData({
                                   ...data,
@@ -201,6 +188,20 @@ const AllOrders = () => {
                               <option value={"delivered"}>Delivered</option>
                               <option value={"cancel"}>Cancel</option>
                             </select>
+                          </button>
+                        </td>
+
+                        <td>
+                          <p> {item?.payable}</p>
+                        </td>
+                        <td>
+                          <button
+                            className='btn btn-success'
+                            data-bs-toggle='modal'
+                            data-bs-target={`#exampleModal_1`}
+                            onClick={() => viewOrder(item?._id)}
+                          >
+                            View
                           </button>
                         </td>
                       </tr>
