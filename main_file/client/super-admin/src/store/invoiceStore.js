@@ -35,6 +35,58 @@ const invoiceStore = create((set) => ({
     }
   },
 
+  // update-invoice
+  updateInvoiceLoading: false,
+  updateInvoiceRequest: async (id, data) => {
+    try {
+      set({ createInvoiceLoading: true });
+      let res = await axios.post(baseURL + `/update-invoice/${id}`, data, {
+        withCredentials: true,
+        credentials: "include",
+      });
+
+      if (res?.data?.success === true) {
+        set({ createInvoiceLoading: false });
+        SuccessToast(res?.data?.message);
+        return true;
+      } else {
+        set({ createInvoiceLoading: false });
+        ErrorToast(res?.data?.message);
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      set({ createInvoiceLoading: false });
+      return false;
+    }
+  },
+
+  // all-order-list
+  totalAllOrderList: null,
+  allOrderList: null,
+  allOrderListRequest: async (per_page, page_no) => {
+    try {
+      let res = await axios.get(
+        baseURL + `/all-order-list/${per_page}/${page_no}`,
+        {
+          withCredentials: true,
+          credentials: "include",
+        }
+      );
+
+      if (res?.data?.success === true) {
+        set({ allOrderList: res?.data?.data?.products });
+        set({
+          totalAllOrderList: res?.data?.data?.totalCount?.[0]?.count,
+        });
+        return res?.data?.data?.products;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
+
   // read-all-invoice-single-user
   totalInvoiceSingleUser: null,
   readAllInvoiceSingleUser: null,

@@ -225,25 +225,6 @@ exports.createInvoice = async (req, res) => {
 };
 
 //! read all invoice single user
-// exports.readAllInvoiceSingleUser = async (req, res) => {
-//   try {
-//     let user_id = new ObjectId(req.headers._id);
-
-//     let data = await invoiceModel.find({ user_id });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Invoice fetched successfully",
-//       data,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       error: error.toString(),
-//       message: "Something went wrong.",
-//     });
-//   }
-// };
 exports.readAllInvoiceSingleUser = async (req, res) => {
   try {
     let user_id = new ObjectId(req.headers._id);
@@ -258,21 +239,7 @@ exports.readAllInvoiceSingleUser = async (req, res) => {
     };
     let sortStage = { createdAt: -1 };
 
-    let unwindStage = { $unwind: "$product" };
 
-    let projectionStage = {
-      $project: {
-        product_name: 1,
-        qty: 1,
-        price: 1,
-        color: 1,
-        size: 1,
-        size: 1,
-        createdAt: 1,
-        "product._id": 1,
-        "product.images": 1,
-      },
-    };
 
     let facetStage = {
       $facet: {
@@ -280,9 +247,7 @@ exports.readAllInvoiceSingleUser = async (req, res) => {
         data: [
           { $sort: sortStage },
           { $skip: skipRow },
-          { $limit: per_page },
-          // projectionStage,
-          // unwindStage,
+          { $limit: per_page }
         ],
       },
     };
@@ -302,92 +267,7 @@ exports.readAllInvoiceSingleUser = async (req, res) => {
   }
 };
 
-//! read all invoice all user
-// exports.readAllInvoiceAllUser = async (req, res) => {
-//   try {
-//     let data = await invoiceModel.find();
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Invoice fetched successfully",
-//       data,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       error: error.toString(),
-//       message: "Something went wrong.",
-//     });
-//   }
-// };
-
-//! read single invoice single user
-// exports.readSingleInvoiceSingleUser = async (req, res) => {
-//   try {
-//     let user_id = new ObjectId(req.headers._id);
-
-//     let invoice_id = new ObjectId(req.params.invoice_id);
-
-//     let matchStage = {
-//       $match: {
-//         user_id: user_id,
-//         invoice_id: invoice_id,
-//       },
-//     };
-
-//     let joinStageWithProduct = {
-//       $lookup: {
-//         from: "products",
-//         localField: "product_id",
-//         foreignField: "_id",
-//         as: "product",
-//       },
-//     };
-//     let joinStageWithInvoice = {
-//       $lookup: {
-//         from: "invoices",
-//         localField: "invoice_id",
-//         foreignField: "_id",
-//         as: "invoices",
-//       },
-//     };
-//     let projectionStage = {
-//       $project: {
-//         product_id: 1,
-//         qty: 1,
-//         price: 1,
-//         color: 1,
-//         size: 1,
-//         invoice_id: 1,
-
-//         "product.title": 1,
-//       },
-//     };
-
-//     let unwindStage = { $unwind: "$product" };
-
-//     let data = await invoiceProductModel.aggregate([
-//       matchStage,
-//       joinStageWithProduct,
-//       joinStageWithInvoice,
-//       unwindStage,
-//       // projectionStage,
-//     ]);
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Invoice fetched successfully",
-//       data,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       error: error.toString(),
-//       message: "Something went wrong.",
-//     });
-//   }
-// };
-
+//! read Single Invoice Single User 
 exports.readSingleInvoiceSingleUser = async (req, res) => {
   try {
     let user_id = new ObjectId(req.headers._id);
@@ -500,65 +380,7 @@ exports.readInvoiceProductListSingleUser = async (req, res) => {
     });
   }
 };
-//! order-list
-exports.readOrderList = async (req, res) => {
-  try {
-    let user_id = new ObjectId(req.headers._id);
-    let matchStage = {
-      $match: { user_id: user_id },
-    };
-    let joinStageWithInvoiceProduct = {
-      $lookup: {
-        from: "invoicesproducts",
-        localField: "_id",
-        foreignField: "invoice_id",
-        as: "product",
-      },
-    };
 
-    let data = await invoiceModel.aggregate([
-      matchStage,
-      joinStageWithInvoiceProduct,
-    ]);
-    res.status(200).json({
-      success: true,
-      message: "Invoice fetched successfully",
-      data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.toString(),
-      message: "Something went wrong.",
-    });
-  }
-};
-//! all-order-list
-// exports.allOrderList = async (req, res) => {
-//   try {
-//     let joinStageWithInvoiceProduct = {
-//       $lookup: {
-//         from: "invoicesproducts",
-//         localField: "_id",
-//         foreignField: "invoice_id",
-//         as: "product",
-//       },
-//     };
-
-//     let data = await invoiceModel.aggregate([joinStageWithInvoiceProduct]);
-//     res.status(200).json({
-//       success: true,
-//       message: "Invoice fetched successfully",
-//       data,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       error: error.toString(),
-//       message: "Something went wrong.",
-//     });
-//   }
-// };
 
 //! payment-success
 exports.paymentSuccess = async (req, res) => {
@@ -639,3 +461,229 @@ exports.paymentIpn = async (req, res) => {
     });
   }
 };
+
+// ===================== // For admin -- 
+
+//! all-order-list
+exports.allOrderList = async (req, res) => {
+  try {
+    let page_no = Number(req.params.page_no);
+    let per_page = Number(req.params.per_page);
+    let skipRow = (page_no - 1) * per_page;
+
+    let sortStage = { createdAt: -1 };
+    let joinStageWithInvoiceProduct = {
+      $lookup: {
+        from: "invoicesproducts",
+        localField: "_id",
+        foreignField: "invoice_id",
+        as: "product",
+      },
+    };
+    let unwindStage = { $unwind: "$product" };
+
+    let projectionStage = {
+      $project: {
+        _id: 1,
+        user_id: 1,
+        payable: 1,
+        cus_details: 1,
+        ship_details: 1,
+        tran_id: 1,
+        val_id: 1,
+        deliver_status: 1,
+        payment_status: 1,
+        vat: 1,
+        total: 1,
+        createdAt: 1,
+        createdAt: 1,
+        "product.product_id": 1,
+        "product.product_name": 1,
+        "product.qty": 1,
+        "product.price": 1,
+        "product.color": 1,
+        "product.size": 1,
+        "product.size": 1,
+      },
+    }
+
+
+
+    let facetStage = {
+      $facet: {
+        totalCount: [{ $count: "count" }],
+        products: [
+          { $sort: sortStage },
+          { $skip: skipRow },
+          { $limit: per_page },
+          joinStageWithInvoiceProduct,
+          projectionStage
+        ],
+      },
+    };
+
+
+
+
+    let products = await invoiceModel.aggregate([facetStage]);
+    res.status(200).json({
+      success: true,
+      message: "Invoice fetched successfully",
+      data: products[0],
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! read all invoice single user
+// exports.readAllInvoiceSingleUser = async (req, res) => {
+//   try {
+//     let user_id = new ObjectId(req.headers._id);
+
+//     let data = await invoiceModel.find({ user_id });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Invoice fetched successfully",
+//       data,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       error: error.toString(),
+//       message: "Something went wrong.",
+//     });
+//   }
+// };
+
+
+//! read all invoice all user
+// exports.readAllInvoiceAllUser = async (req, res) => {
+//   try {
+//     let data = await invoiceModel.find();
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Invoice fetched successfully",
+//       data,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       error: error.toString(),
+//       message: "Something went wrong.",
+//     });
+//   }
+// };
+
+//! read single invoice single user
+// exports.readSingleInvoiceSingleUser = async (req, res) => {
+//   try {
+//     let user_id = new ObjectId(req.headers._id);
+
+//     let invoice_id = new ObjectId(req.params.invoice_id);
+
+//     let matchStage = {
+//       $match: {
+//         user_id: user_id,
+//         invoice_id: invoice_id,
+//       },
+//     };
+
+//     let joinStageWithProduct = {
+//       $lookup: {
+//         from: "products",
+//         localField: "product_id",
+//         foreignField: "_id",
+//         as: "product",
+//       },
+//     };
+//     let joinStageWithInvoice = {
+//       $lookup: {
+//         from: "invoices",
+//         localField: "invoice_id",
+//         foreignField: "_id",
+//         as: "invoices",
+//       },
+//     };
+//     let projectionStage = {
+//       $project: {
+//         product_id: 1,
+//         qty: 1,
+//         price: 1,
+//         color: 1,
+//         size: 1,
+//         invoice_id: 1,
+
+//         "product.title": 1,
+//       },
+//     };
+
+//     let unwindStage = { $unwind: "$product" };
+
+//     let data = await invoiceProductModel.aggregate([
+//       matchStage,
+//       joinStageWithProduct,
+//       joinStageWithInvoice,
+//       unwindStage,
+//       // projectionStage,
+//     ]);
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Invoice fetched successfully",
+//       data,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       error: error.toString(),
+//       message: "Something went wrong.",
+//     });
+//   }
+// };
+
+
+
+
+//! order-list
+// exports.readOrderList = async (req, res) => {
+//   try {
+//     let user_id = new ObjectId(req.headers._id);
+//     let matchStage = {
+//       $match: { user_id: user_id },
+//     };
+//     let joinStageWithInvoiceProduct = {
+//       $lookup: {
+//         from: "invoicesproducts",
+//         localField: "_id",
+//         foreignField: "invoice_id",
+//         as: "product",
+//       },
+//     };
+
+//     let data = await invoiceModel.aggregate([
+//       matchStage,
+//       joinStageWithInvoiceProduct,
+//     ]);
+//     res.status(200).json({
+//       success: true,
+//       message: "Invoice fetched successfully",
+//       data,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       error: error.toString(),
+//       message: "Something went wrong.",
+//     });
+//   }
+// };
+
+
+

@@ -132,6 +132,8 @@ router.delete(
 );
 
 //! ============== For Invoice & Payment ==================
+
+// For user --- 
 router.post(
   "/create-invoice",
   authVerificationUser,
@@ -142,11 +144,6 @@ router.get(
   authVerificationUser,
   invoiceController.readAllInvoiceSingleUser
 );
-// router.get(
-//   "/read-all-invoice-all-user",
-//   authVerificationAdmin,
-//   invoiceController.readAllInvoiceAllUser
-// );
 
 router.get(
   "/read-single-invoice-single-user/:invoice_id",
@@ -159,21 +156,38 @@ router.get(
   authVerificationUser,
   invoiceController.readInvoiceProductListSingleUser
 );
-router.get(
-  "/order-list",
-  authVerificationUser,
-  invoiceController.readOrderList
-);
-// router.get(
-//   "/all-order-list",
-//   authVerificationAdmin,
-//   invoiceController.allOrderList
-// );
+
 
 router.post("/payment-success/:trx_id", invoiceController.paymentSuccess);
 router.post("/payment-cancel/:trx_id", invoiceController.paymentCancel);
 router.post("/payment-fail/:trx_id", invoiceController.paymentFail);
 router.post("/payment-ipn/:trx_id", invoiceController.paymentIpn);
+
+
+// For admin -- 
+router.get(
+  "/all-order-list/:per_page/:page_no",
+  authVerificationAdmin,
+  invoiceController.allOrderList
+);
+
+
+// router.get(
+//   "/read-all-invoice-all-user",
+//   authVerificationAdmin,
+//   invoiceController.readAllInvoiceAllUser
+// );
+
+
+
+
+// router.get(
+//   "/order-list",
+//   authVerificationUser,
+//   invoiceController.readOrderList
+// );
+
+
 
 // ! File Uploads
 router.post(

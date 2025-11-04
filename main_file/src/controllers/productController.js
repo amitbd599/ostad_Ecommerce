@@ -225,6 +225,15 @@ exports.updateProduct = async (req, res) => {
       brand_id,
     } = req.body;
 
+        if(discount_price>price){
+      return  res.status(200).json({
+      success: false,
+      message: "The discount  price must be smaller than the main price.",
+    
+    });
+    }
+
+
     let data = await productModel.findByIdAndUpdate(
       id,
       {

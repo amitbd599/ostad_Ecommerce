@@ -63,7 +63,7 @@ const Brand = () => {
     })();
   }, [allBrandRequest, page_no]);
 
-  // update Brand
+  // delete Brand
   let deleteBrand = async (_id) => {
     let res = await DeleteAlert(deleteBrandRequest, _id);
     if (res) {

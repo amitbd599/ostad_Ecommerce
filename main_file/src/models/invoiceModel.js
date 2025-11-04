@@ -21,3 +21,7 @@ const DataSchema = mongoose.Schema(
 const invoiceModel = mongoose.model("invoices", DataSchema);
 
 module.exports = invoiceModel;
+
+
+// delivered, pending, cancel
+// success, cancel, fail

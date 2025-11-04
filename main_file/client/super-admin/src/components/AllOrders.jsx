@@ -1,8 +1,50 @@
+import { ToWords } from "to-words";
+import invoiceStore from "../store/invoiceStore";
+import { useEffect, useState } from "react";
+import { formatDate } from "../helper/helper";
 import { useCallback, useRef } from "react";
-import { Link } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 const AllOrders = () => {
+  const [searchParams] = useSearchParams();
+
+  let [data, setData] = useState({ deliver_status: null });
+
+  const navigate = useNavigate();
+  const per_page = 6;
+  const page_no = searchParams.get("page_no") || 1;
+
+  let {
+    allOrderListRequest,
+    totalAllOrderList,
+    allOrderList,
+    readSingleInvoiceSingleUser,
+    singleInvoiceSingleUserRequest,
+    updateInvoiceRequest,
+  } = invoiceStore();
+
+  useEffect(() => {
+    (async () => {
+      let res = await allOrderListRequest(per_page, page_no);
+
+      if (res) {
+        setData({
+          deliver_status: res?.deliver_status,
+        });
+      }
+    })();
+  }, [allOrderListRequest, page_no]);
+
+  //! pagination function
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allOrderListRequest(per_page, page_no + 1);
+
+    navigate(`/dashboard-all-orders?page_no=${page_no + 1}`);
+  };
+
   const componentRef = useRef(null);
 
   const handleAfterPrint = useCallback(() => {
@@ -29,7 +71,7 @@ const AllOrders = () => {
       -webkit-print-color-adjust: exact !important;
       color-adjust: exact !important;
       font-family: Arial, sans-serif;
-      padding: 20px;
+      padding: 0px;
     }
     table {
       border-collapse: collapse !important;
@@ -41,120 +83,171 @@ const AllOrders = () => {
     }
   `,
   });
+
+  let viewOrder = (id) => {
+    singleInvoiceSingleUserRequest(id);
+  };
+
+  const toWords = new ToWords({
+    localeCode: "en-IN",
+    converterOptions: {
+      currency: true,
+      ignoreDecimal: false,
+      ignoreZeroCurrency: false,
+      doNotAddOnly: false,
+      currencyOptions: {
+        // can be used to override defaults for the selected locale
+        name: "Taka",
+        plural: "Taka",
+        symbol: "Tk.",
+        fractionalUnit: {
+          name: "Paisa",
+          plural: "Paisa",
+          symbol: "",
+        },
+      },
+    },
+  });
+
+  // update invoice
+  let updateInvoice = async (id) => {
+    let res = await updateInvoiceRequest(id, data);
+    if (res) {
+      await allOrderListRequest(per_page, page_no + 1);
+    }
+  };
+
   return (
-    <>
-      {/* Cover Photo Start */}
-      <div className='cover-photo  overflow-hidden '>
-        <div className='avatar-upload p-5'>
-          <h2>Supper Admin</h2>
-          <h5>All Orders</h5>
-        </div>
-      </div>
-      <div className='dashboard-body__content mt-0'>
-        {/* ========================= Statement section start =========================== */}
-        <div className='row gy-4'>
-          <div className='col-12'>
-            <div className='card common-card border border-gray-five'>
-              <div className='card-body'>
-                <div className='table-responsive'>
-                  <table className='table text-body '>
-                    <thead>
-                      <tr>
-                        <th>Order ID</th>
-                        <th>Date</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>#DR54745425478 </td>
-                        <td>2022-12-31 03:36 AM</td>
-                        <td> 500</td>
+    <div className='dashboard-body__content'>
+      {/* ========================= Statement section start =========================== */}
+      <div className='row gy-4'>
+        <div className='col-12'>
+          <div className='card common-card border border-gray-five'>
+            <div className='card-body'>
+              <div className='table-responsive'>
+                <table className='table text-body mt--24'>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Transaction ID</th>
+                      <th>Order ID</th>
+                      <th>Deliver status</th>
+                      <th>Payment status</th>
+                      <th>Total Payable</th>
+                      <th>Invoice</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allOrderList?.map((item, index) => (
+                      <tr key={index}>
+                        <td>{formatDate(item?.createdAt)}</td>
+                        <td>{item?.tran_id}</td>
                         <td>
-                          <div className='d-flex justify-content-end gap-2'>
-                            <button
-                              className='btn btn-success'
-                              data-bs-toggle='modal'
-                              data-bs-target={`#exampleModal_${1}`}
+                          <span>{item?._id}</span>
+                        </td>
+                        <td>
+                          <span
+                            className={`badge rounded-pill ${
+                              item?.deliver_status === "delivered"
+                                ? "bg-success"
+                                : item?.deliver_status === "pending"
+                                ? "bg-warning"
+                                : "bg-danger"
+                            }`}
+                          >
+                            {item?.deliver_status}
+                          </span>
+                        </td>
+                        <td>
+                          <span
+                            className={`badge rounded-pill ${
+                              item?.payment_status === "success"
+                                ? "bg-success"
+                                : item?.payment_status === "cancel"
+                                ? "bg-warning"
+                                : "bg-danger"
+                            }`}
+                          >
+                            {item?.payment_status}
+                          </span>{" "}
+                        </td>
+                        <td>
+                          <p> {item?.payable}</p>
+                        </td>
+                        <td>
+                          <button
+                            className='btn btn-success'
+                            data-bs-toggle='modal'
+                            data-bs-target={`#exampleModal_1`}
+                            onClick={() => viewOrder(item?._id)}
+                          >
+                            View
+                          </button>
+                        </td>
+                        <td>
+                          <button>
+                            <select
+                              className=' border'
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  deliver_status: e.target.value,
+                                })
+                              }
+                              defaultValue={item?.deliver_status}
                             >
-                              View order
-                            </button>
-                          </div>
+                              <option value={"pending"}>Pending</option>
+                              <option value={"delivered"}>Delivered</option>
+                              <option value={"cancel"}>Cancel</option>
+                            </select>
+                          </button>
                         </td>
                       </tr>
-                    </tbody>
-                  </table>
-                  <div className='flx-between gap-2'>
-                    <div className='paginate-content flx-align flex-nowrap gap-3'>
-                      <select
-                        className='select common-input py-2 px-3 w-auto'
-                        defaultValue={1}
-                      >
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
-                      </select>
-                      <span className='paginate-content__text fs-14'>
-                        Showing 1 - 10 of 100
-                      </span>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className='flx-between justify-content-end gap-2'>
+                <nav aria-label='Page navigation example'>
+                  {totalAllOrderList > per_page ? (
+                    <div>
+                      <ReactPaginate
+                        className='pagination common-pagination'
+                        previousLabel='<'
+                        nextLabel='>'
+                        pageClassName='page-item'
+                        activeClassName='pagination'
+                        pageLinkClassName=' page-link'
+                        previousClassName='page-item'
+                        previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                        nextClassName='page-item'
+                        nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                        activeLinkClassName=' pagination active'
+                        breakLabel='...'
+                        pageCount={totalAllOrderList / per_page}
+                        initialPage={page_no - 1}
+                        pageRangeDisplayed={3}
+                        onPageChange={handelPageClick}
+                        type='button'
+                      />
                     </div>
-                    <nav aria-label='Page navigation example'>
-                      <ul className='pagination common-pagination mt-0'>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            1
-                          </Link>
-                        </li>
-                        <li className='page-item active'>
-                          <Link className='page-link' to='#'>
-                            2
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            3
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            4
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link
-                            className='page-link flx-align gap-2 flex-nowrap'
-                            to='#'
-                          >
-                            Next
-                            <span className='icon line-height-1 font-20'>
-                              <i className='las la-arrow-right' />
-                            </span>
-                          </Link>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
+                  ) : (
+                    ""
+                  )}
+                </nav>
               </div>
             </div>
           </div>
         </div>
-        {/* ========================= Statement section End =========================== */}
       </div>
+      {/* ========================= Statement section End =========================== */}
 
       {/*  */}
       <>
         <div
           className='modal fade order_item'
-          id={`exampleModal_${1}`}
+          id={`exampleModal_1`}
           tabIndex={-1}
           aria-labelledby='exampleModalLabel'
           aria-hidden='true'
@@ -163,7 +256,7 @@ const AllOrders = () => {
             <div className='modal-content'>
               <div className='modal-header'>
                 <h6 className='modal-title fs-5' id='exampleModalLabel'>
-                  Update Product
+                  Super Admin Invoice View
                 </h6>
                 <button
                   type='button'
@@ -183,13 +276,23 @@ const AllOrders = () => {
                           <div className='row mb-4 border-bottom pb-3'>
                             <div className='col-sm-6'>
                               <h2 className='fw-bold'>INVOICE</h2>
-                              <p className='mb-0'>#INV-000123</p>
-                              <small>Date: Oct 03, 2025</small>
+                              <p className='mb-0'>
+                                #INV no: {readSingleInvoiceSingleUser?._id}
+                              </p>
+                              <p className='mb-0'>
+                                #TRA no: {readSingleInvoiceSingleUser?.tran_id}
+                              </p>
+                              <small>
+                                Date:{" "}
+                                {formatDate(
+                                  readSingleInvoiceSingleUser?.createdAt
+                                )}
+                              </small>
                             </div>
                             <div className='col-sm-6 text-end'>
-                              <h5 className='fw-bold'>Your Shop Name</h5>
-                              <p className='mb-0'>123 Street, Dhaka</p>
-                              <p className='mb-0'>support@email.com</p>
+                              <h5 className='fw-bold'>PixBO</h5>
+                              <p className='mb-0'>123 Street, Chittagong</p>
+                              <p className='mb-0'>support@pixbo.com</p>
                               <p className='mb-0'>+880 1234 567 890</p>
                             </div>
                           </div>
@@ -198,63 +301,144 @@ const AllOrders = () => {
                           <div className='row mb-4'>
                             <div className='col-sm-6'>
                               <h6 className='fw-bold'>Bill To:</h6>
-                              <p className='mb-0'>Amit Biswas</p>
-                              <p className='mb-0'>456 Avenue Road</p>
-                              <p className='mb-0'>Chittagong, Bangladesh</p>
+                              <p className='mb-0'>
+                                {
+                                  readSingleInvoiceSingleUser?.cus_details?.[0]
+                                    ?.Name
+                                }
+                              </p>
+
+                              <p className='mb-0'>
+                                {
+                                  readSingleInvoiceSingleUser?.cus_details?.[0]
+                                    ?.Email
+                                }
+                              </p>
+                              <p className='mb-0'>
+                                {
+                                  readSingleInvoiceSingleUser?.cus_details?.[0]
+                                    ?.Phone
+                                }
+                              </p>
+                              <p className='mb-0'>
+                                {
+                                  readSingleInvoiceSingleUser?.cus_details?.[0]
+                                    ?.Address
+                                }
+                              </p>
                             </div>
                             <div className='col-sm-6 text-end'>
-                              <h6 className='fw-bold'>Payment Method:</h6>
-                              <p className='mb-0'>Credit Card</p>
-                              <p className='mb-0'>Visa ending **** 5678</p>
+                              <h6 className='fw-bold'>Payment information: </h6>
+                              <p className='mb-1'>
+                                Payment Status:{" "}
+                                <span
+                                  className={`fw-bold text-uppercase ${
+                                    readSingleInvoiceSingleUser?.payment_status ===
+                                    "success"
+                                      ? "text-success"
+                                      : readSingleInvoiceSingleUser?.payment_status ===
+                                        "cancel"
+                                      ? "text-warning"
+                                      : "text-danger"
+                                  }`}
+                                >
+                                  {readSingleInvoiceSingleUser?.payment_status}
+                                </span>
+                              </p>
+                              <p className='mb-1'>
+                                Deliver Status:{" "}
+                                <span
+                                  className={`fw-bold text-uppercase ${
+                                    readSingleInvoiceSingleUser?.deliver_status ===
+                                    "delivered"
+                                      ? "text-success"
+                                      : readSingleInvoiceSingleUser?.deliver_status ===
+                                        "pending"
+                                      ? "text-warning"
+                                      : "text-danger"
+                                  }`}
+                                >
+                                  {readSingleInvoiceSingleUser?.deliver_status}
+                                </span>
+                              </p>
+                              <p className='mb-0'>
+                                Total payable:{" "}
+                                <span className='fw-bold text-uppercase'>
+                                  {readSingleInvoiceSingleUser?.payable} tk.
+                                </span>
+                              </p>
                             </div>
                           </div>
 
                           {/* Table */}
-                          <div className='table-responsive mb-4'>
-                            <table className='table table-bordered align-middle'>
+                          <div className='table-responsive invoice mb-4'>
+                            <table className='table  align-middle'>
                               <thead className='table-light'>
                                 <tr>
-                                  <th>Item</th>
+                                  <th>Product</th>
+                                  <th className='text-center'>Color</th>
+                                  <th className='text-center'>Size</th>
                                   <th className='text-center'>Quantity</th>
-                                  <th className='text-end'>Price</th>
+                                  <th className='text-center'>Price</th>
                                   <th className='text-end'>Total</th>
                                 </tr>
                               </thead>
-                              <tbody>
-                                <tr>
-                                  <td>Nike Sneakers</td>
-                                  <td className='text-center'>2</td>
-                                  <td className='text-end'>$120</td>
-                                  <td className='text-end'>$240</td>
-                                </tr>
-                                <tr>
-                                  <td>T-Shirt</td>
-                                  <td className='text-center'>3</td>
-                                  <td className='text-end'>$25</td>
-                                  <td className='text-end'>$75</td>
-                                </tr>
-                                <tr>
-                                  <td>Backpack</td>
-                                  <td className='text-center'>1</td>
-                                  <td className='text-end'>$80</td>
-                                  <td className='text-end'>$80</td>
-                                </tr>
+                              <tbody className='text-dark'>
+                                {readSingleInvoiceSingleUser?.invoiceProducts?.map(
+                                  (item, index) => (
+                                    <tr key={index}>
+                                      <td className='text-start'>
+                                        {item?.product_name}
+                                      </td>
+
+                                      <td>{item?.color}</td>
+                                      <td>{item?.size}</td>
+                                      <td>{item?.qty}</td>
+                                      <td>{item?.price} Tk.</td>
+                                      <td className='text-end'>
+                                        {item?.qty * item?.price} Tk.
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
                               </tbody>
                             </table>
                           </div>
 
                           {/* Summary */}
                           <div className='row justify-content-end'>
-                            <div className='col-md-4'>
+                            <div className='col-8'>
+                              <p className='text-danger small fst-italic'>
+                                {toWords.convert(
+                                  Number(
+                                    readSingleInvoiceSingleUser?.payable || 0
+                                  )
+                                )}
+                              </p>
+                            </div>
+                            <div className='col-4'>
                               <ul className='list-unstyled'>
                                 <li className='d-flex justify-content-between mb-2'>
-                                  <span>Subtotal:</span> <span>$395</span>
+                                  <span>Subtotal:</span>{" "}
+                                  <span>
+                                    {readSingleInvoiceSingleUser?.total} Tk.
+                                  </span>
                                 </li>
                                 <li className='d-flex justify-content-between mb-2'>
-                                  <span>Tax (5%):</span> <span>$19.75</span>
+                                  <span>Vat (15%):</span>{" "}
+                                  <span>
+                                    {readSingleInvoiceSingleUser?.vat} Tk.
+                                  </span>
+                                </li>
+                                <li className='d-flex justify-content-between mb-2'>
+                                  <span>Shipping cost:</span>{" "}
+                                  <span>75 Tk.</span>
                                 </li>
                                 <li className='d-flex justify-content-between border-top pt-2 fw-bold'>
-                                  <span>Total:</span> <span>$414.75</span>
+                                  <span>Total:</span>{" "}
+                                  <span>
+                                    {readSingleInvoiceSingleUser?.payable} Tk.
+                                  </span>
                                 </li>
                               </ul>
                             </div>
@@ -294,7 +478,7 @@ const AllOrders = () => {
           </div>
         </div>
       </>
-    </>
+    </div>
   );
 };
 
