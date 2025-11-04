@@ -1,23 +1,37 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import productStore from "../store/productStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Paginate from "../helper/Paginate";
 import Skeleton from "react-loading-skeleton";
 import { baseURLFile, hostURL } from "../helper/config";
+import { DeleteAlert, ErrorToast, IsEmpty } from "../helper/helper";
+import categoryStore from "../store/categoryStore";
+import brandStore from "../store/brandStore";
 
 const AllProducts = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  let { allProducts, totalProducts, allProductsRequest } = productStore();
+  let {
+    allProducts,
+    totalProducts,
+    allProductsRequest,
+    deleteProductRequest,
+    updateProductRequest,
+    singleProductsRequest,
+  } = productStore();
+  let { allCategoryRequest, allCategory } = categoryStore();
+  let { allBrandRequest, allBrand } = brandStore();
   const per_page = 12;
   const page_no = searchParams.get("page_no") || 1;
 
-  // all Category
+  // all Products
   useEffect(() => {
     (async () => {
       await allProductsRequest(0, 0, 0, 0, per_page, page_no);
+      await allCategoryRequest(100, 1);
+      await allBrandRequest(100, 1);
     })();
-  }, [allProductsRequest, page_no]);
+  }, [allBrandRequest, allCategoryRequest, allProductsRequest, page_no]);
 
   //! pagination function
   const handelPageClick = async (event) => {
@@ -27,7 +41,84 @@ const AllProducts = () => {
     navigate(`/all-products?page_no=${page_no + 1}`);
   };
 
-  console.log(allProducts);
+  // delete Product
+  let deleteProduct = async (_id) => {
+    let res = await DeleteAlert(deleteProductRequest, _id);
+    if (res) {
+      await allProductsRequest(0, 0, 0, 0, per_page, page_no);
+    }
+  };
+
+  // read single Product
+  let [_id, setId] = useState("");
+  let readSingleProduct = async (_id) => {
+    let res = await singleProductsRequest(_id);
+    if (res) {
+      setId(res?._id);
+      setData({
+        title: res?.title,
+        images: res?.images,
+        sort_description: res?.sort_description,
+        price: res?.price,
+        is_discount: res?.is_discount,
+        discount_price: res?.discount_price,
+        remark: res?.remark,
+        stock: res?.stock,
+        color: res?.color,
+        size: res?.size,
+        description: res?.description,
+        category_id: res?.category_id,
+        brand_id: res?.brand_id,
+      });
+    }
+  };
+
+  let [data, setData] = useState({
+    title: "",
+    images: [],
+    sort_description: "",
+    price: "",
+    is_discount: true,
+    discount_price: 0,
+    remark: "",
+    stock: 0,
+    color: [],
+    size: [],
+    description: "",
+    category_id: "",
+    brand_id: "",
+  });
+
+  // Validation rules
+  const validations = [
+    { field: data.title, message: "Title is required!" },
+    { field: data.images, message: "Images is required!" },
+    { field: data.sort_description, message: "Sort description is required!" },
+    { field: data.price, message: "Price is required!" },
+    { field: data.is_discount, message: "Discount is required!" },
+    { field: data.discount_price, message: "Discount price is required!" },
+    { field: data.remark, message: "Remark is required!" },
+    { field: data.stock, message: "Stock is required!" },
+    { field: data.color, message: "Color is required!" },
+    { field: data.size, message: "Size is required!" },
+    { field: data.description, message: "Description is required!" },
+    { field: data.category_id, message: "Category is required!" },
+    { field: data.brand_id, message: "Brand is required!" },
+  ];
+  // update Product
+  let updateProduct = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+    let res = await updateProductRequest(_id, data);
+    if (res) {
+      await allProductsRequest(0, 0, 0, 0, per_page, page_no);
+    }
+  };
+
+  console.log(data);
 
   return (
     <>
@@ -59,12 +150,27 @@ const AllProducts = () => {
                     <tbody>
                       {allProducts === null ? (
                         <>
-                          {[...Array(4)].map(() => (
-                            <div className='col-xl-4 col-sm-6'>
-                              <div className='Skeleton'>
-                                <Skeleton count={8} />
-                              </div>
-                            </div>
+                          {[...Array(6)].map(() => (
+                            <tr className='super_admin_all-product'>
+                              <td className='Skeleton'>
+                                <Skeleton count={2} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={2} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={2} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={2} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={2} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={2} />
+                              </td>
+                            </tr>
                           ))}
                         </>
                       ) : (
@@ -90,13 +196,13 @@ const AllProducts = () => {
                                 </h6>
                               </td>
                               <td>
-                                <div className='flx-align gap-2'>
+                                <div className='flx-align justify-content-center gap-2'>
                                   <h6 className='product-item__price mb-0'>
                                     {item?.is_discount === false
                                       ? `৳${item?.price}`
                                       : `৳${item?.discount_price}`}
                                   </h6>
-                                  <span className='product-item__prevPrice text-decoration-line-through'>
+                                  <span className='product-item__prevPrice font-12 text-danger text-decoration-line-through'>
                                     {item?.is_discount === false
                                       ? ""
                                       : `৳${item?.price}`}
@@ -111,10 +217,14 @@ const AllProducts = () => {
                                     className='btn btn-success'
                                     data-bs-toggle='modal'
                                     data-bs-target={`#exampleModal_${1}`}
+                                    onClick={() => readSingleProduct(item?._id)}
                                   >
                                     Edit
                                   </button>
-                                  <button className='btn btn-danger'>
+                                  <button
+                                    onClick={() => deleteProduct(item?._id)}
+                                    className='btn btn-danger'
+                                  >
                                     Delete
                                   </button>
                                 </div>
@@ -175,13 +285,20 @@ const AllProducts = () => {
                         <div className='profile-info-content'>
                           <div className='tab-content' id='pills-tabContent'>
                             <div className='tab-pane fade show active'>
-                              <form action='#' autoComplete='off'>
+                              <div>
                                 <div className='row gy-4'>
                                   <div className='col-sm-6 col-xs-6'>
                                     <label className='form-label mb-2 font-18 font-heading fw-600'>
                                       Title
                                     </label>
                                     <input
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          title: e.target.value,
+                                        })
+                                      }
+                                      value={data.title}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -191,15 +308,49 @@ const AllProducts = () => {
                                       Short Description
                                     </label>
                                     <input
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          sort_description: e.target.value,
+                                        })
+                                      }
+                                      value={data.sort_description}
                                       type='text'
                                       className='common-input border'
                                     />
+                                  </div>
+                                  <div className='col-12'>
+                                    <label className='form-label mb-2 font-18 font-heading fw-600'>
+                                      Image (Use comma for multi images. Ex:
+                                      image_1.png, image_2.jpg, image_3.png)
+                                    </label>
+                                    <textarea
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          images: e.target.value
+                                            .split(",")
+                                            .map((item) => item.trim()),
+                                        })
+                                      }
+                                      value={data.images}
+                                      name=''
+                                      id=''
+                                      className='common-input border'
+                                    ></textarea>
                                   </div>
                                   <div className='col-sm-4 col-xs-4'>
                                     <label className='form-label mb-2 font-18 font-heading fw-600'>
                                       Price
                                     </label>
                                     <input
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          price: Number(e.target.value),
+                                        })
+                                      }
+                                      value={data.price}
                                       type='number'
                                       className='common-input border'
                                     />
@@ -209,7 +360,17 @@ const AllProducts = () => {
                                       Is Discount?
                                     </label>
                                     <div className='select-has-icon'>
-                                      <select className='common-input border'>
+                                      <select
+                                        className='common-input border'
+                                        onChange={(e) =>
+                                          setData({
+                                            ...data,
+                                            is_discount:
+                                              e.target.value === "true",
+                                          })
+                                        }
+                                        value={data.is_discount}
+                                      >
                                         <option value={true}>True</option>
                                         <option value={false}>False</option>
                                       </select>
@@ -220,6 +381,15 @@ const AllProducts = () => {
                                       Discount Price
                                     </label>
                                     <input
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          discount_price: Number(
+                                            e.target.value
+                                          ),
+                                        })
+                                      }
+                                      value={data.discount_price}
                                       type='number'
                                       className='common-input border'
                                     />
@@ -230,9 +400,24 @@ const AllProducts = () => {
                                       Category
                                     </label>
                                     <div className='select-has-icon'>
-                                      <select className='common-input border'>
-                                        <option value={true}>True</option>
-                                        <option value={false}>False</option>
+                                      <select
+                                        className='common-input border'
+                                        onChange={(e) =>
+                                          setData({
+                                            ...data,
+                                            category_id: e.target.value,
+                                          })
+                                        }
+                                        value={data.category_id}
+                                      >
+                                        <option value={""}>
+                                          Please Select A Category **
+                                        </option>
+                                        {allCategory?.map((item, index) => (
+                                          <option key={index} value={item?._id}>
+                                            {item?.category_name}
+                                          </option>
+                                        ))}
                                       </select>
                                     </div>
                                   </div>
@@ -241,17 +426,39 @@ const AllProducts = () => {
                                       Brand
                                     </label>
                                     <div className='select-has-icon'>
-                                      <select className='common-input border'>
-                                        <option value={true}>True</option>
-                                        <option value={false}>False</option>
+                                      <select
+                                        className='common-input border'
+                                        onChange={(e) =>
+                                          setData({
+                                            ...data,
+                                            brand_id: e.target.value,
+                                          })
+                                        }
+                                        value={data.brand_id}
+                                      >
+                                        <option value={""}>
+                                          Please Select A Brand **
+                                        </option>
+                                        {allBrand?.map((item, index) => (
+                                          <option key={index} value={item?._id}>
+                                            {item?.brand_name}
+                                          </option>
+                                        ))}
                                       </select>
                                     </div>
                                   </div>
                                   <div className='col-sm-4 col-xs-4'>
                                     <label className='form-label mb-2 font-18 font-heading fw-600'>
-                                      Remark
+                                      Remark (Ex: New)
                                     </label>
                                     <input
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          remark: e.target.value,
+                                        })
+                                      }
+                                      value={data.remark}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -261,15 +468,31 @@ const AllProducts = () => {
                                       Stock
                                     </label>
                                     <input
-                                      type='text'
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          stock: Number(e.target.value),
+                                        })
+                                      }
+                                      value={data.stock}
+                                      type='number'
                                       className='common-input border'
                                     />
                                   </div>
                                   <div className='col-sm-4 col-xs-4'>
                                     <label className='form-label mb-2 font-18 font-heading fw-600'>
-                                      Color
+                                      Color (Ex: Red, Green, Blue)
                                     </label>
                                     <input
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          color: e.target.value
+                                            .split(",")
+                                            .map((item) => item.trim()),
+                                        })
+                                      }
+                                      value={data.color}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -277,9 +500,18 @@ const AllProducts = () => {
 
                                   <div className='col-sm-4 col-xs-4'>
                                     <label className='form-label mb-2 font-18 font-heading fw-600'>
-                                      Size
+                                      Size (Ex: XXL, XL, X)
                                     </label>
                                     <input
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          size: e.target.value
+                                            .split(",")
+                                            .map((item) => item.trim()),
+                                        })
+                                      }
+                                      value={data.size}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -290,23 +522,20 @@ const AllProducts = () => {
                                       Description
                                     </label>
                                     <textarea
-                                      name=''
-                                      id=''
-                                      className='common-input border'
-                                    ></textarea>
-                                  </div>
-                                  <div className='col-12'>
-                                    <label className='form-label mb-2 font-18 font-heading fw-600'>
-                                      Image
-                                    </label>
-                                    <textarea
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          description: e.target.value,
+                                        })
+                                      }
+                                      value={data.description}
                                       name=''
                                       id=''
                                       className='common-input border'
                                     ></textarea>
                                   </div>
                                 </div>
-                              </form>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -323,7 +552,12 @@ const AllProducts = () => {
                 >
                   Close
                 </button>
-                <button type='button' className='btn btn-primary'>
+                <button
+                  data-bs-dismiss='modal'
+                  onClick={updateProduct}
+                  type='button'
+                  className='btn btn-primary'
+                >
                   Update Product
                 </button>
               </div>

@@ -63,7 +63,7 @@ const Category = () => {
     })();
   }, [allCategoryRequest, page_no]);
 
-  // update Category
+  // delete Category
   let deleteCategory = async (_id) => {
     let res = await DeleteAlert(deleteCategoryRequest, _id);
     if (res) {

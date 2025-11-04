@@ -80,6 +80,49 @@ const productStore = create((set) => ({
 
     if (res?.data?.success === true) {
       set({ singleProduct: res?.data?.data?.[0] });
+      return res?.data?.data?.[0];
+    }
+  },
+
+  //! delete-product
+  deleteProductRequest: async (id) => {
+    try {
+      let res = await axios.delete(baseURL + `/delete-product/${id}`, {
+        withCredentials: true,
+        credentials: "include",
+      });
+      if (res?.data?.success === true) {
+        SuccessToast(res?.data?.message);
+        return true;
+      } else {
+        ErrorToast(res?.data?.message);
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorToast("Something went wrong");
+      return false;
+    }
+  },
+
+  //! update-product
+  updateProductRequest: async (id, data) => {
+    try {
+      let res = await axios.put(baseURL + `/update-product/${id}`, data, {
+        withCredentials: true,
+        credentials: "include",
+      });
+      if (res?.data?.success === true) {
+        SuccessToast(res?.data?.message);
+        return true;
+      } else {
+        ErrorToast(res?.data?.message);
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      ErrorToast("Something went wrong");
+      return false;
     }
   },
 }));
