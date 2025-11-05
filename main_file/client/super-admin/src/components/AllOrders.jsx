@@ -178,6 +178,7 @@ const AllOrders = () => {
                   <thead>
                     <tr>
                       <th>Date</th>
+                      <th>Customer name</th>
                       <th>Order ID</th>
                       <th>Payment status</th>
                       <th>Deliver status</th>
@@ -220,6 +221,7 @@ const AllOrders = () => {
                         {allOrderList?.map((item, index) => (
                           <tr key={index}>
                             <td>{formatDate(item?.createdAt)}</td>
+                            <td>{item?.cus_details?.[0]?.Name}</td>
 
                             <td>
                               <span>{item?._id}</span>
