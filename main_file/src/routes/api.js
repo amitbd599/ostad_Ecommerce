@@ -147,7 +147,6 @@ router.get(
 
 router.get(
   "/read-single-invoice-single-user/:invoice_id",
-  authVerificationUser,
   invoiceController.readSingleInvoiceSingleUser
 );
 
@@ -167,7 +166,9 @@ router.get(
   "/all-order-list/:per_page/:page_no",
   authVerificationAdmin,
   invoiceController.allOrderList
-);
+); //all-order-list/1/10?from=2025-11-01&to=2025-11-05
+router.get("/export-csv", authVerificationAdmin, invoiceController.exportCSV); //export-csv?from=2025-11-01&to=2025-11-05
+
 router.put(
   "/update-invoice",
   authVerificationAdmin,

@@ -1,20 +1,21 @@
 import { ToWords } from "to-words";
 import invoiceStore from "../store/invoiceStore";
 import { useEffect, useState } from "react";
-import { formatDate } from "../helper/helper";
+import { ErrorToast, formatDate } from "../helper/helper";
 import { useCallback, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import DatePicker from "react-datepicker";
+import { baseURL } from "../helper/config";
 
 const AllOrders = () => {
   const [searchParams] = useSearchParams();
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
-  let [data, setData] = useState({
-    _id: "",
-    user_id: "",
-    deliver_status: null,
-  });
+  console.log(fromDate);
+  console.log(toDate);
 
   const navigate = useNavigate();
   const per_page = 6;
@@ -31,24 +32,16 @@ const AllOrders = () => {
 
   useEffect(() => {
     (async () => {
-      let res = await allOrderListRequest(per_page, page_no);
-
-      if (res) {
-        setData({
-          _id: res?.user_id,
-          user_id: res?.user_id,
-          deliver_status: res?.deliver_status,
-        });
-      }
+      await allOrderListRequest(per_page, page_no, fromDate, toDate);
     })();
-  }, [allOrderListRequest, page_no]);
+  }, [allOrderListRequest, fromDate, page_no, toDate]);
 
   //! pagination function
   const handelPageClick = async (event) => {
     let page_no = event.selected;
-    await allOrderListRequest(per_page, page_no + 1);
+    await allOrderListRequest(per_page, page_no + 1, fromDate, toDate);
 
-    navigate(`/dashboard-all-orders?page_no=${page_no + 1}`);
+    navigate(`/all-orders?page_no=${page_no + 1}`);
   };
 
   const componentRef = useRef(null);
@@ -124,9 +117,58 @@ const AllOrders = () => {
     }
   };
 
+  const handleDownload = () => {
+    try {
+      let url = baseURL + "/export-csv";
+      // If user gives dates, add them as query
+      if (fromDate && toDate) {
+        url += `?from=${fromDate}&to=${toDate}`;
+      }
+      // 📥 Open link (it will download automatically)
+      window.open(url, "_blank");
+    } catch (error) {
+      console.log(error);
+
+      ErrorToast("Something went wrong!");
+    }
+  };
+
   return (
     <div className='dashboard-body__content'>
       {/* ========================= Statement section start =========================== */}
+      <div className='card shadow-sm p-3 mb-4'>
+        <div className='row g-3 align-items-end'>
+          <div className='col-md-3'>
+            <label className='form-label fw-semibold'>From Date</label>
+            <input
+              type='date'
+              className='form-control'
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+            />
+          </div>
+
+          <div className='col-md-3'>
+            <label className='form-label fw-semibold'>To Date</label>
+            <input
+              type='date'
+              placeholder=''
+              className='form-control'
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+            />
+          </div>
+
+          <div className='col-md-3 text-center'>
+            <button
+              className='btn d-block btn-primary px-4 mt-2'
+              onClick={handleDownload}
+            >
+              Download CSV
+            </button>
+          </div>
+        </div>
+      </div>
       <div className='row gy-4'>
         <div className='col-12'>
           <div className='card common-card border border-gray-five'>

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Parser } = require("json2csv");
 const cartModel = require("../models/cartModel");
 const invoiceModel = require("../models/invoiceModel");
 const invoiceProductModel = require("../models/invoiceProductModel");
@@ -264,13 +265,10 @@ exports.readAllInvoiceSingleUser = async (req, res) => {
 //! read Single Invoice Single User
 exports.readSingleInvoiceSingleUser = async (req, res) => {
   try {
-    let user_id = new ObjectId(req.headers._id);
-
     let invoice_id = new ObjectId(req.params.invoice_id);
 
     let matchStage = {
       $match: {
-        user_id: user_id,
         _id: invoice_id,
       },
     };
@@ -457,115 +455,87 @@ exports.paymentIpn = async (req, res) => {
 
 // ===================== // For admin --
 
-//! all-order-list
+// all Order List by date filter
 exports.allOrderList = async (req, res) => {
   try {
-    let page_no = Number(req.params.page_no);
-    let per_page = Number(req.params.per_page);
-    let skipRow = (page_no - 1) * per_page;
+    const page_no = Number(req.params.page_no) || 1;
+    const per_page = Number(req.params.per_page) || 10;
+    const skipRow = (page_no - 1) * per_page;
 
-    let sortStage = { createdAt: -1 };
-    let joinStageWithInvoiceProduct = {
-      $lookup: {
-        from: "invoicesproducts",
-        localField: "_id",
-        foreignField: "invoice_id",
-        as: "product",
-      },
-    };
-    let unwindStage = { $unwind: "$product" };
+    // Optional date filter
+    const { from, to } = req.query;
 
-    let projectionStage = {
-      $project: {
-        _id: 1,
-        user_id: 1,
-        payable: 1,
-        cus_details: 1,
-        ship_details: 1,
-        tran_id: 1,
-        val_id: 1,
-        deliver_status: 1,
-        payment_status: 1,
-        vat: 1,
-        total: 1,
-        createdAt: 1,
-        createdAt: 1,
-        "product.product_id": 1,
-        "product.product_name": 1,
-        "product.qty": 1,
-        "product.price": 1,
-        "product.color": 1,
-        "product.size": 1,
-        "product.size": 1,
+    // Simple match: if no date, show all invoices
+    const fromDate = from
+      ? new Date(`${from}T00:00:00`)
+      : new Date("1970-01-01T00:00:00");
+    const toDate = to ? new Date(`${to}T23:59:59.999`) : new Date();
+
+    const matchStage = {
+      createdAt: {
+        $gte: fromDate,
+        $lte: toDate,
       },
     };
 
-    let facetStage = {
+    // $facet for total count + paginated data
+    const facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
         products: [
-          { $sort: sortStage },
+          { $sort: { createdAt: -1 } },
           { $skip: skipRow },
           { $limit: per_page },
-          joinStageWithInvoiceProduct,
-          projectionStage,
+          {
+            $lookup: {
+              from: "invoicesproducts",
+              localField: "_id",
+              foreignField: "invoice_id",
+              as: "product",
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              user_id: 1,
+              payable: 1,
+              cus_details: 1,
+              ship_details: 1,
+              tran_id: 1,
+              val_id: 1,
+              deliver_status: 1,
+              payment_status: 1,
+              vat: 1,
+              total: 1,
+              createdAt: 1,
+              "product.product_id": 1,
+              "product.product_name": 1,
+              "product.qty": 1,
+              "product.price": 1,
+              "product.color": 1,
+              "product.size": 1,
+            },
+          },
         ],
       },
     };
 
-    let products = await invoiceModel.aggregate([facetStage]);
+    // Aggregate pipeline
+    const products = await invoiceModel.aggregate([
+      { $match: matchStage }, // filter by date
+      facetStage, // count + paginated products
+    ]);
+
     res.status(200).json({
       success: true,
-      message: "Invoice fetched successfully",
+      message: "Invoices fetched successfully",
       data: products[0],
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.toString(),
       message: "Something went wrong.",
-    });
-  }
-};
-
-//! read Single Invoice
-exports.readSingleInvoice = async (req, res) => {
-  try {
-    let user_id = new ObjectId(req.headers._id);
-
-    let invoice_id = new ObjectId(req.params.invoice_id);
-
-    let matchStage = {
-      $match: {
-        user_id: user_id,
-        _id: invoice_id,
-      },
-    };
-
-    let joinStageWithInvoiceProduct = {
-      $lookup: {
-        from: "invoicesproducts",
-        localField: "_id",
-        foreignField: "invoice_id",
-        as: "invoiceProducts",
-      },
-    };
-
-    let data = await invoiceModel.aggregate([
-      matchStage,
-      joinStageWithInvoiceProduct,
-    ]);
-
-    res.status(200).json({
-      success: true,
-      message: "Invoice fetched successfully",
-      data: data?.[0],
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
       error: error.toString(),
-      message: "Something went wrong.",
     });
   }
 };
@@ -593,6 +563,50 @@ exports.updateInvoice = async (req, res) => {
       error: error.toString(),
       message: "Something went wrong.",
     });
+  }
+};
+
+exports.exportCSV = async (req, res) => {
+  try {
+    const { from, to } = req.query;
+
+    const fromDate = from
+      ? new Date(`${from}T00:00:00`)
+      : new Date("1970-01-01T00:00:00");
+    const toDate = to ? new Date(`${to}T23:59:59.999`) : new Date();
+
+    const matchStage = {
+      createdAt: {
+        $gte: fromDate,
+        $lte: toDate,
+      },
+    };
+
+    // 🧾 Get invoices
+    const data = await invoiceModel.find(matchStage).sort({ createdAt: -1 });
+
+    // 📊 Select columns for CSV
+    const fields = [
+      "_id",
+      "user_id",
+      "payable",
+      "deliver_status",
+      "payment_status",
+      "total",
+      "vat",
+      "createdAt",
+    ];
+
+    // 🪄 Convert to CSV
+    const parser = new Parser({ fields });
+    const csv = parser.parse(data);
+
+    // 💾 Send file
+    res.header("Content-Type", "text/csv");
+    res.attachment("invoices.csv");
+    res.send(csv);
+  } catch (error) {
+    res.status(500).send("Error creating CSV file");
   }
 };
 

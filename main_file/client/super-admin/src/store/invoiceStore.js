@@ -64,10 +64,11 @@ const invoiceStore = create((set) => ({
   // all-order-list
   totalAllOrderList: null,
   allOrderList: null,
-  allOrderListRequest: async (per_page, page_no) => {
+  allOrderListRequest: async (per_page, page_no, fromDate, toDate) => {
     try {
       let res = await axios.get(
-        baseURL + `/all-order-list/${per_page}/${page_no}`,
+        baseURL +
+          `/all-order-list/${per_page}/${page_no}?from=${fromDate}&to=${toDate}`,
         {
           withCredentials: true,
           credentials: "include",
