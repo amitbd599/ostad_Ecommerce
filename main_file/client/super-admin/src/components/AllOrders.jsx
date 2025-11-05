@@ -5,18 +5,14 @@ import { ErrorToast, formatDate } from "../helper/helper";
 import { useCallback, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import ReactPaginate from "react-paginate";
-import DatePicker from "react-datepicker";
 import { baseURL } from "../helper/config";
 import Skeleton from "react-loading-skeleton";
+import Paginate from "../helper/Paginate";
 
 const AllOrders = () => {
   const [searchParams] = useSearchParams();
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
-  console.log(fromDate);
-  console.log(toDate);
 
   const navigate = useNavigate();
   const per_page = 6;
@@ -111,10 +107,9 @@ const AllOrders = () => {
 
   // update invoice
   let updateInvoice = async (_id, user_id, deliver_status) => {
-    console.log({ _id, user_id, deliver_status });
     let res = await updateInvoiceRequest({ _id, user_id, deliver_status });
     if (res) {
-      await allOrderListRequest(per_page, page_no);
+      await allOrderListRequest(per_page, page_no, fromDate, toDate);
     }
   };
 
@@ -129,7 +124,6 @@ const AllOrders = () => {
       window.open(url, "_blank");
     } catch (error) {
       console.log(error);
-
       ErrorToast("Something went wrong!");
     }
   };
@@ -192,6 +186,9 @@ const AllOrders = () => {
                       <>
                         {[...Array(6)].map(() => (
                           <tr className='super_admin_all-product'>
+                            <td className='Skeleton'>
+                              <Skeleton count={1} />
+                            </td>
                             <td className='Skeleton'>
                               <Skeleton count={1} />
                             </td>
@@ -300,24 +297,11 @@ const AllOrders = () => {
               <div className='flx-between justify-content-end gap-2'>
                 <nav aria-label='Page navigation example'>
                   <div>
-                    <ReactPaginate
-                      className='pagination common-pagination'
-                      previousLabel='<'
-                      nextLabel='>'
-                      pageClassName='page-item'
-                      activeClassName='pagination'
-                      pageLinkClassName=' page-link'
-                      previousClassName='page-item'
-                      previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                      nextClassName='page-item'
-                      nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                      activeLinkClassName=' pagination active'
-                      breakLabel='...'
-                      pageCount={totalAllOrderList / per_page}
-                      initialPage={page_no - 1}
-                      pageRangeDisplayed={3}
-                      onPageChange={handelPageClick}
-                      type='button'
+                    <Paginate
+                      handelPageClick={handelPageClick}
+                      page_no={page_no}
+                      per_page={per_page}
+                      totalCount={totalAllOrderList}
                     />
                   </div>
                 </nav>
@@ -417,13 +401,13 @@ const AllOrders = () => {
                               <p className='mb-1'>
                                 Payment Status:{" "}
                                 <span
-                                  className={`fw-bold text-uppercase ${
+                                  className={`fw-bold  text-capitalize ${
                                     readSingleInvoiceSingleUser?.payment_status ===
                                     "success"
                                       ? "text-success"
                                       : readSingleInvoiceSingleUser?.payment_status ===
                                         "cancel"
-                                      ? "text-warning"
+                                      ? "text-danger"
                                       : "text-danger"
                                   }`}
                                 >
@@ -433,7 +417,7 @@ const AllOrders = () => {
                               <p className='mb-1'>
                                 Deliver Status:{" "}
                                 <span
-                                  className={`fw-bold text-uppercase ${
+                                  className={`fw-bold text-capitalize ${
                                     readSingleInvoiceSingleUser?.deliver_status ===
                                     "delivered"
                                       ? "text-success"

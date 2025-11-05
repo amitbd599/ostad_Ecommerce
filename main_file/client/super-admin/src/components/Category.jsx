@@ -175,10 +175,13 @@ const Category = () => {
                             {[...Array(4)].map(() => (
                               <tr>
                                 <td className='Skeleton'>
-                                  <Skeleton count={2} />
+                                  <Skeleton count={1} />
                                 </td>
                                 <td className='Skeleton'>
-                                  <Skeleton count={2} />
+                                  <Skeleton count={1} />
+                                </td>
+                                <td className='Skeleton'>
+                                  <Skeleton count={1} />
                                 </td>
                               </tr>
                             ))}

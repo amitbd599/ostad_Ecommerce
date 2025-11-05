@@ -118,8 +118,6 @@ const AllProducts = () => {
     }
   };
 
-  console.log(data);
-
   return (
     <>
       {/* Cover Photo Start */}
@@ -151,24 +149,24 @@ const AllProducts = () => {
                       {allProducts === null ? (
                         <>
                           {[...Array(6)].map(() => (
-                            <tr className='super_admin_all-product'>
+                            <tr className='super_admin_all-product '>
                               <td className='Skeleton'>
-                                <Skeleton count={2} />
+                                <Skeleton count={1} />
                               </td>
                               <td className='Skeleton'>
-                                <Skeleton count={2} />
+                                <Skeleton count={1} />
                               </td>
                               <td className='Skeleton'>
-                                <Skeleton count={2} />
+                                <Skeleton count={1} />
                               </td>
                               <td className='Skeleton'>
-                                <Skeleton count={2} />
+                                <Skeleton count={1} />
                               </td>
                               <td className='Skeleton'>
-                                <Skeleton count={2} />
+                                <Skeleton count={1} />
                               </td>
                               <td className='Skeleton'>
-                                <Skeleton count={2} />
+                                <Skeleton count={1} />
                               </td>
                             </tr>
                           ))}

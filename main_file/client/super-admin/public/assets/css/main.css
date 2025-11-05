@@ -9713,5 +9713,9 @@ input[type="number"] {
   padding: 5px 16px;
   border-radius: 0;
 }
+
+.review_img img {
+  width: 100px;
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */

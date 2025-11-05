@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import FileManagerPopup from "./FileManagerPopup";
 import productStore from "../store/productStore";
 import categoryStore from "../store/categoryStore";
 import brandStore from "../store/brandStore";

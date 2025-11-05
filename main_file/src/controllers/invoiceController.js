@@ -6,6 +6,7 @@ const invoiceProductModel = require("../models/invoiceProductModel");
 const userModel = require("../models/userModel");
 const FormData = require("form-data");
 const axios = require("axios");
+const productModel = require("../models/productModel");
 const ObjectId = mongoose.Types.ObjectId;
 
 //! invoice create
@@ -545,7 +546,9 @@ exports.updateInvoice = async (req, res) => {
   try {
     const { _id, user_id, deliver_status } = req.body;
 
-    await invoiceModel.findByIdAndUpdate(
+
+    // step 1 - invoice update
+    let data = await invoiceModel.findByIdAndUpdate(
       { _id, user_id },
       {
         deliver_status,
@@ -553,9 +556,13 @@ exports.updateInvoice = async (req, res) => {
       { new: true }
     );
 
+    // step 2 - product update (less stock)
+
+
     res.status(200).json({
       success: true,
       message: "Deliver status update!",
+      data
     });
   } catch (error) {
     res.status(500).json({

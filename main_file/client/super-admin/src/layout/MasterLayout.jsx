@@ -72,7 +72,7 @@ const MasterLayout = ({ children }) => {
                     <span className='dash_icon'>
                       <FaAngleRight />
                     </span>
-                    <span className='text'>Profile</span>
+                    <span className='text'>Dashboard</span>
                   </NavLink>
                 </li>
                 <li className='sidebar-list__item'>
@@ -180,6 +180,21 @@ const MasterLayout = ({ children }) => {
                     <span className='text'>File manager</span>
                   </NavLink>
                 </li>
+                <li className='sidebar-list__item'>
+                  <NavLink
+                    to='/profile'
+                    className={(navData) =>
+                      navData.isActive
+                        ? "sidebar-list__link activePage"
+                        : "sidebar-list__link"
+                    }
+                  >
+                    <span className='dash_icon'>
+                      <FaAngleRight />
+                    </span>
+                    <span className='text'>Profile</span>
+                  </NavLink>
+                </li>
               </ul>
               {/* Sidebar List End */}
             </div>
@@ -244,10 +259,7 @@ const MasterLayout = ({ children }) => {
                         className={`user-profile-dropdown ${show && "show"} `}
                       >
                         <li className='sidebar-list__item'>
-                          <Link
-                            to='/dashboard-profile'
-                            className='sidebar-list__link'
-                          >
+                          <Link to='/' className='sidebar-list__link'>
                             <span className='sidebar-list__icon'>
                               <img
                                 src='/super-admin/assets/images/icons/sidebar-icon2.svg'

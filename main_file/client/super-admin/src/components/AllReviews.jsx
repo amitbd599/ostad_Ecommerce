@@ -1,9 +1,10 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
-import ReactPaginate from "react-paginate";
 import { formatDate } from "../helper/helper";
 import reviewStore from "../store/reviewStore";
 import { FaRegStar, FaStar } from "react-icons/fa";
+import { baseURLFile, hostURL } from "../helper/config";
+import Paginate from "../helper/Paginate";
 
 const AllReviews = () => {
   const [searchParams] = useSearchParams();
@@ -51,26 +52,36 @@ const AllReviews = () => {
               {allReview?.map((item, index) => (
                 <div key={index} className='product-review'>
                   <div className='product-review__top flx-between'>
-                    <div className='product-review__rating flx-align'>
+                    <div className='review_img'>
+                      <img
+                        src={`${baseURLFile}/${item?.product?.images?.[0]}`}
+                      />
+                      <div>
+                        <Link
+                          target='_blank'
+                          to={`${hostURL}/product-details?product_id=${item?.product_id}`}
+                        >
+                          <h5>{item?.product?.title}</h5>
+                        </Link>
+                      </div>
+                    </div>
+                    <div>
                       <div className='d-flex align-items-center gap-1'>
                         <div className='star'>
-                          <StarRating star={item?.rating} />
+                          <p className='font-20 fw-bold'>
+                            Name: {item?.user?.cus_name}
+                          </p>
+                          <strong>Email:</strong> {item?.user?.email}
                         </div>
-                        <span className='star-rating__text text-body'>
-                          {" "}
-                          {item?.rating}.0
-                        </span>
                       </div>
-                      <span className='product-review__reason'>
-                        <strong>Invoice ID:</strong> {item?.invoice_id}
-                      </span>
-                    </div>
-                    <div className='product-review__date'>
-                      by{" "}
-                      <strong className='product-review__user text--base'>
-                        cus_name
-                      </strong>{" "}
-                      ({formatDate(item?.updatedAt)})
+                      <div className='d-flex align-items-center gap-1'>
+                        <div className='star d-flex align-items-center gap-1'>
+                          <StarRating star={item?.rating} />
+                          <span className='star-rating__text text-body mt-1'>
+                            {item?.rating}.0 ({formatDate(item?.updatedAt)})
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className='product-review__body'>
@@ -82,24 +93,11 @@ const AllReviews = () => {
             <div className='flx-between justify-content-end gap-2'>
               <nav aria-label='Page navigation example'>
                 <div>
-                  <ReactPaginate
-                    className='pagination common-pagination'
-                    previousLabel='<'
-                    nextLabel='>'
-                    pageClassName='page-item'
-                    activeClassName='pagination'
-                    pageLinkClassName=' page-link'
-                    previousClassName='page-item'
-                    previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                    nextClassName='page-item'
-                    nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                    activeLinkClassName=' pagination active'
-                    breakLabel='...'
-                    pageCount={totalReview / per_page}
-                    initialPage={page_no - 1}
-                    pageRangeDisplayed={3}
-                    onPageChange={handelPageClick}
-                    type='button'
+                  <Paginate
+                    handelPageClick={handelPageClick}
+                    page_no={page_no}
+                    per_page={per_page}
+                    totalCount={totalReview}
                   />
                 </div>
               </nav>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import fileStore from "../store/fileStore";
-import ReactPaginate from "react-paginate";
 import { DeleteAlertFile, ErrorToast, SuccessToast } from "../helper/helper";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { baseURLFile } from "../helper/config";
 import Skeleton from "react-loading-skeleton";
+import Paginate from "../helper/Paginate";
 const FileManager = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -161,31 +161,12 @@ const FileManager = () => {
                     )}
                   </div>
                   <nav aria-label='Page navigation example'>
-                    {totalFile > per_page ? (
-                      <div>
-                        <ReactPaginate
-                          className='pagination common-pagination'
-                          previousLabel='<'
-                          nextLabel='>'
-                          pageClassName='page-item'
-                          activeClassName='pagination'
-                          pageLinkClassName=' page-link'
-                          previousClassName='page-item'
-                          previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                          nextClassName='page-item'
-                          nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                          activeLinkClassName=' pagination active'
-                          breakLabel='...'
-                          pageCount={totalFile / per_page}
-                          // initialPage={page_no - 1}
-                          pageRangeDisplayed={3}
-                          onPageChange={handelPageClick}
-                          type='button'
-                        />
-                      </div>
-                    ) : (
-                      ""
-                    )}
+                    <Paginate
+                      handelPageClick={handelPageClick}
+                      page_no={page_no}
+                      per_page={per_page}
+                      totalCount={totalFile}
+                    />
                   </nav>
                 </div>
               </div>

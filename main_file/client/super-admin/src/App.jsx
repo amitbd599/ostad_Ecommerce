@@ -10,6 +10,7 @@ import AllOrdersPage from "./pages/AllOrdersPage";
 import AllReviewPage from "./pages/AllReviewPage";
 import FileManagerPage from "./pages/FileManagerPage";
 import PrivateRoute from "./layout/PrivateRoute";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
   return (
@@ -20,6 +21,15 @@ function App() {
         <Route
           exact
           path='/'
+          element={
+            <PrivateRoute>
+              <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          exact
+          path='/profile'
           element={
             <PrivateRoute>
               <DashboardProfilePage />

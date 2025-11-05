@@ -41,6 +41,39 @@ exports.allReview = async (req, res) => {
     let skipRow = (page_no - 1) * per_page;
 
     let sortStage = { createdAt: -1 };
+    let joinStageWithUser = {
+      $lookup: {
+        from: "users",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "user",
+      },
+    };
+    let joinStageWithProduct = {
+      $lookup: {
+        from: "products",
+        localField: "product_id",
+        foreignField: "_id",
+        as: "product",
+      },
+    };
+    let unwindStageUser = { $unwind: "$user" };
+    let unwindStageProduct = { $unwind: "$product" };
+    let projectStage = {
+      $project: {
+        _id: 1,
+        invoice_id: 1,
+        product_id: 1,
+        user_id: 1,
+        createdAt: 1,
+        des: 1,
+        rating: 1,
+        "user.cus_name": 1,
+        "user.email": 1,
+        "product.title": 1,
+        "product.images": 1,
+      },
+    }
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
@@ -48,11 +81,11 @@ exports.allReview = async (req, res) => {
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
-          {
-            $project: {
-              updatedAt: 0,
-            },
-          },
+          joinStageWithUser,
+          unwindStageUser,
+          joinStageWithProduct,
+          unwindStageProduct,
+          projectStage
         ],
       },
     };
