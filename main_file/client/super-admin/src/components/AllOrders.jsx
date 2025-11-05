@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import DatePicker from "react-datepicker";
 import { baseURL } from "../helper/config";
+import Skeleton from "react-loading-skeleton";
 
 const AllOrders = () => {
   const [searchParams] = useSearchParams();
@@ -152,7 +153,6 @@ const AllOrders = () => {
             <label className='form-label fw-semibold'>To Date</label>
             <input
               type='date'
-              placeholder=''
               className='form-control'
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
@@ -178,7 +178,6 @@ const AllOrders = () => {
                   <thead>
                     <tr>
                       <th>Date</th>
-                      <th>Transaction ID</th>
                       <th>Order ID</th>
                       <th>Payment status</th>
                       <th>Deliver status</th>
@@ -188,109 +187,137 @@ const AllOrders = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allOrderList?.map((item, index) => (
-                      <tr key={index}>
-                        <td>{formatDate(item?.createdAt)}</td>
-                        <td>{item?.tran_id}</td>
-                        <td>
-                          <span>{item?._id}</span>
-                        </td>
-                        <td>
-                          <span
-                            className={`badge text-capitalize rounded-pill ${
-                              item?.payment_status === "success"
-                                ? "bg-success"
-                                : item?.payment_status === "cancel"
-                                ? "bg-warning"
-                                : "bg-danger"
-                            }`}
-                          >
-                            {item?.payment_status}
-                          </span>{" "}
-                        </td>
-                        <td>
-                          <span
-                            className={`badge text-capitalize rounded-pill ${
-                              item?.deliver_status === "delivered"
-                                ? "bg-success"
-                                : item?.deliver_status === "pending"
-                                ? "bg-warning"
-                                : "bg-danger"
-                            }`}
-                          >
-                            {item?.deliver_status}
-                          </span>
-                        </td>
-                        <td>
-                          <button>
-                            <select
-                              disabled={
-                                item?.payment_status === "pending" ||
-                                item?.payment_status === "cancel" ||
-                                item?.payment_status === "fail"
-                              }
-                              className=' common-input border custom'
-                              onChange={(e) =>
-                                updateInvoice(
-                                  item?._id,
-                                  item?.user_id,
-                                  e.target.value
-                                )
-                              }
-                              defaultValue={item?.deliver_status}
-                            >
-                              <option value={"pending"}>Pending</option>
-                              <option value={"delivered"}>Delivered</option>
-                              <option value={"cancel"}>Cancel</option>
-                            </select>
-                          </button>
-                        </td>
+                    {allOrderList === null ? (
+                      <>
+                        {[...Array(6)].map(() => (
+                          <tr className='super_admin_all-product'>
+                            <td className='Skeleton'>
+                              <Skeleton count={1} />
+                            </td>
+                            <td className='Skeleton'>
+                              <Skeleton count={1} />
+                            </td>
+                            <td className='Skeleton'>
+                              <Skeleton count={1} />
+                            </td>
+                            <td className='Skeleton'>
+                              <Skeleton count={1} />
+                            </td>
+                            <td className='Skeleton'>
+                              <Skeleton count={1} />
+                            </td>
+                            <td className='Skeleton'>
+                              <Skeleton count={1} />
+                            </td>
+                            <td className='Skeleton'>
+                              <Skeleton count={1} />
+                            </td>
+                          </tr>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {allOrderList?.map((item, index) => (
+                          <tr key={index}>
+                            <td>{formatDate(item?.createdAt)}</td>
 
-                        <td>
-                          <p> {item?.payable}</p>
-                        </td>
-                        <td>
-                          <button
-                            className='btn btn-success'
-                            data-bs-toggle='modal'
-                            data-bs-target={`#exampleModal_1`}
-                            onClick={() => viewOrder(item?._id)}
-                          >
-                            View
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                            <td>
+                              <span>{item?._id}</span>
+                            </td>
+                            <td>
+                              <span
+                                className={`badge text-capitalize rounded-pill ${
+                                  item?.payment_status === "success"
+                                    ? "bg-success"
+                                    : item?.payment_status === "cancel"
+                                    ? "bg-warning"
+                                    : "bg-danger"
+                                }`}
+                              >
+                                {item?.payment_status}
+                              </span>{" "}
+                            </td>
+                            <td>
+                              <span
+                                className={`badge text-capitalize rounded-pill ${
+                                  item?.deliver_status === "delivered"
+                                    ? "bg-success"
+                                    : item?.deliver_status === "pending"
+                                    ? "bg-warning"
+                                    : "bg-danger"
+                                }`}
+                              >
+                                {item?.deliver_status}
+                              </span>
+                            </td>
+                            <td>
+                              <button>
+                                <select
+                                  disabled={
+                                    item?.payment_status === "pending" ||
+                                    item?.payment_status === "cancel" ||
+                                    item?.payment_status === "fail"
+                                  }
+                                  className=' common-input border custom'
+                                  onChange={(e) =>
+                                    updateInvoice(
+                                      item?._id,
+                                      item?.user_id,
+                                      e.target.value
+                                    )
+                                  }
+                                  defaultValue={item?.deliver_status}
+                                >
+                                  <option value={"pending"}>Pending</option>
+                                  <option value={"delivered"}>Delivered</option>
+                                  <option value={"cancel"}>Cancel</option>
+                                </select>
+                              </button>
+                            </td>
+
+                            <td>
+                              <p> {item?.payable}</p>
+                            </td>
+                            <td>
+                              <button
+                                className='btn btn-success'
+                                data-bs-toggle='modal'
+                                data-bs-target={`#exampleModal_1`}
+                                onClick={() => viewOrder(item?._id)}
+                              >
+                                View
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </>
+                    )}
                   </tbody>
                 </table>
               </div>
               <div className='flx-between justify-content-end gap-2'>
                 <nav aria-label='Page navigation example'>
-                  {totalAllOrderList > per_page ? (
-                    <div>
-                      <ReactPaginate
-                        className='pagination common-pagination'
-                        previousLabel='<'
-                        nextLabel='>'
-                        pageClassName='page-item'
-                        activeClassName='pagination'
-                        pageLinkClassName=' page-link'
-                        previousClassName='page-item'
-                        previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                        nextClassName='page-item'
-                        nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                        activeLinkClassName=' pagination active'
-                        breakLabel='...'
-                        pageCount={totalAllOrderList / per_page}
-                        initialPage={page_no - 1}
-                        pageRangeDisplayed={3}
-                        onPageChange={handelPageClick}
-                        type='button'
-                      />
-                    </div>
-                  ) : (
-                    ""
-                  )}
+                  <div>
+                    <ReactPaginate
+                      className='pagination common-pagination'
+                      previousLabel='<'
+                      nextLabel='>'
+                      pageClassName='page-item'
+                      activeClassName='pagination'
+                      pageLinkClassName=' page-link'
+                      previousClassName='page-item'
+                      previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                      nextClassName='page-item'
+                      nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                      activeLinkClassName=' pagination active'
+                      breakLabel='...'
+                      pageCount={totalAllOrderList / per_page}
+                      initialPage={page_no - 1}
+                      pageRangeDisplayed={3}
+                      onPageChange={handelPageClick}
+                      type='button'
+                    />
+                  </div>
                 </nav>
               </div>
             </div>
