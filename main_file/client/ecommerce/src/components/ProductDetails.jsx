@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import parse from "html-react-parser";
 import "swiper/css";
@@ -13,13 +13,7 @@ import Skeleton from "react-loading-skeleton";
 import { ErrorToast, formatDate, IsEmpty } from "../helper/helper";
 import cartStore from "../store/cartStore";
 import reviewStore from "../store/reviewStore";
-import {
-  FaMinus,
-  FaPlus,
-  FaRegStar,
-  FaStar,
-  FaStarHalfAlt,
-} from "react-icons/fa";
+import { FaRegStar, FaStar } from "react-icons/fa";
 
 const ProductDetails = () => {
   const [searchParams] = useSearchParams();

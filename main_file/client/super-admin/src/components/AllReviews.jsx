@@ -1,122 +1,114 @@
-import { Link } from "react-router-dom";
-import { FaRegStar, FaRegStarHalfStroke } from "react-icons/fa6";
-import { FaStar } from "react-icons/fa";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import ReactPaginate from "react-paginate";
+import { formatDate } from "../helper/helper";
+import reviewStore from "../store/reviewStore";
+import { FaRegStar, FaStar } from "react-icons/fa";
+
 const AllReviews = () => {
-  return (
-    <>
-      {/* Cover Photo Start */}
-      <div className='cover-photo  overflow-hidden'>
-        <div className='avatar-upload p-5'>
-          <h2>Supper Admin</h2>
-          <h5>All Reviews</h5>
-        </div>
+  const [searchParams] = useSearchParams();
+
+  const navigate = useNavigate();
+  const per_page = 6;
+  const page_no = searchParams.get("page_no") || 1;
+
+  let { allReviewRequest, allReview, totalReview } = reviewStore();
+
+  useEffect(() => {
+    allReviewRequest(per_page, page_no);
+  }, [allReviewRequest, page_no, per_page]);
+
+  //! pagination function
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allReviewRequest(per_page, page_no + 1);
+
+    navigate(`/all-reviews?page_no=${page_no + 1}`);
+  };
+
+  const StarRating = ({ star }) => {
+    star = parseInt(star);
+    const totalStars = 5;
+    const filledStars = Array(star).fill(<FaStar />);
+    const emptyStars = Array(totalStars - star).fill(<FaRegStar />);
+
+    return (
+      <div className='star'>
+        {filledStars.concat(emptyStars).map((star, index) => (
+          <span key={index}>{star}</span>
+        ))}
       </div>
-      <div className='dashboard-body__content mt-0'>
-        {/* ========================= Statement section start =========================== */}
-        <div className='row gy-4'>
-          <div className='col-12'>
-            <div className='card common-card border border-gray-five'>
-              <div className='card-body'>
-                <div className='table-responsive'>
-                  <table className='table text-body '>
-                    <thead>
-                      <tr>
-                        <th>Product Name</th>
-                        <th>Purchase time</th>
-                        <th>Invoice No</th>
-                        <th>Message</th>
-                        <th>Review</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Product Name</td>
-                        <td>Purchase time </td>
-                        <td> Invoice No</td>
-                        <td> Message</td>
-                        <td>
-                          <FaStar />
-                          <FaRegStarHalfStroke />
-                          <FaRegStar />
-                          <FaRegStar />
-                          <FaRegStar />
-                        </td>
-                        <td>
-                          <div className='d-flex justify-content-end gap-2'>
-                            <Link to='/' className='btn btn-success'>
-                              Show product
-                            </Link>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div className='flx-between gap-2'>
-                    <div className='paginate-content flx-align flex-nowrap gap-3'>
-                      <select
-                        className='select common-input py-2 px-3 w-auto'
-                        defaultValue={1}
-                      >
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
-                      </select>
-                      <span className='paginate-content__text fs-14'>
-                        Showing 1 - 10 of 100
+    );
+  };
+
+  return (
+    <div className='dashboard-body__content'>
+      {/* ===================== Review Section Start ========================== */}
+      <div className='card common-card border border-gray-five'>
+        <div className='card-body'>
+          <div className='table-responsive'>
+            <div className='product-review-wrapper'>
+              {allReview?.map((item, index) => (
+                <div key={index} className='product-review'>
+                  <div className='product-review__top flx-between'>
+                    <div className='product-review__rating flx-align'>
+                      <div className='d-flex align-items-center gap-1'>
+                        <div className='star'>
+                          <StarRating star={item?.rating} />
+                        </div>
+                        <span className='star-rating__text text-body'>
+                          {" "}
+                          {item?.rating}.0
+                        </span>
+                      </div>
+                      <span className='product-review__reason'>
+                        <strong>Invoice ID:</strong> {item?.invoice_id}
                       </span>
                     </div>
-                    <nav aria-label='Page navigation example'>
-                      <ul className='pagination common-pagination mt-0'>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            1
-                          </Link>
-                        </li>
-                        <li className='page-item active'>
-                          <Link className='page-link' to='#'>
-                            2
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            3
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link className='page-link' to='#'>
-                            4
-                          </Link>
-                        </li>
-                        <li className='page-item'>
-                          <Link
-                            className='page-link flx-align gap-2 flex-nowrap'
-                            to='#'
-                          >
-                            Next
-                            <span className='icon line-height-1 font-20'>
-                              <i className='las la-arrow-right' />
-                            </span>
-                          </Link>
-                        </li>
-                      </ul>
-                    </nav>
+                    <div className='product-review__date'>
+                      by{" "}
+                      <strong className='product-review__user text--base'>
+                        cus_name
+                      </strong>{" "}
+                      ({formatDate(item?.updatedAt)})
+                    </div>
+                  </div>
+                  <div className='product-review__body'>
+                    <p className='product-review__desc'>{item?.des}</p>
                   </div>
                 </div>
-              </div>
+              ))}
+            </div>
+            <div className='flx-between justify-content-end gap-2'>
+              <nav aria-label='Page navigation example'>
+                <div>
+                  <ReactPaginate
+                    className='pagination common-pagination'
+                    previousLabel='<'
+                    nextLabel='>'
+                    pageClassName='page-item'
+                    activeClassName='pagination'
+                    pageLinkClassName=' page-link'
+                    previousClassName='page-item'
+                    previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                    nextClassName='page-item'
+                    nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
+                    activeLinkClassName=' pagination active'
+                    breakLabel='...'
+                    pageCount={totalReview / per_page}
+                    initialPage={page_no - 1}
+                    pageRangeDisplayed={3}
+                    onPageChange={handelPageClick}
+                    type='button'
+                  />
+                </div>
+              </nav>
             </div>
           </div>
         </div>
-        {/* ========================= Statement section End =========================== */}
       </div>
-    </>
+      {/* ===================== Review Section End ========================== */}
+    </div>
   );
 };
 
