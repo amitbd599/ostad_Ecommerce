@@ -108,8 +108,8 @@ exports.createInvoice = async (req, res) => {
 
       let tran_id = "tra-" + Date.now() + Math.floor(Math.random() * 90000000);
       let val_id = "val-" + Date.now() + Math.floor(Math.random() * 90000000);
-      let deliver_status = "pending";
-      let payment_status = "pending";
+      // let deliver_status = "pending";
+      // let payment_status = "pending";
 
       // =========== Step-4: Create invoice =============
 
@@ -120,8 +120,8 @@ exports.createInvoice = async (req, res) => {
         ship_details: ship_details,
         tran_id: tran_id,
         val_id: val_id,
-        deliver_status: deliver_status,
-        payment_status: payment_status,
+        // deliver_status: deliver_status,
+        // payment_status: payment_status,
         vat: vat,
         total: totalAmount,
       });
@@ -239,16 +239,10 @@ exports.readAllInvoiceSingleUser = async (req, res) => {
     };
     let sortStage = { createdAt: -1 };
 
-
-
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
-        data: [
-          { $sort: sortStage },
-          { $skip: skipRow },
-          { $limit: per_page }
-        ],
+        data: [{ $sort: sortStage }, { $skip: skipRow }, { $limit: per_page }],
       },
     };
 
@@ -267,7 +261,7 @@ exports.readAllInvoiceSingleUser = async (req, res) => {
   }
 };
 
-//! read Single Invoice Single User 
+//! read Single Invoice Single User
 exports.readSingleInvoiceSingleUser = async (req, res) => {
   try {
     let user_id = new ObjectId(req.headers._id);
@@ -381,7 +375,6 @@ exports.readInvoiceProductListSingleUser = async (req, res) => {
   }
 };
 
-
 //! payment-success
 exports.paymentSuccess = async (req, res) => {
   try {
@@ -462,7 +455,7 @@ exports.paymentIpn = async (req, res) => {
   }
 };
 
-// ===================== // For admin -- 
+// ===================== // For admin --
 
 //! all-order-list
 exports.allOrderList = async (req, res) => {
@@ -505,9 +498,7 @@ exports.allOrderList = async (req, res) => {
         "product.size": 1,
         "product.size": 1,
       },
-    }
-
-
+    };
 
     let facetStage = {
       $facet: {
@@ -517,19 +508,84 @@ exports.allOrderList = async (req, res) => {
           { $skip: skipRow },
           { $limit: per_page },
           joinStageWithInvoiceProduct,
-          projectionStage
+          projectionStage,
         ],
       },
     };
-
-
-
 
     let products = await invoiceModel.aggregate([facetStage]);
     res.status(200).json({
       success: true,
       message: "Invoice fetched successfully",
       data: products[0],
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! read Single Invoice
+exports.readSingleInvoice = async (req, res) => {
+  try {
+    let user_id = new ObjectId(req.headers._id);
+
+    let invoice_id = new ObjectId(req.params.invoice_id);
+
+    let matchStage = {
+      $match: {
+        user_id: user_id,
+        _id: invoice_id,
+      },
+    };
+
+    let joinStageWithInvoiceProduct = {
+      $lookup: {
+        from: "invoicesproducts",
+        localField: "_id",
+        foreignField: "invoice_id",
+        as: "invoiceProducts",
+      },
+    };
+
+    let data = await invoiceModel.aggregate([
+      matchStage,
+      joinStageWithInvoiceProduct,
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: "Invoice fetched successfully",
+      data: data?.[0],
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! invoice update
+exports.updateInvoice = async (req, res) => {
+  try {
+    const { _id, user_id, deliver_status } = req.body;
+
+    await invoiceModel.findByIdAndUpdate(
+      { _id, user_id },
+      {
+        deliver_status,
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Deliver status update!",
     });
   } catch (error) {
     res.status(500).json({
@@ -560,7 +616,6 @@ exports.allOrderList = async (req, res) => {
 //     });
 //   }
 // };
-
 
 //! read all invoice all user
 // exports.readAllInvoiceAllUser = async (req, res) => {
@@ -648,9 +703,6 @@ exports.allOrderList = async (req, res) => {
 //   }
 // };
 
-
-
-
 //! order-list
 // exports.readOrderList = async (req, res) => {
 //   try {
@@ -684,6 +736,3 @@ exports.allOrderList = async (req, res) => {
 //     });
 //   }
 // };
-
-
-

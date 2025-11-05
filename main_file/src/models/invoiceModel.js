@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const DataSchema = mongoose.Schema(
   {
     user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -7,8 +8,18 @@ const DataSchema = mongoose.Schema(
     ship_details: { type: Array, required: true },
     tran_id: { type: String, required: true },
     val_id: { type: String, required: true },
-    deliver_status: { type: String, required: true },
-    payment_status: { type: String, required: true },
+    deliver_status: {
+      type: String,
+      required: true,
+      enum: ["pending", "delivered", "cancel"],
+      default: "pending", // 👈 default value
+    },
+    payment_status: {
+      type: String,
+      required: true,
+      enum: ["pending", "success", "cancel", "fail"],
+      default: "pending", // 👈 default value
+    },
     vat: { type: Number, required: true },
     total: { type: Number, required: true },
   },
@@ -21,7 +32,3 @@ const DataSchema = mongoose.Schema(
 const invoiceModel = mongoose.model("invoices", DataSchema);
 
 module.exports = invoiceModel;
-
-
-// delivered, pending, cancel
-// success, cancel, fail

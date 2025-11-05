@@ -10,7 +10,11 @@ import ReactPaginate from "react-paginate";
 const AllOrders = () => {
   const [searchParams] = useSearchParams();
 
-  let [data, setData] = useState({ deliver_status: null });
+  let [data, setData] = useState({
+    _id: "",
+    user_id: "",
+    deliver_status: null,
+  });
 
   const navigate = useNavigate();
   const per_page = 6;
@@ -31,6 +35,8 @@ const AllOrders = () => {
 
       if (res) {
         setData({
+          _id: res?.user_id,
+          user_id: res?.user_id,
           deliver_status: res?.deliver_status,
         });
       }
@@ -110,10 +116,11 @@ const AllOrders = () => {
   });
 
   // update invoice
-  let updateInvoice = async (id) => {
-    let res = await updateInvoiceRequest(id, data);
+  let updateInvoice = async (_id, user_id, deliver_status) => {
+    console.log({ _id, user_id, deliver_status });
+    let res = await updateInvoiceRequest({ _id, user_id, deliver_status });
     if (res) {
-      await allOrderListRequest(per_page, page_no + 1);
+      await allOrderListRequest(per_page, page_no);
     }
   };
 
@@ -133,7 +140,7 @@ const AllOrders = () => {
                       <th>Order ID</th>
                       <th>Payment status</th>
                       <th>Deliver status</th>
-                      <th>Action</th>
+                      <th>Deliver Action</th>
                       <th>Total Payable</th>
                       <th>Invoice</th>
                     </tr>
@@ -148,7 +155,7 @@ const AllOrders = () => {
                         </td>
                         <td>
                           <span
-                            className={`badge rounded-pill ${
+                            className={`badge text-capitalize rounded-pill ${
                               item?.payment_status === "success"
                                 ? "bg-success"
                                 : item?.payment_status === "cancel"
@@ -161,7 +168,7 @@ const AllOrders = () => {
                         </td>
                         <td>
                           <span
-                            className={`badge rounded-pill ${
+                            className={`badge text-capitalize rounded-pill ${
                               item?.deliver_status === "delivered"
                                 ? "bg-success"
                                 : item?.deliver_status === "pending"
@@ -175,12 +182,18 @@ const AllOrders = () => {
                         <td>
                           <button>
                             <select
+                              disabled={
+                                item?.payment_status === "pending" ||
+                                item?.payment_status === "cancel" ||
+                                item?.payment_status === "fail"
+                              }
                               className=' common-input border custom'
                               onChange={(e) =>
-                                setData({
-                                  ...data,
-                                  deliver_status: e.target.value,
-                                })
+                                updateInvoice(
+                                  item?._id,
+                                  item?.user_id,
+                                  e.target.value
+                                )
                               }
                               defaultValue={item?.deliver_status}
                             >

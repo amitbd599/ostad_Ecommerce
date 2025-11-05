@@ -37,10 +37,10 @@ const invoiceStore = create((set) => ({
 
   // update-invoice
   updateInvoiceLoading: false,
-  updateInvoiceRequest: async (id, data) => {
+  updateInvoiceRequest: async (data) => {
     try {
       set({ createInvoiceLoading: true });
-      let res = await axios.post(baseURL + `/update-invoice/${id}`, data, {
+      let res = await axios.put(baseURL + `/update-invoice`, data, {
         withCredentials: true,
         credentials: "include",
       });
