@@ -86,7 +86,8 @@ exports.createInvoice = async (req, res) => {
       ) {
         return res.status(200).json({
           success: false,
-          message: "Please complete your profile information data.",
+          message:
+            "Please go dashboard & complete your profile information data!",
         });
       }
 
@@ -546,29 +547,116 @@ exports.updateInvoice = async (req, res) => {
   try {
     const { _id, user_id, deliver_status } = req.body;
 
+    // Step 1: Find the invoice
+    const checkInvoice = await invoiceModel.findById(_id);
+    if (!checkInvoice) {
+      return res.status(404).json({
+        success: false,
+        message: "Invoice not found!",
+      });
+    }
 
-    // step 1 - invoice update
-    let data = await invoiceModel.findByIdAndUpdate(
-      { _id, user_id },
-      {
-        deliver_status,
-      },
-      { new: true }
-    );
+    // Step 2: Prevent multiple updates
+    if (checkInvoice.deliver_status === "delivered") {
+      return res.status(200).json({
+        success: false,
+        message: "Product already delivered!",
+      });
+    }
+    if (checkInvoice.deliver_status === "cancel") {
+      return res.status(200).json({
+        success: false,
+        message: "Product already canceled!",
+      });
+    }
 
-    // step 2 - product update (less stock)
+    // Step 3: Handle logic based on payment_status
+    const paymentStatus = checkInvoice.payment_status;
 
+    if (paymentStatus === "success") {
+      // ✅ Payment successful: allow deliver or cancel
 
-    res.status(200).json({
-      success: true,
-      message: "Deliver status update!",
-      data
-    });
+      if (deliver_status === "delivered") {
+        // Update invoice as delivered
+        const data = await invoiceModel.findByIdAndUpdate(
+          { _id, user_id },
+          { deliver_status },
+          { new: true }
+        );
+
+        return res.status(200).json({
+          success: true,
+          message: "Product delivered successfully!",
+          data,
+        });
+      }
+
+      if (deliver_status === "cancel") {
+        // Restock products because order canceled after payment
+        const invoiceProducts = await invoiceProductModel.find({
+          invoice_id: _id,
+        });
+        for (const item of invoiceProducts) {
+          await productModel.updateOne(
+            { _id: item.product_id },
+            { $inc: { stock: item.qty } }
+          );
+        }
+
+        const data = await invoiceModel.findByIdAndUpdate(
+          { _id, user_id },
+          { deliver_status },
+          { new: true }
+        );
+
+        return res.status(200).json({
+          success: true,
+          message: "Order canceled and stock restored!",
+          data,
+        });
+      }
+
+      // Invalid deliver_status
+      return res.status(200).json({
+        success: false,
+        message: "Invalid deliver status update!",
+      });
+    } else {
+      // ❌ Payment not successful: allow only cancel
+      if (deliver_status === "cancel") {
+        const invoiceProducts = await invoiceProductModel.find({
+          invoice_id: _id,
+        });
+        for (const item of invoiceProducts) {
+          await productModel.updateOne(
+            { _id: item.product_id },
+            { $inc: { stock: item.qty } }
+          );
+        }
+
+        const data = await invoiceModel.findByIdAndUpdate(
+          { _id, user_id },
+          { deliver_status },
+          { new: true }
+        );
+
+        return res.status(200).json({
+          success: true,
+          message: "Unpaid order canceled and stock restored!",
+          data,
+        });
+      }
+
+      return res.status(200).json({
+        success: false,
+        message: "Cannot deliver because payment was not successful!",
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.toString(),
       message: "Something went wrong.",
+      error: error.message,
     });
   }
 };
@@ -616,144 +704,3 @@ exports.exportCSV = async (req, res) => {
     res.status(500).send("Error creating CSV file");
   }
 };
-
-//! read all invoice single user
-// exports.readAllInvoiceSingleUser = async (req, res) => {
-//   try {
-//     let user_id = new ObjectId(req.headers._id);
-
-//     let data = await invoiceModel.find({ user_id });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Invoice fetched successfully",
-//       data,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       error: error.toString(),
-//       message: "Something went wrong.",
-//     });
-//   }
-// };
-
-//! read all invoice all user
-// exports.readAllInvoiceAllUser = async (req, res) => {
-//   try {
-//     let data = await invoiceModel.find();
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Invoice fetched successfully",
-//       data,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       error: error.toString(),
-//       message: "Something went wrong.",
-//     });
-//   }
-// };
-
-//! read single invoice single user
-// exports.readSingleInvoiceSingleUser = async (req, res) => {
-//   try {
-//     let user_id = new ObjectId(req.headers._id);
-
-//     let invoice_id = new ObjectId(req.params.invoice_id);
-
-//     let matchStage = {
-//       $match: {
-//         user_id: user_id,
-//         invoice_id: invoice_id,
-//       },
-//     };
-
-//     let joinStageWithProduct = {
-//       $lookup: {
-//         from: "products",
-//         localField: "product_id",
-//         foreignField: "_id",
-//         as: "product",
-//       },
-//     };
-//     let joinStageWithInvoice = {
-//       $lookup: {
-//         from: "invoices",
-//         localField: "invoice_id",
-//         foreignField: "_id",
-//         as: "invoices",
-//       },
-//     };
-//     let projectionStage = {
-//       $project: {
-//         product_id: 1,
-//         qty: 1,
-//         price: 1,
-//         color: 1,
-//         size: 1,
-//         invoice_id: 1,
-
-//         "product.title": 1,
-//       },
-//     };
-
-//     let unwindStage = { $unwind: "$product" };
-
-//     let data = await invoiceProductModel.aggregate([
-//       matchStage,
-//       joinStageWithProduct,
-//       joinStageWithInvoice,
-//       unwindStage,
-//       // projectionStage,
-//     ]);
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Invoice fetched successfully",
-//       data,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       error: error.toString(),
-//       message: "Something went wrong.",
-//     });
-//   }
-// };
-
-//! order-list
-// exports.readOrderList = async (req, res) => {
-//   try {
-//     let user_id = new ObjectId(req.headers._id);
-//     let matchStage = {
-//       $match: { user_id: user_id },
-//     };
-//     let joinStageWithInvoiceProduct = {
-//       $lookup: {
-//         from: "invoicesproducts",
-//         localField: "_id",
-//         foreignField: "invoice_id",
-//         as: "product",
-//       },
-//     };
-
-//     let data = await invoiceModel.aggregate([
-//       matchStage,
-//       joinStageWithInvoiceProduct,
-//     ]);
-//     res.status(200).json({
-//       success: true,
-//       message: "Invoice fetched successfully",
-//       data,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       error: error.toString(),
-//       message: "Something went wrong.",
-//     });
-//   }
-// };

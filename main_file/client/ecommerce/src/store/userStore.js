@@ -72,9 +72,26 @@ const userStore = create((set) => ({
       }
     } catch (error) {
       console.log(error);
+
+      return false;
+    }
+  },
+
+  // user-verify
+  userVerifyRequest: async () => {
+    try {
+      await axios.get(baseURL + `/user-verify`, {
+        withCredentials: true,
+        credentials: "include",
+      });
+
+      return true;
+    } catch (error) {
+      console.log(error);
       if (error?.status === 401) {
         window.location.href = "/login";
       }
+      ErrorToast("Something went wrong");
       return false;
     }
   },

@@ -14,6 +14,7 @@ const reviewController = require("../controllers/reviewController.js");
 const cartController = require("../controllers/cartController.js");
 const invoiceController = require("../controllers/invoiceController.js");
 const fileController = require("../controllers/fileController.js");
+const dashboardSummaryController = require("../controllers/dashboardSummaryController.js");
 
 //! ============== For Super admin ==================
 router.post("/admin-register", adminController.register);
@@ -27,6 +28,7 @@ router.put("/admin-update", authVerificationAdmin, adminController.update);
 router.post("/user-register", userController.register);
 router.post("/user-login", userController.login);
 router.get("/user", authVerificationUser, userController.admin);
+router.get("/user-verify", authVerificationUser, userController.userVerify);
 router.get("/user-logout", authVerificationUser, userController.logout);
 router.put("/user-update", authVerificationUser, userController.update);
 
@@ -106,16 +108,6 @@ router.post(
   authVerificationUser,
   reviewController.singleReview
 );
-// router.put(
-//   "/update-review/:id",
-//   authVerificationUser,
-//   reviewController.updateReview
-// );
-// router.delete(
-//   "/delete-review/:id",
-//   authVerificationUser,
-//   reviewController.deleteReview
-// );
 
 //! ============== For cart ==================
 router.post("/create-cart", authVerificationUser, cartController.createCart);
@@ -175,18 +167,6 @@ router.put(
   invoiceController.updateInvoice
 );
 
-// router.get(
-//   "/read-all-invoice-all-user",
-//   authVerificationAdmin,
-//   invoiceController.readAllInvoiceAllUser
-// );
-
-// router.get(
-//   "/order-list",
-//   authVerificationUser,
-//   invoiceController.readOrderList
-// );
-
 // ! File Uploads
 router.post(
   "/file-upload",
@@ -196,5 +176,8 @@ router.post(
 );
 router.post("/file-remove", authVerificationAdmin, fileController.fileRemove);
 router.get("/all-file/:per_page/:page_no", fileController.allFile);
+
+//! dashboard Summary
+router.get("/dashboard-summary", dashboardSummaryController.dashboardSummary);
 
 module.exports = router;

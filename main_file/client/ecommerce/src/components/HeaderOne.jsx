@@ -120,7 +120,9 @@ const HeaderOne = () => {
                   alt=''
                   className='dark-version'
                 />
-                <span className='qty-badge font-12'>{allCart?.length}</span>
+                <span className='qty-badge font-12'>
+                  {allCart?.length || 0}
+                </span>
               </Link>
               {/* Light Dark Mode */}
               <ThemeToggle />

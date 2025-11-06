@@ -252,11 +252,7 @@ const AllOrders = () => {
                             <td>
                               <button>
                                 <select
-                                  disabled={
-                                    item?.payment_status === "pending" ||
-                                    item?.payment_status === "cancel" ||
-                                    item?.payment_status === "fail"
-                                  }
+                                  // disabled={item?.deliver_status === "cancel"}
                                   className=' common-input border custom'
                                   onChange={(e) =>
                                     updateInvoice(

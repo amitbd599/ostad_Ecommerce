@@ -109,6 +109,19 @@ exports.admin = async (req, res) => {
   }
 };
 
+//! user Verify
+exports.userVerify = async (req, res) => {
+  try {
+    res.status(200).json({ success: true });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      error: e.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
 //! user Logout
 exports.logout = async (req, res) => {
   try {

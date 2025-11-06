@@ -10,6 +10,9 @@ exports.createCart = async (req, res) => {
 
     let user_id = req.headers._id;
 
+    // find the stock products
+    let product = await productModel.findById(product_id);
+
     // Find existing cart
     let existingCart = await cartModel.findOne({
       user_id,
@@ -19,7 +22,7 @@ exports.createCart = async (req, res) => {
       size,
     });
 
-    if (!!existingCart) {
+    if (!!existingCart === true) {
       let newReqBody = {
         user_id,
         product_id,
@@ -28,11 +31,9 @@ exports.createCart = async (req, res) => {
         size,
         qty: parseInt(existingCart.qty) + parseInt(qty),
       };
+      console.log(product?.stock, newReqBody.qty);
 
-      // find the stock products
-      let product = await productModel.findById(product_id);
-
-      if (product?.stock < newReqBody.qty) {
+      if (product?.stock < qty) {
         return res.status(200).json({
           success: false,
           message: "Product out of stock.",
@@ -43,6 +44,11 @@ exports.createCart = async (req, res) => {
         { _id: existingCart._id, user_id: existingCart.user_id },
         { $set: newReqBody }
       );
+      // decrease stock
+      await mongoose.model("products").updateOne(
+        { _id: product_id },
+        { $inc: { stock: -qty } }
+      );
 
       res.status(200).json({
         success: true,
@@ -50,15 +56,28 @@ exports.createCart = async (req, res) => {
         updateData,
       });
     } else {
+      // For new products
+      if (product?.stock < qty) {
+        return res.status(200).json({
+          success: false,
+          message: "Product out of stock.",
+        });
+      }
+
       const data = await cartModel.create({
         user_id,
         product_id,
         product_name,
         color,
-
         qty,
         size,
       });
+
+      // decrease stock
+      await mongoose.model("products").updateOne(
+        { _id: product_id },
+        { $inc: { stock: -qty } }
+      );
       res.status(200).json({
         success: true,
         message: "Product add to cart successfully",
@@ -157,20 +176,52 @@ exports.readCart = async (req, res) => {
 //! cart update
 exports.updateCart = async (req, res) => {
   try {
-    const { product_id, qty } = req.body;
+    const { product_id, qty, inc } = req.body;
 
     let user_id = req.headers._id;
     let cart_id = new ObjectId(req.params.cart_id);
 
-    const data = await cartModel.updateOne(
-      { _id: cart_id, user_id: user_id },
-      { $set: { user_id, product_id, qty } }
-    );
-    res.status(200).json({
-      success: true,
-      message: "Cart update successfully",
-      data,
-    });
+    let initQTY = 1
+    if (inc) {
+      // find the stock products
+      let product = await productModel.findById(product_id);
+      if (product?.stock >= initQTY) {
+        await productModel.updateOne(
+          { _id: product_id },
+          { $inc: { stock: -initQTY } } // decrease stock
+        );
+        const data = await cartModel.updateOne(
+          { _id: cart_id, user_id: user_id },
+          { $set: { user_id, product_id, qty } }
+        );
+        return res.status(200).json({
+          success: true,
+          message: "Cart update successfully.",
+          data,
+        });
+      } else {
+        return res.status(200).json({
+          success: false,
+          message: "Product out of stock!",
+
+        });
+      }
+    } else {
+      await productModel.updateOne(
+        { _id: product_id },
+        { $inc: { stock: initQTY } } // increase stock
+      );
+      const data = await cartModel.updateOne(
+        { _id: cart_id, user_id: user_id },
+        { $set: { user_id, product_id, qty } }
+      );
+      return res.status(200).json({
+        success: true,
+        message: "Cart update successfully.",
+        data,
+      });
+    }
+
   } catch (error) {
     res.status(500).json({
       success: false,

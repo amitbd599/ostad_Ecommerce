@@ -21,14 +21,10 @@ class FormHelper {
   }
 
   ErrorToast(msg) {
-    toast.error(msg, {
-      position: "bottom-right",
-    });
+    toast.error(msg);
   }
   SuccessToast(msg) {
-    toast.success(msg, {
-      position: "bottom-right",
-    });
+    toast.success(msg);
   }
   toNumber(value) {
     return parseFloat(value);

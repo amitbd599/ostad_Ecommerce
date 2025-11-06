@@ -63,6 +63,7 @@ const ProductDetails = () => {
       size: data.size,
     };
     let res = await createCartRequest(submitData);
+    await singleProductsRequest(product_id);
     if (res === 401) {
       navigate("/login");
     }
@@ -241,6 +242,7 @@ const ProductDetails = () => {
                     </h3>
                   </div>
 
+
                   <div className='price py-3'>
                     <h4>
                       {singleProduct?.is_discount === false
@@ -260,7 +262,8 @@ const ProductDetails = () => {
                   </div>
 
                   <div className='size py-3'>
-                    <h4>Size: {data?.size}</h4>
+
+                    <h5>Size: {data?.size}</h5>
                     <div className='size_varient'>
                       {singleProduct?.size?.map((item, index) => (
                         <button
@@ -281,7 +284,7 @@ const ProductDetails = () => {
                   </div>
 
                   <div className='color py-3'>
-                    <h4>Color: {data?.color}</h4>
+                    <h5>Color: {data?.color}</h5>
                     <div className='size_varient'>
                       {singleProduct?.color?.map((item, index) => (
                         <button
@@ -302,7 +305,11 @@ const ProductDetails = () => {
                   </div>
                   <div className='quantity py-3'>
                     <div className='w-100'>
+                      <h5 className="text-danger">
+                        Stock: {singleProduct?.stock}
+                      </h5>
                       <div className='inner'>
+
                         <button
                           className='btn-quantity btn-decrease'
                           onClick={() =>
@@ -328,16 +335,33 @@ const ProductDetails = () => {
                         </button>
                       </div>
                     </div>
-                    <div className='w-100'>
-                      <button
-                        disabled={createCartLoading}
-                        onClick={cartSubmit}
-                        className='btn btn-main d-flex w-100 justify-content-center align-items-center gap-2 pill px-sm-5 '
-                      >
-                        <img src='assets/images/icons/add-to-cart.svg' alt='' />
+                    <div className='w-100 pt-5'>
+                      {
+                        singleProduct?.stock === 0 ?
+                          (
+                            <button
+                              disabled={true}
+                              className='btn not-allow btn-main d-flex w-100 justify-content-center align-items-center gap-2 pill px-sm-5 '
+                            >
+                              <img src='assets/images/icons/add-to-cart.svg' alt='' />
 
-                        {createCartLoading ? "Loading..." : "Add To Cart"}
-                      </button>
+                              Product out of stock
+                            </button>
+                          )
+                          :
+                          (
+                            <button
+                              disabled={createCartLoading}
+                              onClick={cartSubmit}
+                              className='btn btn-main d-flex w-100 justify-content-center align-items-center gap-2 pill px-sm-5 '
+                            >
+                              <img src='assets/images/icons/add-to-cart.svg' alt='' />
+
+                              {createCartLoading ? "Loading..." : "Add To Cart"}
+                            </button>
+                          )
+                      }
+
                     </div>
                   </div>
                 </div>

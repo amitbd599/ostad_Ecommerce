@@ -15,14 +15,14 @@ const Cart = () => {
   }, [allCartRequest]);
 
   let increaseCartQty = async (cart_id, product_id, qty) => {
-    await updateCartRequest(cart_id, { product_id, qty: qty + 1 });
+    await updateCartRequest(cart_id, { product_id, qty: qty + 1, inc:true });
     await allCartRequest();
   };
   let decreaseCartQty = async (cart_id, product_id, qty) => {
     if (qty === 1) {
       return ErrorToast("Cart must have one item.");
     }
-    await updateCartRequest(cart_id, { product_id, qty: qty - 1 });
+    await updateCartRequest(cart_id, { product_id, qty: qty - 1, inc:false });
     await allCartRequest();
   };
 
