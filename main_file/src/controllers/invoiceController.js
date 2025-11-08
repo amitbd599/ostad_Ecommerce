@@ -36,8 +36,6 @@ exports.createInvoice = async (req, res) => {
       unwindStage,
     ]);
 
-    // console.log(cartProducts);
-
     if (cartProducts.length > 0) {
       let totalAmount = 0;
 
@@ -54,8 +52,6 @@ exports.createInvoice = async (req, res) => {
 
       let vat = totalAmount * 0.15; // 15% vat
       let shipping = 75; // 75tk
-
-      // console.log(totalAmount, vat, shipping);
 
       let totalPayable = totalAmount + vat + shipping;
 
@@ -104,15 +100,10 @@ exports.createInvoice = async (req, res) => {
         Phone: user?.ship_phone,
       };
 
-      // console.log(cus_details);
-      // console.log(ship_details);
-
       // =========== Step-3: Transaction & other's ID =============
 
       let tran_id = "tra-" + Date.now() + Math.floor(Math.random() * 90000000);
       let val_id = "val-" + Date.now() + Math.floor(Math.random() * 90000000);
-      // let deliver_status = "pending";
-      // let payment_status = "pending";
 
       // =========== Step-4: Create invoice =============
 
@@ -123,8 +114,6 @@ exports.createInvoice = async (req, res) => {
         ship_details: ship_details,
         tran_id: tran_id,
         val_id: val_id,
-        // deliver_status: deliver_status,
-        // payment_status: payment_status,
         vat: vat,
         total: totalAmount,
       });
@@ -148,11 +137,20 @@ exports.createInvoice = async (req, res) => {
         });
       });
 
-      // =========== Step-6: Remove carts =============
+      // =========== Step-6: stock remove  =============
+
+      for (const item of cartProducts) {
+        await productModel.updateOne(
+          { _id: item.product_id },
+          { $inc: { stock: -item.qty } }
+        );
+      }
+
+      // =========== Step-7: Remove carts =============
 
       await cartModel.deleteMany({ user_id: user_id });
 
-      // =========== Step-7: Prepare SSL Payment =============
+      // =========== Step-8: Prepare SSL Payment =============
 
       let paymentSetting = {
         store_id: process.env.SSLCZ_STORE_ID,
@@ -592,27 +590,9 @@ exports.updateInvoice = async (req, res) => {
       }
 
       if (deliver_status === "cancel") {
-        // Restock products because order canceled after payment
-        const invoiceProducts = await invoiceProductModel.find({
-          invoice_id: _id,
-        });
-        for (const item of invoiceProducts) {
-          await productModel.updateOne(
-            { _id: item.product_id },
-            { $inc: { stock: item.qty } }
-          );
-        }
-
-        const data = await invoiceModel.findByIdAndUpdate(
-          { _id, user_id },
-          { deliver_status },
-          { new: true }
-        );
-
         return res.status(200).json({
-          success: true,
-          message: "Order canceled and stock restored!",
-          data,
+          success: false,
+          message: "Payment is success. You can't cancel!",
         });
       }
 
@@ -627,12 +607,15 @@ exports.updateInvoice = async (req, res) => {
         const invoiceProducts = await invoiceProductModel.find({
           invoice_id: _id,
         });
+        // Restock each product
         for (const item of invoiceProducts) {
           await productModel.updateOne(
             { _id: item.product_id },
             { $inc: { stock: item.qty } }
           );
         }
+
+        // Update invoice as canceled
 
         const data = await invoiceModel.findByIdAndUpdate(
           { _id, user_id },

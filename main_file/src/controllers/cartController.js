@@ -36,7 +36,7 @@ exports.createCart = async (req, res) => {
 
       const carts = await cartModel.find({ product_id }).select("qty");
       const totalQty = carts.reduce((sum, item) => sum + item.qty, 0);
-      if (product?.stock <= totalQty + qty) {
+      if (product?.stock < totalQty + qty) {
         return res.status(200).json({
           success: false,
           message: "You have added all the products in stock.",
@@ -56,7 +56,8 @@ exports.createCart = async (req, res) => {
       // For new products
       const carts = await cartModel.find({ product_id }).select("qty");
       const totalQty = carts.reduce((sum, item) => sum + item.qty, 0);
-      if (product?.stock <= totalQty + qty) {
+
+      if (product?.stock < totalQty + qty) {
         return res.status(200).json({
           success: false,
           message: "You have added all the products in stock. ",

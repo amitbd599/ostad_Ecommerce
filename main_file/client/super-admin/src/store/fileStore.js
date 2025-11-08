@@ -32,7 +32,7 @@ const fileStore = create((set) => ({
     } catch (error) {
       console.error(error);
       set({ fileUploadLoading: false });
-      ErrorToast("Upload error occurred");
+      ErrorToast(error?.response?.data?.message || "Upload failed");
       return false;
     }
   },

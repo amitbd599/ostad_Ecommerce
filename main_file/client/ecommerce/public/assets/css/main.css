@@ -79,7 +79,8 @@
   --static-black-h: 234;
   --static-black-s: 100%;
   --static-black-l: 7%;
-  --static-black: var(--static-black-h) var(--static-black-s) var(--static-black-l);
+  --static-black: var(--static-black-h) var(--static-black-s)
+    var(--static-black-l);
   /* Black Two Color */
   --black-two-h: 234;
   --black-two-s: 69%;
@@ -99,32 +100,48 @@
   --box-shadow: 0px 20px 30px 0px rgba(197, 196, 201, 0.25);
   --box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.1);
   /* Color Variables Start */
-  --main-gradient: linear-gradient(312deg,
-      hsl(var(--main)) 5.38%,
-      hsl(var(--main-two)) 113.21%);
-  --main-gradient-rev: linear-gradient(312deg,
-      hsl(var(--main-two)) 5.38%,
-      hsl(var(--main)) 113.21%);
-  --main-gradient-two: linear-gradient(305deg,
-      hsl(var(--main)) 0%,
-      hsl(var(--main-three)) 100%);
+  --main-gradient: linear-gradient(
+    312deg,
+    hsl(var(--main)) 5.38%,
+    hsl(var(--main-two)) 113.21%
+  );
+  --main-gradient-rev: linear-gradient(
+    312deg,
+    hsl(var(--main-two)) 5.38%,
+    hsl(var(--main)) 113.21%
+  );
+  --main-gradient-two: linear-gradient(
+    305deg,
+    hsl(var(--main)) 0%,
+    hsl(var(--main-three)) 100%
+  );
   /* ========================= Main Color ============================= */
   --main-h: 253;
   --main-s: 88%;
   --main-l: 58%;
   --main: var(--main-h) var(--main-s) var(--main-l);
   /* Main Lighten */
-  --main-l-100: var(--main-h) calc(var(--main-s)) calc(var(--main-l) + (100% - var(--main-l)) * 0.1);
-  --main-l-200: var(--main-h) calc(var(--main-s)) calc(var(--main-l) + (100% - var(--main-l)) * 0.2);
-  --main-l-300: var(--main-h) calc(var(--main-s)) calc(var(--main-l) + (100% - var(--main-l)) * 0.3);
-  --main-l-400: var(--main-h) calc(var(--main-s)) calc(var(--main-l) + (100% - var(--main-l)) * 0.4);
-  --main-l-500: var(--main-h) calc(var(--main-s)) calc(var(--main-l) + (100% - var(--main-l)) * 0.5);
+  --main-l-100: var(--main-h) calc(var(--main-s))
+    calc(var(--main-l) + (100% - var(--main-l)) * 0.1);
+  --main-l-200: var(--main-h) calc(var(--main-s))
+    calc(var(--main-l) + (100% - var(--main-l)) * 0.2);
+  --main-l-300: var(--main-h) calc(var(--main-s))
+    calc(var(--main-l) + (100% - var(--main-l)) * 0.3);
+  --main-l-400: var(--main-h) calc(var(--main-s))
+    calc(var(--main-l) + (100% - var(--main-l)) * 0.4);
+  --main-l-500: var(--main-h) calc(var(--main-s))
+    calc(var(--main-l) + (100% - var(--main-l)) * 0.5);
   /* Main Darken  */
-  --main-d-100: var(--main-h) var(--main-s) calc(var(--main-l) - var(--main-l) * 0.1);
-  --main-d-200: var(--main-h) var(--main-s) calc(var(--main-l) - var(--main-l) * 0.2);
-  --main-d-300: var(--main-h) var(--main-s) calc(var(--main-l) - var(--main-l) * 0.3);
-  --main-d-400: var(--main-h) var(--main-s) calc(var(--main-l) - var(--main-l) * 0.4);
-  --main-d-500: var(--main-h) var(--main-s) calc(var(--main-l) - var(--main-l) * 0.5);
+  --main-d-100: var(--main-h) var(--main-s)
+    calc(var(--main-l) - var(--main-l) * 0.1);
+  --main-d-200: var(--main-h) var(--main-s)
+    calc(var(--main-l) - var(--main-l) * 0.2);
+  --main-d-300: var(--main-h) var(--main-s)
+    calc(var(--main-l) - var(--main-l) * 0.3);
+  --main-d-400: var(--main-h) var(--main-s)
+    calc(var(--main-l) - var(--main-l) * 0.4);
+  --main-d-500: var(--main-h) var(--main-s)
+    calc(var(--main-l) - var(--main-l) * 0.5);
   /* ========================= Main Color ============================= */
   /* ========================= Main two Color ============================= */
   --main-two-h: 184;
@@ -132,17 +149,27 @@
   --main-two-l: 48%;
   --main-two: var(--main-two-h) var(--main-two-s) var(--main-two-l);
   /* Main-two Lighten */
-  --main-two-l-100: var(--main-two-h) calc(var(--main-two-s)) calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.1);
-  --main-two-l-200: var(--main-two-h) calc(var(--main-two-s)) calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.2);
-  --main-two-l-300: var(--main-two-h) calc(var(--main-two-s)) calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.3);
-  --main-two-l-400: var(--main-two-h) calc(var(--main-two-s)) calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.4);
-  --main-two-l-500: var(--main-two-h) calc(var(--main-two-s)) calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.5);
+  --main-two-l-100: var(--main-two-h) calc(var(--main-two-s))
+    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.1);
+  --main-two-l-200: var(--main-two-h) calc(var(--main-two-s))
+    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.2);
+  --main-two-l-300: var(--main-two-h) calc(var(--main-two-s))
+    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.3);
+  --main-two-l-400: var(--main-two-h) calc(var(--main-two-s))
+    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.4);
+  --main-two-l-500: var(--main-two-h) calc(var(--main-two-s))
+    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.5);
   /* Main-two Darken  */
-  --main-two-d-100: var(--main-two-h) var(--main-two-s) calc(var(--main-two-l) - var(--main-two-l) * 0.1);
-  --main-two-d-200: var(--main-two-h) var(--main-two-s) calc(var(--main-two-l) - var(--main-two-l) * 0.2);
-  --main-two-d-300: var(--main-two-h) var(--main-two-s) calc(var(--main-two-l) - var(--main-two-l) * 0.3);
-  --main-two-d-400: var(--main-two-h) var(--main-two-s) calc(var(--main-two-l) - var(--main-two-l) * 0.4);
-  --main-two-d-500: var(--main-two-h) var(--main-two-s) calc(var(--main-two-l) - var(--main-two-l) * 0.5);
+  --main-two-d-100: var(--main-two-h) var(--main-two-s)
+    calc(var(--main-two-l) - var(--main-two-l) * 0.1);
+  --main-two-d-200: var(--main-two-h) var(--main-two-s)
+    calc(var(--main-two-l) - var(--main-two-l) * 0.2);
+  --main-two-d-300: var(--main-two-h) var(--main-two-s)
+    calc(var(--main-two-l) - var(--main-two-l) * 0.3);
+  --main-two-d-400: var(--main-two-h) var(--main-two-s)
+    calc(var(--main-two-l) - var(--main-two-l) * 0.4);
+  --main-two-d-500: var(--main-two-h) var(--main-two-s)
+    calc(var(--main-two-l) - var(--main-two-l) * 0.5);
   /* ========================= Main Three Color ============================= */
   /* ========================= Main three Color ============================= */
   --main-three-h: 306;
@@ -150,17 +177,27 @@
   --main-three-l: 68%;
   --main-three: var(--main-three-h) var(--main-three-s) var(--main-three-l);
   /* Main-three Lighten */
-  --main-three-l-100: var(--main-three-h) calc(var(--main-three-s)) calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.1);
-  --main-three-l-200: var(--main-three-h) calc(var(--main-three-s)) calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.2);
-  --main-three-l-300: var(--main-three-h) calc(var(--main-three-s)) calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.3);
-  --main-three-l-400: var(--main-three-h) calc(var(--main-three-s)) calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.4);
-  --main-three-l-500: var(--main-three-h) calc(var(--main-three-s)) calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.5);
+  --main-three-l-100: var(--main-three-h) calc(var(--main-three-s))
+    calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.1);
+  --main-three-l-200: var(--main-three-h) calc(var(--main-three-s))
+    calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.2);
+  --main-three-l-300: var(--main-three-h) calc(var(--main-three-s))
+    calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.3);
+  --main-three-l-400: var(--main-three-h) calc(var(--main-three-s))
+    calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.4);
+  --main-three-l-500: var(--main-three-h) calc(var(--main-three-s))
+    calc(var(--main-three-l) + (100% - var(--main-three-l)) * 0.5);
   /* Main-three Darken  */
-  --main-three-d-100: var(--main-three-h) var(--main-three-s) calc(var(--main-three-l) - var(--main-three-l) * 0.1);
-  --main-three-d-200: var(--main-three-h) var(--main-three-s) calc(var(--main-three-l) - var(--main-three-l) * 0.2);
-  --main-three-d-300: var(--main-three-h) var(--main-three-s) calc(var(--main-three-l) - var(--main-three-l) * 0.3);
-  --main-three-d-400: var(--main-three-h) var(--main-three-s) calc(var(--main-three-l) - var(--main-three-l) * 0.4);
-  --main-three-d-500: var(--main-three-h) var(--main-three-s) calc(var(--main-three-l) - var(--main-three-l) * 0.5);
+  --main-three-d-100: var(--main-three-h) var(--main-three-s)
+    calc(var(--main-three-l) - var(--main-three-l) * 0.1);
+  --main-three-d-200: var(--main-three-h) var(--main-three-s)
+    calc(var(--main-three-l) - var(--main-three-l) * 0.2);
+  --main-three-d-300: var(--main-three-h) var(--main-three-s)
+    calc(var(--main-three-l) - var(--main-three-l) * 0.3);
+  --main-three-d-400: var(--main-three-h) var(--main-three-s)
+    calc(var(--main-three-l) - var(--main-three-l) * 0.4);
+  --main-three-d-500: var(--main-three-h) var(--main-three-s)
+    calc(var(--main-three-l) - var(--main-three-l) * 0.5);
   /* ========================= Main Two Color ============================= */
   /* ========================= Info Color ============================= */
   --info-h: 214;
@@ -168,17 +205,27 @@
   --info-l: 56%;
   --info: var(--info-h) var(--info-s) var(--info-l);
   /* info Lighten */
-  --info-l-100: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.1);
-  --info-l-200: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.2);
-  --info-l-300: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.3);
-  --info-l-400: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.4);
-  --info-l-500: var(--info-h) calc(var(--info-s)) calc(var(--info-l) + (100% - var(--info-l)) * 0.5);
+  --info-l-100: var(--info-h) calc(var(--info-s))
+    calc(var(--info-l) + (100% - var(--info-l)) * 0.1);
+  --info-l-200: var(--info-h) calc(var(--info-s))
+    calc(var(--info-l) + (100% - var(--info-l)) * 0.2);
+  --info-l-300: var(--info-h) calc(var(--info-s))
+    calc(var(--info-l) + (100% - var(--info-l)) * 0.3);
+  --info-l-400: var(--info-h) calc(var(--info-s))
+    calc(var(--info-l) + (100% - var(--info-l)) * 0.4);
+  --info-l-500: var(--info-h) calc(var(--info-s))
+    calc(var(--info-l) + (100% - var(--info-l)) * 0.5);
   /* info Darken  */
-  --info-d-100: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.1);
-  --info-d-200: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.2);
-  --info-d-300: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.3);
-  --info-d-400: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.4);
-  --info-d-500: var(--info-h) var(--info-s) calc(var(--info-l) - var(--info-l) * 0.5);
+  --info-d-100: var(--info-h) var(--info-s)
+    calc(var(--info-l) - var(--info-l) * 0.1);
+  --info-d-200: var(--info-h) var(--info-s)
+    calc(var(--info-l) - var(--info-l) * 0.2);
+  --info-d-300: var(--info-h) var(--info-s)
+    calc(var(--info-l) - var(--info-l) * 0.3);
+  --info-d-400: var(--info-h) var(--info-s)
+    calc(var(--info-l) - var(--info-l) * 0.4);
+  --info-d-500: var(--info-h) var(--info-s)
+    calc(var(--info-l) - var(--info-l) * 0.5);
   /* ========================= Info Color ============================= */
   /* ========================= Success Color ============================= */
   --success-h: 145;
@@ -186,17 +233,27 @@
   --success-l: 42%;
   --success: var(--success-h) var(--success-s) var(--success-l);
   /* success Lighten */
-  --success-l-100: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.1);
-  --success-l-200: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.2);
-  --success-l-300: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.3);
-  --success-l-400: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.4);
-  --success-l-500: var(--success-h) calc(var(--success-s)) calc(var(--success-l) + (100% - var(--success-l)) * 0.5);
+  --success-l-100: var(--success-h) calc(var(--success-s))
+    calc(var(--success-l) + (100% - var(--success-l)) * 0.1);
+  --success-l-200: var(--success-h) calc(var(--success-s))
+    calc(var(--success-l) + (100% - var(--success-l)) * 0.2);
+  --success-l-300: var(--success-h) calc(var(--success-s))
+    calc(var(--success-l) + (100% - var(--success-l)) * 0.3);
+  --success-l-400: var(--success-h) calc(var(--success-s))
+    calc(var(--success-l) + (100% - var(--success-l)) * 0.4);
+  --success-l-500: var(--success-h) calc(var(--success-s))
+    calc(var(--success-l) + (100% - var(--success-l)) * 0.5);
   /* success Darken  */
-  --success-d-100: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.1);
-  --success-d-200: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.2);
-  --success-d-300: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.3);
-  --success-d-400: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.4);
-  --success-d-500: var(--success-h) var(--success-s) calc(var(--success-l) - var(--success-l) * 0.5);
+  --success-d-100: var(--success-h) var(--success-s)
+    calc(var(--success-l) - var(--success-l) * 0.1);
+  --success-d-200: var(--success-h) var(--success-s)
+    calc(var(--success-l) - var(--success-l) * 0.2);
+  --success-d-300: var(--success-h) var(--success-s)
+    calc(var(--success-l) - var(--success-l) * 0.3);
+  --success-d-400: var(--success-h) var(--success-s)
+    calc(var(--success-l) - var(--success-l) * 0.4);
+  --success-d-500: var(--success-h) var(--success-s)
+    calc(var(--success-l) - var(--success-l) * 0.5);
   /* ========================= Success Color ============================= */
   /* ========================= Warning Color ============================= */
   --waring-h: 45;
@@ -204,17 +261,27 @@
   --waring-l: 56%;
   --waring: var(--waring-h) var(--waring-s) var(--waring-l);
   /* waring Lighten */
-  --waring-l-100: var(--waring-h) calc(var(--waring-s)) calc(var(--waring-l) + (100% - var(--waring-l)) * 0.1);
-  --waring-l-200: var(--waring-h) calc(var(--waring-s)) calc(var(--waring-l) + (100% - var(--waring-l)) * 0.2);
-  --waring-l-300: var(--waring-h) calc(var(--waring-s)) calc(var(--waring-l) + (100% - var(--waring-l)) * 0.3);
-  --waring-l-400: var(--waring-h) calc(var(--waring-s)) calc(var(--waring-l) + (100% - var(--waring-l)) * 0.4);
-  --waring-l-500: var(--waring-h) calc(var(--waring-s)) calc(var(--waring-l) + (100% - var(--waring-l)) * 0.5);
+  --waring-l-100: var(--waring-h) calc(var(--waring-s))
+    calc(var(--waring-l) + (100% - var(--waring-l)) * 0.1);
+  --waring-l-200: var(--waring-h) calc(var(--waring-s))
+    calc(var(--waring-l) + (100% - var(--waring-l)) * 0.2);
+  --waring-l-300: var(--waring-h) calc(var(--waring-s))
+    calc(var(--waring-l) + (100% - var(--waring-l)) * 0.3);
+  --waring-l-400: var(--waring-h) calc(var(--waring-s))
+    calc(var(--waring-l) + (100% - var(--waring-l)) * 0.4);
+  --waring-l-500: var(--waring-h) calc(var(--waring-s))
+    calc(var(--waring-l) + (100% - var(--waring-l)) * 0.5);
   /* waring Darken  */
-  --waring-d-100: var(--waring-h) var(--waring-s) calc(var(--waring-l) - var(--waring-l) * 0.1);
-  --waring-d-200: var(--waring-h) var(--waring-s) calc(var(--waring-l) - var(--waring-l) * 0.2);
-  --waring-d-300: var(--waring-h) var(--waring-s) calc(var(--waring-l) - var(--waring-l) * 0.3);
-  --waring-d-400: var(--waring-h) var(--waring-s) calc(var(--waring-l) - var(--waring-l) * 0.4);
-  --waring-d-500: var(--waring-h) var(--waring-s) calc(var(--waring-l) - var(--waring-l) * 0.5);
+  --waring-d-100: var(--waring-h) var(--waring-s)
+    calc(var(--waring-l) - var(--waring-l) * 0.1);
+  --waring-d-200: var(--waring-h) var(--waring-s)
+    calc(var(--waring-l) - var(--waring-l) * 0.2);
+  --waring-d-300: var(--waring-h) var(--waring-s)
+    calc(var(--waring-l) - var(--waring-l) * 0.3);
+  --waring-d-400: var(--waring-h) var(--waring-s)
+    calc(var(--waring-l) - var(--waring-l) * 0.4);
+  --waring-d-500: var(--waring-h) var(--waring-s)
+    calc(var(--waring-l) - var(--waring-l) * 0.5);
   /* ========================= Warning Color ============================= */
   /* ========================= Danger Color ============================= */
   --danger-h: 0;
@@ -222,17 +289,27 @@
   --danger-l: 63%;
   --danger: var(--danger-h) var(--danger-s) var(--danger-l);
   /* danger Lighten */
-  --danger-l-100: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.1);
-  --danger-l-200: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.2);
-  --danger-l-300: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.3);
-  --danger-l-400: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.4);
-  --danger-l-500: var(--danger-h) calc(var(--danger-s)) calc(var(--danger-l) + (100% - var(--danger-l)) * 0.5);
+  --danger-l-100: var(--danger-h) calc(var(--danger-s))
+    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.1);
+  --danger-l-200: var(--danger-h) calc(var(--danger-s))
+    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.2);
+  --danger-l-300: var(--danger-h) calc(var(--danger-s))
+    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.3);
+  --danger-l-400: var(--danger-h) calc(var(--danger-s))
+    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.4);
+  --danger-l-500: var(--danger-h) calc(var(--danger-s))
+    calc(var(--danger-l) + (100% - var(--danger-l)) * 0.5);
   /* danger Darken  */
-  --danger-d-100: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.1);
-  --danger-d-200: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.2);
-  --danger-d-300: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.3);
-  --danger-d-400: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.4);
-  --danger-d-500: var(--danger-h) var(--danger-s) calc(var(--danger-l) - var(--danger-l) * 0.5);
+  --danger-d-100: var(--danger-h) var(--danger-s)
+    calc(var(--danger-l) - var(--danger-l) * 0.1);
+  --danger-d-200: var(--danger-h) var(--danger-s)
+    calc(var(--danger-l) - var(--danger-l) * 0.2);
+  --danger-d-300: var(--danger-h) var(--danger-s)
+    calc(var(--danger-l) - var(--danger-l) * 0.3);
+  --danger-d-400: var(--danger-h) var(--danger-s)
+    calc(var(--danger-l) - var(--danger-l) * 0.4);
+  --danger-d-500: var(--danger-h) var(--danger-s)
+    calc(var(--danger-l) - var(--danger-l) * 0.5);
   /* ========================= Danger Color ============================= */
 }
 
@@ -1049,12 +1126,15 @@ ul.wp-block-latest-posts li {
   background-color: var(--title-color);
 }
 
-.wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper {
+.wp-block-search.wp-block-search__button-inside
+  .wp-block-search__inside-wrapper {
   padding: 0;
   border: none;
 }
 
-.wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper .wp-block-search__input {
+.wp-block-search.wp-block-search__button-inside
+  .wp-block-search__inside-wrapper
+  .wp-block-search__input {
   padding: 0 8px 0 25px;
 }
 
@@ -1094,7 +1174,6 @@ ul.wp-block-rss a {
 }
 
 @media (max-width: 782px) {
-
   .logged-in .will-sticky .sticky-active.active,
   .logged-in .preloader .btn {
     top: 46px;
@@ -1102,7 +1181,6 @@ ul.wp-block-rss a {
 }
 
 @media (max-width: 600px) {
-
   .logged-in .will-sticky .sticky-active.active,
   .logged-in .preloader .btn {
     top: 0;
@@ -1174,12 +1252,12 @@ ul.wp-block-rss a {
   padding-top: 1em;
 }
 
-.page-links>.page-links-title {
+.page-links > .page-links-title {
   margin-right: 10px;
 }
 
-.page-links>span:not(.page-links-title):not(.screen-reader-text),
-.page-links>a {
+.page-links > span:not(.page-links-title):not(.screen-reader-text),
+.page-links > a {
   display: inline-block;
   padding: 5px 13px;
   background-color: var(--white-color);
@@ -1188,16 +1266,16 @@ ul.wp-block-rss a {
   margin-right: 10px;
 }
 
-.page-links>span:not(.page-links-title):not(.screen-reader-text):hover,
-.page-links>a:hover {
+.page-links > span:not(.page-links-title):not(.screen-reader-text):hover,
+.page-links > a:hover {
   opacity: 0.8;
   color: var(--white-color);
   background-color: var(--theme-color);
   border-color: transparent;
 }
 
-.page-links>span:not(.page-links-title):not(.screen-reader-text).current,
-.page-links>a.current {
+.page-links > span:not(.page-links-title):not(.screen-reader-text).current,
+.page-links > a.current {
   background-color: var(--theme-color);
   color: var(--white-color);
   border-color: transparent;
@@ -1288,7 +1366,7 @@ ul.wp-block-rss a {
   margin-bottom: 30px;
 }
 
-.blog-single.format-chat .entry-content>p:nth-child(2n) {
+.blog-single.format-chat .entry-content > p:nth-child(2n) {
   background: var(--smoke-color);
   padding: 5px 20px;
 }
@@ -1310,7 +1388,7 @@ ul.wp-block-rss a {
   margin-bottom: 20px;
 }
 
-.blog-details .blog-single.format-chat .blog-content>p:nth-child(2n) {
+.blog-details .blog-single.format-chat .blog-content > p:nth-child(2n) {
   background: var(--smoke-color);
   padding: 5px 20px;
 }
@@ -1371,13 +1449,13 @@ ul.wp-block-rss a {
   color: var(--theme-color);
 }
 
-.th-search .search-grid-meta>* {
+.th-search .search-grid-meta > * {
   display: inline-block;
   margin-right: 15px;
   font-size: 14px;
 }
 
-.th-search .search-grid-meta>*:last-child {
+.th-search .search-grid-meta > *:last-child {
   margin-right: 0;
 }
 
@@ -1388,7 +1466,6 @@ ul.wp-block-rss a {
 
 /* Large devices */
 @media (max-width: 1199px) {
-
   .blog-single.format-quote:before,
   .blog-single.format-link:before,
   .blog-single.tag-sticky-2:before,
@@ -1404,7 +1481,6 @@ ul.wp-block-rss a {
 
 /* Small devices */
 @media (max-width: 767px) {
-
   .blog-single.format-quote:before,
   .blog-single.format-link:before,
   .blog-single.tag-sticky-2:before,
@@ -1419,7 +1495,7 @@ ul.wp-block-rss a {
     padding-left: 10px;
   }
 
-  .page--content.clearfix+.th-comment-form {
+  .page--content.clearfix + .th-comment-form {
     margin-top: 24px;
   }
 }
@@ -1507,12 +1583,12 @@ h6 {
   font-weight: 800;
 }
 
-h1>a,
-h2>a,
-h3>a,
-h4>a,
-h5>a,
-h6>a {
+h1 > a,
+h2 > a,
+h3 > a,
+h4 > a,
+h5 > a,
+h6 > a {
   font-weight: inherit;
   font-size: inherit;
   color: inherit;
@@ -1520,12 +1596,12 @@ h6>a {
   line-height: inherit;
 }
 
-h1>a:hover,
-h2>a:hover,
-h3>a:hover,
-h4>a:hover,
-h5>a:hover,
-h6>a:hover {
+h1 > a:hover,
+h2 > a:hover,
+h3 > a:hover,
+h4 > a:hover,
+h5 > a:hover,
+h6 > a:hover {
   color: hsl(var(--main));
 }
 
@@ -1939,7 +2015,6 @@ button:focus {
 }
 
 @media screen and (max-width: 575px) {
-
   .common-accordion .accordion-button[aria-expanded="true"]::after,
   .common-accordion .accordion-button[aria-expanded="false"]::after {
     right: 20px;
@@ -1953,11 +2028,11 @@ button:focus {
 
 /* ================================= Accordion Css End =========================== */
 /* ================================= Button Css Start =========================== */
-.btn-check:checked+.btn,
+.btn-check:checked + .btn,
 .btn.active,
 .btn.show,
 .btn:first-child:active,
-:not(.btn-check)+.btn:active {
+:not(.btn-check) + .btn:active {
   color: none;
   background-color: none;
   border-color: none;
@@ -2334,7 +2409,7 @@ button:focus {
   right: auto;
 }
 
-textarea+.input-icon {
+textarea + .input-icon {
   top: 15px;
   transform: translateY(0);
 }
@@ -2755,7 +2830,11 @@ input[type="number"] {
   font-weight: 500;
 }
 
-.common-tab.style-icon .nav-item .nav-link.active .product-category-list__item .text {
+.common-tab.style-icon
+  .nav-item
+  .nav-link.active
+  .product-category-list__item
+  .text {
   display: block;
 }
 
@@ -2887,7 +2966,7 @@ input[type="number"] {
   /* Style Two */
 }
 
-.table> :not(caption)>*>* {
+.table > :not(caption) > * > * {
   border-bottom: 0;
 }
 
@@ -3021,7 +3100,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 424px) {
-
   .common-card .card-header,
   .common-card .card-footer {
     padding: 12px 16px;
@@ -3100,7 +3178,6 @@ input[type="number"] {
 }
 
 @-webkit-keyframes ballPulseDouble {
-
   0%,
   100% {
     -webkit-transform: scale(0);
@@ -3114,7 +3191,6 @@ input[type="number"] {
 }
 
 @keyframes ballPulseDouble {
-
   0%,
   100% {
     -webkit-transform: scale(0);
@@ -3382,20 +3458,20 @@ input[type="number"] {
   }
 }
 
-.nav-menu__item.activePage>a {
+.nav-menu__item.activePage > a {
   color: hsl(var(--main));
 }
 
-.nav-menu__item.activePage>a::before {
+.nav-menu__item.activePage > a::before {
   color: hsl(var(--main));
 }
 
-.nav-menu__item:hover>a {
+.nav-menu__item:hover > a {
   color: hsl(var(--heading-color));
 }
 
 @media (min-width: 992px) {
-  .nav-menu__item:hover>a {
+  .nav-menu__item:hover > a {
     color: hsl(var(--main));
   }
 }
@@ -3423,12 +3499,12 @@ input[type="number"] {
   padding-right: 16px;
 }
 
-.has-submenu.active>a,
-.has-submenu.active>a::before {
+.has-submenu.active > a,
+.has-submenu.active > a::before {
   color: hsl(var(--main));
 }
 
-.has-submenu.active>a::before {
+.has-submenu.active > a::before {
   transform: translateY(-50%) rotate(180deg) !important;
 }
 
@@ -3439,17 +3515,17 @@ input[type="number"] {
 }
 
 @media (min-width: 992px) {
-  .has-submenu:hover>a::before {
+  .has-submenu:hover > a::before {
     color: hsl(var(--main));
     transform: translateY(-50%) rotate(180deg);
   }
 }
 
-.has-submenu>a {
+.has-submenu > a {
   position: relative;
 }
 
-.has-submenu>a::before {
+.has-submenu > a::before {
   position: absolute;
   content: "\f107";
   right: 0;
@@ -3767,7 +3843,7 @@ input[type="number"] {
   margin-top: 32px;
 }
 
-.nav-menu--mobile .nav-menu__item>a::before {
+.nav-menu--mobile .nav-menu__item > a::before {
   transform: translateY(-50%) rotate(0deg);
 }
 
@@ -3940,7 +4016,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 991px) {
-
   .bottom-footer__text,
   .footer-link {
     font-size: 1rem;
@@ -3948,7 +4023,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 767px) {
-
   .bottom-footer__text,
   .footer-link {
     font-size: 0.9375rem;
@@ -4186,7 +4260,7 @@ input[type="number"] {
   }
 }
 
-.countdown>div {
+.countdown > div {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -4258,7 +4332,7 @@ input[type="number"] {
   margin: 0 10px;
 }
 
-.slick-initialized.slick-slider .slick-slide>div {
+.slick-initialized.slick-slider .slick-slide > div {
   height: 100%;
 }
 
@@ -4795,12 +4869,16 @@ input[type="number"] {
 /* ====================== Dashboard nav Css End =================== */
 /* ====================== Change Body gradient Css Start =================*/
 .change-gradient {
-  --main-gradient: linear-gradient(312deg,
-      hsl(var(--main)) 5.38%,
-      hsl(var(--main-three)) 113.21%);
-  --main-gradient-rev: linear-gradient(312deg,
-      hsl(var(--main-three)) 5.38%,
-      hsl(var(--main)) 113.21%);
+  --main-gradient: linear-gradient(
+    312deg,
+    hsl(var(--main)) 5.38%,
+    hsl(var(--main-three)) 113.21%
+  );
+  --main-gradient-rev: linear-gradient(
+    312deg,
+    hsl(var(--main-three)) 5.38%,
+    hsl(var(--main)) 113.21%
+  );
 }
 
 /* ====================== Change Body gradient Css End =================*/
@@ -4959,7 +5037,6 @@ input[type="number"] {
 
 /* Statistics End */
 @keyframes upDown {
-
   0%,
   100% {
     transform: translateY(0px) scale(1);
@@ -4994,7 +5071,6 @@ input[type="number"] {
 }
 
 @keyframes scaling {
-
   0%,
   100% {
     transform: scale(0.6);
@@ -5105,10 +5181,12 @@ input[type="number"] {
   left: 0;
   bottom: 0;
   border-radius: 8px;
-  background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(0, 4, 37, 0.5) 69.5%,
-      rgba(0, 4, 37, 0.5) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 4, 37, 0.5) 69.5%,
+    rgba(0, 4, 37, 0.5) 100%
+  );
   pointer-events: none;
   visibility: hidden;
   opacity: 0;
@@ -5271,7 +5349,6 @@ input[type="number"] {
 }
 
 @media (min-width: 575px) {
-
   .selling-product .bg--gradient,
   .selling-product .bg-pattern {
     top: 0;
@@ -5421,9 +5498,11 @@ input[type="number"] {
   content: "";
   width: 750px;
   height: 613px;
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.2) 17.12%,
-      rgba(242, 5, 135, 0.2) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.2) 17.12%,
+    rgba(242, 5, 135, 0.2) 105.91%
+  );
   filter: blur(100px);
   right: -100px;
   top: 120px;
@@ -5551,9 +5630,11 @@ input[type="number"] {
   content: "";
   width: 835px;
   height: 682px;
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.2) 17.12%,
-      rgba(94, 53, 242, 0.2) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.2) 17.12%,
+    rgba(94, 53, 242, 0.2) 105.91%
+  );
   filter: blur(100px);
   bottom: 56px;
   right: -280px;
@@ -5566,7 +5647,8 @@ input[type="number"] {
 }
 
 .seller-item {
-  padding: clamp(1.5rem, -2.38rem + 8.082vw, 4.6875rem) clamp(1.5rem, -0.174rem + 3.487vw, 2.875rem);
+  padding: clamp(1.5rem, -2.38rem + 8.082vw, 4.6875rem)
+    clamp(1.5rem, -0.174rem + 3.487vw, 2.875rem);
   border-radius: 16px;
   position: relative;
   z-index: 1;
@@ -5799,9 +5881,11 @@ input[type="number"] {
   content: "";
   width: 675px;
   height: 552px;
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.2) 17.12%,
-      rgba(94, 53, 242, 0.2) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.2) 17.12%,
+    rgba(94, 53, 242, 0.2) 105.91%
+  );
   filter: blur(100px);
   left: 0;
   bottom: 200px;
@@ -5852,10 +5936,12 @@ input[type="number"] {
   left: 0;
   bottom: 0;
   border-radius: 8px;
-  background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(0, 4, 37, 0.5) 69.5%,
-      rgba(0, 4, 37, 0.5) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 4, 37, 0.5) 69.5%,
+    rgba(0, 4, 37, 0.5) 100%
+  );
   pointer-events: none;
   visibility: hidden;
   opacity: 0;
@@ -5909,9 +5995,11 @@ input[type="number"] {
 .featured-contributor::before {
   position: absolute;
   content: "";
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.2) 17.12%,
-      rgba(94, 53, 242, 0.2) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.2) 17.12%,
+    rgba(94, 53, 242, 0.2) 105.91%
+  );
   filter: blur(100px);
   width: 752px;
   height: 614px;
@@ -5973,10 +6061,12 @@ input[type="number"] {
   left: 0;
   bottom: 0;
   border-radius: 8px;
-  background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(0, 4, 37, 0.5) 69.5%,
-      rgba(0, 4, 37, 0.5) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(0, 4, 37, 0.5) 69.5%,
+    rgba(0, 4, 37, 0.5) 100%
+  );
   pointer-events: none;
   visibility: hidden;
   opacity: 0;
@@ -6586,18 +6676,22 @@ input[type="number"] {
 }
 
 .resource.style-two::before {
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.2) 17.12%,
-      rgba(94, 53, 242, 0.2) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.2) 17.12%,
+    rgba(94, 53, 242, 0.2) 105.91%
+  );
   bottom: auto;
 }
 
 .resource::before {
   position: absolute;
   content: "";
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.2) 17.12%,
-      rgba(5, 228, 242, 0.2) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.2) 17.12%,
+    rgba(5, 228, 242, 0.2) 105.91%
+  );
   filter: blur(100px);
   width: 712px;
   height: 582px;
@@ -7042,7 +7136,7 @@ input[type="number"] {
 
 /* List & Grid Buttons End */
 /* List & Grid Card Css Start */
-.list-view .list-grid-wrapper>div {
+.list-view .list-grid-wrapper > div {
   width: 100%;
 }
 
@@ -7425,7 +7519,7 @@ input[type="number"] {
   flex-wrap: wrap;
 }
 
-.meta-attribute__item .details>a {
+.meta-attribute__item .details > a {
   font-size: inherit;
 }
 
@@ -7462,7 +7556,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 1199px) {
-
   .product-review__reason,
   .product-review__subject,
   .product-review__date,
@@ -7472,7 +7565,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 767px) {
-
   .product-review__reason,
   .product-review__subject,
   .product-review__date,
@@ -7506,7 +7598,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 575px) {
-
   .author-reply__thumb,
   .user-comment__thumb {
     width: 40px;
@@ -7521,7 +7612,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 575px) {
-
   .author-reply__content,
   .user-comment__info {
     width: calc(100% - 40px);
@@ -7544,7 +7634,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 767px) {
-
   .author-reply__response,
   .user-comment__purchase {
     font-weight: 500;
@@ -7797,11 +7886,11 @@ input[type="number"] {
 
 /* ========================= Setting Css End ======================== */
 /* ========================== Hidden Item Css Start =========================== */
-.product-reject__wrapper>div {
+.product-reject__wrapper > div {
   margin-bottom: 24px;
 }
 
-.product-reject__wrapper>div:last-child {
+.product-reject__wrapper > div:last-child {
   margin-bottom: 0;
 }
 
@@ -8060,11 +8149,11 @@ input[type="number"] {
   }
 }
 
-.payment-method__item .form-check-input:checked+.form-check-label::before {
+.payment-method__item .form-check-input:checked + .form-check-label::before {
   background: var(--main-gradient);
 }
 
-.payment-method__item .form-check-input:checked+.form-check-label::after {
+.payment-method__item .form-check-input:checked + .form-check-label::after {
   background: hsl(var(--static-white));
   width: calc(100% - 4px);
   height: calc(100% - 4px);
@@ -8253,9 +8342,11 @@ input[type="number"] {
   content: "";
   width: 573px;
   height: 355px;
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.2) 17.12%,
-      rgba(5, 228, 242, 0.2) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.2) 17.12%,
+    rgba(5, 228, 242, 0.2) 105.91%
+  );
   filter: blur(100px);
   left: 24px;
   top: 0;
@@ -8263,9 +8354,11 @@ input[type="number"] {
 }
 
 .blog-details::after {
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.2) 17.12%,
-      rgba(94, 53, 242, 0.2) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.2) 17.12%,
+    rgba(94, 53, 242, 0.2) 105.91%
+  );
   left: auto;
   right: 40px;
 }
@@ -8387,9 +8480,11 @@ input[type="number"] {
   content: "";
   width: 675px;
   height: 552px;
-  background: linear-gradient(152deg,
-      rgba(246, 246, 246, 0.3) 17.12%,
-      rgba(94, 53, 242, 0.3) 105.91%);
+  background: linear-gradient(
+    152deg,
+    rgba(246, 246, 246, 0.3) 17.12%,
+    rgba(94, 53, 242, 0.3) 105.91%
+  );
   filter: blur(100px);
   left: -290px;
   top: 50%;
@@ -8446,7 +8541,6 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 1399px) {
-
   .dashboard-nav,
   .dashboard-body__content,
   .dashboard-footer {
@@ -8683,7 +8777,7 @@ input[type="number"] {
   right: 32px;
 }
 
-.cover-photo .avatar-upload .avatar-edit input+label {
+.cover-photo .avatar-upload .avatar-edit input + label {
   width: unset;
   height: unset;
   border-radius: 8px;
@@ -8696,7 +8790,7 @@ input[type="number"] {
   font-weight: 300;
 }
 
-.cover-photo .avatar-upload .avatar-edit input+label:hover {
+.cover-photo .avatar-upload .avatar-edit input + label:hover {
   background: hsl(var(--black) / 0.8);
 }
 
@@ -8713,7 +8807,7 @@ input[type="number"] {
   }
 }
 
-.cover-photo .avatar-upload .avatar-preview>div {
+.cover-photo .avatar-upload .avatar-preview > div {
   border-radius: 0;
 }
 
@@ -8736,7 +8830,7 @@ input[type="number"] {
   display: none;
 }
 
-.avatar-upload .avatar-edit input+label {
+.avatar-upload .avatar-edit input + label {
   display: inline-block;
   width: 30px;
   height: 30px;
@@ -8772,7 +8866,7 @@ input[type="number"] {
   position: relative;
 }
 
-.avatar-upload .avatar-preview>div {
+.avatar-upload .avatar-preview > div {
   width: 100%;
   height: 100%;
   border-radius: 100%;
@@ -8888,7 +8982,6 @@ input[type="number"] {
 }
 
 @keyframes upDownRotate {
-
   0%,
   100% {
     transform: translateY(0px) rotate(0deg);
@@ -9096,7 +9189,7 @@ input[type="number"] {
   background: var(--dark-black-three) !important;
 }
 
-[data-theme="light"] .sale-offer.sales-offer-bg-two+.header {
+[data-theme="light"] .sale-offer.sales-offer-bg-two + .header {
   background: var(--dark-black-one) !important;
 }
 
@@ -9114,11 +9207,19 @@ input[type="number"] {
   border-color: hsl(var(--static-white)) !important;
 }
 
-[data-theme="light"] .common-tab.style-icon .nav-item .nav-link .product-category-list__item {
+[data-theme="light"]
+  .common-tab.style-icon
+  .nav-item
+  .nav-link
+  .product-category-list__item {
   box-shadow: none;
 }
 
-[data-theme="light"] .common-tab.style-icon .nav-item .nav-link.active .product-category-list__item {
+[data-theme="light"]
+  .common-tab.style-icon
+  .nav-item
+  .nav-link.active
+  .product-category-list__item {
   background-color: var(--dark-black-two);
   box-shadow: none;
 }
@@ -9324,7 +9425,9 @@ input[type="number"] {
   background-color: var(--dark-black-three);
 }
 
-[data-theme="light"] .profile-sidebar__item .social-icon-list__link.border-white {
+[data-theme="light"]
+  .profile-sidebar__item
+  .social-icon-list__link.border-white {
   background: var(--dark-black-two) !important;
   border-color: hsl(var(--static-white) / 0.2) !important;
 }
@@ -9419,7 +9522,8 @@ input[type="number"] {
   }
 
   .size {
-    h4 {}
+    h4 {
+    }
 
     .size_varient {
       display: flex;
@@ -9454,7 +9558,8 @@ input[type="number"] {
   .color {
     width: 100%;
 
-    h4 {}
+    h4 {
+    }
 
     .size_varient {
       display: flex;
@@ -9625,6 +9730,18 @@ input[type="number"] {
 .not-allow {
   cursor: not-allowed !important;
   pointer-events: auto !important;
+}
+
+.user-profile__thumb.inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+}
+
+.mobile-menu {
+  top: 0;
 }
 
 /* ============================ Dark Version Css End =============================== */

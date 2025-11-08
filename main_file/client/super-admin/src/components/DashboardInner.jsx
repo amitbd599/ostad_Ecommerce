@@ -13,7 +13,7 @@ const DashboardInner = () => {
   return (
     <section className='p-5'>
       <div className='row g-4'>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Users</h6>
@@ -21,7 +21,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Products</h6>
@@ -31,7 +31,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Categories</h6>
@@ -41,7 +41,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Brands</h6>
@@ -49,7 +49,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Orders</h6>
@@ -57,7 +57,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Income</h6>
@@ -65,7 +65,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Pending Deliver</h6>
@@ -75,7 +75,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Delivered Orders</h6>
@@ -85,7 +85,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total canceled Orders</h6>
@@ -95,7 +95,7 @@ const DashboardInner = () => {
             </div>
           </div>
         </div>
-        <div className='col-md-3'>
+        <div className='col-xxl-3 col-xl-4 col-md-6'>
           <div className='card user-card shadow-sm border-0 p-3'>
             <div className='card-body text-center'>
               <h6 className='text-secondary mb-2'>Total Reviews</h6>

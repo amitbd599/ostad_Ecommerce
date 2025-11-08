@@ -1,13 +1,10 @@
 const { DecodeToken } = require("../utility/tokenHelper");
 
 module.exports = (req, res, next) => {
-  let token = req.headers["token"];
-
-  if (!token) {
-    token = req.cookies["token"];
-  }
+  token = req.cookies["admin-token"];
 
   let decoded = DecodeToken(token);
+  console.log(decoded);
 
   if (decoded === null) {
     return res.status(401).json({

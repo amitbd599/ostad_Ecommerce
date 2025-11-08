@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import userStore from "../store/userStore";
-import { baseURLFile } from "../helper/config";
+import { FaRegUser } from "react-icons/fa6";
 
 const MasterLayout = ({ children }) => {
   let [active, setActive] = useState(false);
@@ -10,7 +10,7 @@ const MasterLayout = ({ children }) => {
   const navigate = useNavigate();
 
   // api
-  let { user, userRequest, userLogoutRequest } = userStore();
+  let { userRequest, userLogoutRequest } = userStore();
   useEffect(() => {
     (async () => {
       await userRequest();
@@ -33,168 +33,6 @@ const MasterLayout = ({ children }) => {
 
   return (
     <>
-      <div className='mobile-menu d-lg-none d-block'>
-        <button
-          type='button'
-          className='close-button text-body hover-text-main'
-        >
-          {" "}
-          <i className='las la-times' />{" "}
-        </button>
-        <div className='mobile-menu__inner'>
-          <Link to='/' className='mobile-menu__logo'>
-            <img
-              src='assets/images/logo/logo.png'
-              alt='Logo'
-              className='white-version'
-            />
-            <img
-              src='assets/images/logo/white-logo-two.png'
-              alt='Logo'
-              className='dark-version'
-            />
-          </Link>
-          <div className='mobile-menu__menu'>
-            <ul className='nav-menu flx-align nav-menu--mobile'>
-              <li className='nav-menu__item has-submenu'>
-                <Link to='#' className='nav-menu__link'>
-                  Home
-                </Link>
-                <ul className='nav-submenu'>
-                  <li className='nav-submenu__item'>
-                    <Link to='/' className='nav-submenu__link'>
-                      {" "}
-                      Home One
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link to='/index-two' className='nav-submenu__link'>
-                      {" "}
-                      Home Two
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className='nav-menu__item has-submenu'>
-                <Link to='/#' className='nav-menu__link'>
-                  Products
-                </Link>
-                <ul className='nav-submenu'>
-                  <li className='nav-submenu__item'>
-                    <Link to='/all-product' className='nav-submenu__link'>
-                      {" "}
-                      All Products
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link to='/product-details' className='nav-submenu__link'>
-                      {" "}
-                      Product Details
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className='nav-menu__item has-submenu'>
-                <Link to='/#' className='nav-menu__link'>
-                  Pages
-                </Link>
-                <ul className='nav-submenu'>
-                  <li className='nav-submenu__item'>
-                    <Link to='/profile' className='nav-submenu__link'>
-                      {" "}
-                      Profile
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link to='/cart' className='nav-submenu__link'>
-                      {" "}
-                      Shopping Cart
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link to='/cart-personal' className='nav-submenu__link'>
-                      {" "}
-                      Mailing Address
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link to='/cart-payment' className='nav-submenu__link'>
-                      {" "}
-                      Payment Method
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link to='/cart-thank-you' className='nav-submenu__link'>
-                      {" "}
-                      Preview Order
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link to='/dashboard' className='nav-submenu__link'>
-                      {" "}
-                      Dashboard
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className='nav-menu__item has-submenu'>
-                <Link to='/#' className='nav-menu__link'>
-                  Blog
-                </Link>
-                <ul className='nav-submenu'>
-                  <li className='nav-submenu__item'>
-                    <Link to='/blog' className='nav-submenu__link'>
-                      {" "}
-                      Blog
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link to='/blog-details' className='nav-submenu__link'>
-                      {" "}
-                      Blog Details
-                    </Link>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <Link
-                      to='/blog-details-sidebar'
-                      className='nav-submenu__link'
-                    >
-                      {" "}
-                      Blog Details Sidebar
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className='nav-menu__item'>
-                <Link to='/contact' className='nav-menu__link'>
-                  Contact
-                </Link>
-              </li>
-            </ul>
-            <div className='header-right__inner d-lg-none my-3 gap-1 d-flex flx-align'>
-              <Link to='/register' className='btn btn-main pill'>
-                <span className='icon-left icon'>
-                  <img src='assets/images/icons/user.svg' alt='' />
-                </span>
-                Create Account
-              </Link>
-              <div className='language-select flx-align select-has-icon'>
-                <img
-                  src='assets/images/icons/globe.svg'
-                  alt=''
-                  className='globe-icon white-version'
-                />
-                <img
-                  src='assets/images/icons/globe-white.svg'
-                  alt=''
-                  className='globe-icon dark-version'
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <section
         className={`dashboard ${active && "active"}`}
         onClick={() => show === true && setShow(false)}
@@ -210,7 +48,7 @@ const MasterLayout = ({ children }) => {
               <i className='las la-times' />
             </button>
             <div className='dashboard-sidebar__inner'>
-              <Link to='/dashboard-profile' className='logo mb-48'>
+              <Link to='/' className='logo mb-48'>
                 <img
                   src='assets/images/logo/logo.png'
                   alt=''
@@ -354,12 +192,8 @@ const MasterLayout = ({ children }) => {
                         className='user-profile__button flex-align'
                         onClick={showProfileControl}
                       >
-                        <span className='user-profile__thumb'>
-                          <img
-                            src={`${baseURLFile}/${user?.image}`}
-                            className='cover-img'
-                            alt=''
-                          />
+                        <span className='user-profile__thumb inner'>
+                          <FaRegUser />
                         </span>
                       </button>
                       <ul

@@ -15,7 +15,7 @@ const ContactPage = () => {
       <HeaderOne />
 
       {/* BreadcrumbEight */}
-      <Breadcrumb />
+      <Breadcrumb title='Contact' />
 
       {/* Contact */}
       <Contact />

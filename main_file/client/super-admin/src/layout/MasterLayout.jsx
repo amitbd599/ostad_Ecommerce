@@ -221,25 +221,6 @@ const MasterLayout = ({ children }) => {
                     alt=''
                   />
                 </button>
-                <form action='#' className='search-input d-sm-block d-none'>
-                  <span className='icon'>
-                    <img
-                      src='/super-admin/assets/images/icons/search-dark.svg'
-                      alt=''
-                      className='white-version'
-                    />
-                    <img
-                      src='/super-admin/assets/images/icons/search-dark-white.svg'
-                      alt=''
-                      className='dark-version'
-                    />
-                  </span>
-                  <input
-                    type='text'
-                    className='common-input common-input--md common-input--bg pill w-100'
-                    placeholder='Search here...'
-                  />
-                </form>
               </div>
               <div className='dashboard-nav__right'>
                 <div className='header-right flx-align'>
@@ -312,26 +293,6 @@ const MasterLayout = ({ children }) => {
                   {" "}
                   Copyright © 2025-2026 Pixbo, All rights reserved.
                 </p>
-                <div className='footer-links gap-4'>
-                  <Link
-                    to='/#'
-                    className='footer-link hover-text-heading font-14'
-                  >
-                    Terms of service
-                  </Link>
-                  <Link
-                    to='/#'
-                    className='footer-link hover-text-heading font-14'
-                  >
-                    Privacy Policy
-                  </Link>
-                  <Link
-                    to='/#'
-                    className='footer-link hover-text-heading font-14'
-                  >
-                    cookies
-                  </Link>
-                </div>
               </div>
             </div>
           </div>

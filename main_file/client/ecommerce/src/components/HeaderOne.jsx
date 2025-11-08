@@ -184,189 +184,18 @@ const HeaderOne = () => {
               className='nav-menu flx-align nav-menu--mobile'
               id='offcanvas-navigation'
             >
-              <li className='nav-menu__item has-submenu '>
-                <Link to='#' className='nav-menu__link'>
+              <li className='nav-menu__item'>
+                <NavLink to='/contact' className='nav-menu__link'>
                   Home
-                </Link>
-                <ul className='nav-submenu'>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Home One
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/index-two'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Home Two
-                    </NavLink>
-                  </li>
-                </ul>
+                </NavLink>
               </li>
-              <li className='nav-menu__item has-submenu'>
-                <Link to='#' className='nav-menu__link'>
-                  Products
-                </Link>
-                <ul className='nav-submenu'>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/all-product'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      All Products
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/product-details'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Product Details
-                    </NavLink>
-                  </li>
-                </ul>
-              </li>
-              <li className='nav-menu__item has-submenu'>
-                <Link to='#' className='nav-menu__link'>
-                  Pages
-                </Link>
-                <ul className='nav-submenu'>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/profile'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Profile
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/cart'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Shopping Cart
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/cart-personal'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Mailing Address
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/cart-payment'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Payment Method
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/cart-thank-you'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Preview Order
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/dashboard'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Dashboard
-                    </NavLink>
-                  </li>
-                </ul>
-              </li>
-              <li className='nav-menu__item has-submenu'>
-                <Link to='#' className='nav-menu__link'>
-                  Blog
-                </Link>
-                <ul className='nav-submenu'>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/blog'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Blog
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/blog-details'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Blog Details
-                    </NavLink>
-                  </li>
-                  <li className='nav-submenu__item'>
-                    <NavLink
-                      to='/blog-details-sidebar'
-                      className={(navData) =>
-                        navData.isActive
-                          ? "nav-submenu__link activePage"
-                          : "nav-submenu__link"
-                      }
-                    >
-                      Blog Details Sidebar
-                    </NavLink>
-                  </li>
-                </ul>
+              <li className='nav-menu__item'>
+                <NavLink
+                  to='/all-products?category_id=0&brand_id=0&remark=0&keyword=0&per_page=12&page_no=1'
+                  className='nav-menu__link'
+                >
+                  All Products
+                </NavLink>
               </li>
               <li className='nav-menu__item'>
                 <NavLink to='/contact' className='nav-menu__link'>
@@ -375,24 +204,21 @@ const HeaderOne = () => {
               </li>
             </ul>
             <div className='header-right__inner d-lg-none my-3 gap-1 d-flex flx-align'>
-              <Link to='/register' className='btn btn-main pill'>
-                <span className='icon-left icon'>
-                  <img src='assets/images/icons/user.svg' alt='' />
-                </span>
-                Create Account
-              </Link>
-              <div className='language-select flx-align select-has-icon'>
-                <img
-                  src='assets/images/icons/globe.svg'
-                  alt=''
-                  className='globe-icon white-version'
-                />
-                <img
-                  src='assets/images/icons/globe-white.svg'
-                  alt=''
-                  className='globe-icon dark-version'
-                />
-              </div>
+              {user !== null ? (
+                <Link to='/dashboard-profile' className='btn btn-main pill'>
+                  <span className='icon-left icon'>
+                    <FaHouse className='mb-1' />
+                  </span>
+                  Dashboard
+                </Link>
+              ) : (
+                <Link to='/register' className='btn btn-main pill'>
+                  <span className='icon-left icon'>
+                    <img src='assets/images/icons/user.svg' alt='' />
+                  </span>
+                  Create Account
+                </Link>
+              )}
             </div>
           </div>
         </div>

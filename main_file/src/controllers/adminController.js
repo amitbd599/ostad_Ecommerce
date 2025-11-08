@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
       };
 
       // Set cookie
-      res.cookie("token", token, options);
+      res.cookie("admin-token", token, options);
       res.status(200).json({
         success: true,
         message: "Login successful",
@@ -114,7 +114,7 @@ exports.adminVerify = async (req, res) => {
 //! user Logout
 exports.logout = async (req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("admin-token");
     res.status(200).json({ success: true, message: "Logout success!" });
   } catch (e) {
     res.status(500).json({ success: false, error: e.toString() });
@@ -124,10 +124,43 @@ exports.logout = async (req, res) => {
 //! update user
 exports.update = async (req, res) => {
   try {
-    console.log(req.headers._id, req.headers.email);
-
     const { email, password } = req.body;
-    const userId = req.headers._id;
+    const _id = req.headers._id;
+
+    const user = await adminModel.findOne({ email, _id });
+    if (!user)
+      return res
+        .status(200)
+        .json({ success: false, message: "Invalid email or password" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res
+        .status(200)
+        .json({ success: false, message: "Invalid email or password" });
+
+    if (isMatch) {
+      let token = EncodeToken(user.email, user._id.toString());
+
+      let options = {
+        maxAge: process.env.Cookie_Expire_Time,
+        httpOnly: false,
+        sameSite: "none",
+        secure: true,
+      };
+
+      // Set cookie
+      res.cookie("admin-token", token, options);
+      res.status(200).json({
+        success: true,
+        message: "Login successful",
+        user: {
+          id: user._id,
+          email: user.email,
+        },
+        token: token,
+      });
+    }
 
     let updatedData = { email };
 
@@ -138,13 +171,9 @@ exports.update = async (req, res) => {
     }
 
     // Update user
-    const updatedUser = await adminModel.findByIdAndUpdate(
-      userId,
-      updatedData,
-      {
-        new: true,
-      }
-    );
+    const updatedUser = await adminModel.findByIdAndUpdate(_id, updatedData, {
+      new: true,
+    });
 
     res.status(200).json({
       success: true,

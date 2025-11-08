@@ -3,8 +3,6 @@ const router = express.Router();
 
 const authVerificationAdmin = require("../middlewares/authVerificationAdmin.js");
 const authVerificationUser = require("../middlewares/authVerificationUser.js");
-const fileUploads = require("../middlewares/fileUpload.js");
-
 const adminController = require("../controllers/adminController.js");
 const userController = require("../controllers/userController.js");
 const productController = require("../controllers/productController.js");
@@ -15,6 +13,7 @@ const cartController = require("../controllers/cartController.js");
 const invoiceController = require("../controllers/invoiceController.js");
 const fileController = require("../controllers/fileController.js");
 const dashboardSummaryController = require("../controllers/dashboardSummaryController.js");
+const fileUpload = require("../middlewares/fileUpload.js");
 
 //! ============== For Super admin ==================
 router.post("/admin-register", adminController.register);
@@ -171,7 +170,7 @@ router.put(
 router.post(
   "/file-upload",
   authVerificationAdmin,
-  fileUploads.single("file"),
+  fileUpload,
   fileController.fileUpload
 );
 router.post("/file-remove", authVerificationAdmin, fileController.fileRemove);

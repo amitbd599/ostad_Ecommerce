@@ -1,4 +1,4 @@
-import DashboardInner from "../components/Dashboardinner";
+import DashboardInner from "../components/DashboardInner";
 import Preloader from "../helper/Preloader";
 import MasterLayout from "../layout/MasterLayout";
 

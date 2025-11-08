@@ -109,7 +109,10 @@ const FileManager = () => {
                     ) : (
                       <>
                         {allFile?.map((item, index) => (
-                          <div className='col-2 mb-5' key={index}>
+                          <div
+                            className='col-2 col-xl-3 col-md-4 mb-5'
+                            key={index}
+                          >
                             <div className='card img_g shadow-sm position-relative'>
                               {/* Delete button */}
                               <button
