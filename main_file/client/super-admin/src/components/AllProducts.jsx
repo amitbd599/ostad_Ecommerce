@@ -3,8 +3,15 @@ import productStore from "../store/productStore";
 import { useEffect, useState } from "react";
 import Paginate from "../helper/Paginate";
 import Skeleton from "react-loading-skeleton";
+import ReactQuill from "react-quill-new";
 import { baseURLFile, hostURL } from "../helper/config";
-import { DeleteAlert, ErrorToast, IsEmpty } from "../helper/helper";
+import {
+  DeleteAlert,
+  ErrorToast,
+  formats,
+  IsEmpty,
+  modules,
+} from "../helper/helper";
 import categoryStore from "../store/categoryStore";
 import brandStore from "../store/brandStore";
 
@@ -50,29 +57,6 @@ const AllProducts = () => {
   };
 
   // read single Product
-  let [_id, setId] = useState("");
-  let readSingleProduct = async (_id) => {
-    let res = await singleProductsRequest(_id);
-    if (res) {
-      setId(res?._id);
-      setData({
-        title: res?.title,
-        images: res?.images,
-        sort_description: res?.sort_description,
-        price: res?.price,
-        is_discount: res?.is_discount,
-        discount_price: res?.discount_price,
-        remark: res?.remark,
-        stock: res?.stock,
-        color: res?.color,
-        size: res?.size,
-        description: res?.description,
-        category_id: res?.category_id,
-        brand_id: res?.brand_id,
-      });
-    }
-  };
-
   let [data, setData] = useState({
     title: "",
     images: [],
@@ -89,6 +73,32 @@ const AllProducts = () => {
     brand_id: "",
   });
 
+  const [value, setValue] = useState("");
+  let [_id, setId] = useState("");
+
+  let readSingleProduct = async (_id) => {
+    let res = await singleProductsRequest(_id);
+    if (res) {
+      setId(res?._id);
+
+      setData({
+        title: res?.title,
+        images: res?.images,
+        sort_description: res?.sort_description,
+        price: res?.price,
+        is_discount: res?.is_discount,
+        discount_price: res?.discount_price,
+        remark: res?.remark,
+        stock: res?.stock,
+        color: res?.color,
+        size: res?.size,
+        category_id: res?.category_id,
+        brand_id: res?.brand_id,
+      });
+      setValue(res?.description);
+    }
+  };
+
   // Validation rules
   const validations = [
     { field: data.title, message: "Title is required!" },
@@ -101,7 +111,7 @@ const AllProducts = () => {
     { field: data.stock, message: "Stock is required!" },
     { field: data.color, message: "Color is required!" },
     { field: data.size, message: "Size is required!" },
-    { field: data.description, message: "Description is required!" },
+    { field: value, message: "Description is required!" },
     { field: data.category_id, message: "Category is required!" },
     { field: data.brand_id, message: "Brand is required!" },
   ];
@@ -112,6 +122,7 @@ const AllProducts = () => {
         return ErrorToast(message);
       }
     }
+    data.description = value;
     let res = await updateProductRequest(_id, data);
     if (res) {
       await allProductsRequest(0, 0, 0, 0, per_page, page_no);
@@ -519,18 +530,14 @@ const AllProducts = () => {
                                     <label className='form-label mb-2 font-18 font-heading fw-600'>
                                       Description
                                     </label>
-                                    <textarea
-                                      onChange={(e) =>
-                                        setData({
-                                          ...data,
-                                          description: e.target.value,
-                                        })
-                                      }
-                                      value={data.description}
-                                      name=''
-                                      id=''
-                                      className='common-input border'
-                                    ></textarea>
+
+                                    <ReactQuill
+                                      theme='snow'
+                                      modules={modules}
+                                      formats={formats}
+                                      value={value}
+                                      onChange={setValue}
+                                    />
                                   </div>
                                 </div>
                               </div>

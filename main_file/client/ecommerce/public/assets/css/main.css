@@ -9719,7 +9719,7 @@ input[type="number"] {
 
 .brand-item.inner {
   img {
-    width: 100px;
+    width: 60px;
   }
 }
 
@@ -9742,6 +9742,23 @@ input[type="number"] {
 
 .mobile-menu {
   top: 0;
+}
+
+@media screen and (max-width: 576px) {
+  .product-details {
+    .quantity {
+      display: grid;
+    }
+  }
+}
+
+.product-details {
+  ul,
+  li,
+  ol {
+    list-style: auto;
+    margin-left: 15px;
+  }
 }
 
 /* ============================ Dark Version Css End =============================== */

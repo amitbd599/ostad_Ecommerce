@@ -9717,5 +9717,9 @@ input[type="number"] {
 .review_img img {
   width: 100px;
 }
+
+.ql-editor {
+  min-height: 280px;
+}
 /* ============================ Dark Version Css End =============================== */
 /*# sourceMappingURL=main.css.map */

@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import productStore from "../store/productStore";
 import categoryStore from "../store/categoryStore";
 import brandStore from "../store/brandStore";
-import { ErrorToast, IsEmpty } from "../helper/helper";
+import { ErrorToast, formats, IsEmpty, modules } from "../helper/helper";
 import { useNavigate } from "react-router-dom";
+import ReactQuill from "react-quill-new";
 
 const CreateProduct = () => {
   const navigate = useNavigate();
@@ -18,8 +19,6 @@ const CreateProduct = () => {
       await allBrandRequest(100, 1);
     })();
   }, [allCategoryRequest, allBrandRequest]);
-
-  console.log(allBrand);
 
   let [data, setData] = useState({
     title: "",
@@ -306,17 +305,19 @@ const CreateProduct = () => {
                             <label className='form-label mb-2 font-18 font-heading fw-600'>
                               Description
                             </label>
-                            <textarea
+
+                            <ReactQuill
+                              theme='snow'
+                              modules={modules}
+                              formats={formats}
+                              value={data.description}
                               onChange={(e) =>
                                 setData({
                                   ...data,
-                                  description: e.target.value,
+                                  description: e,
                                 })
                               }
-                              name=''
-                              id=''
-                              className='common-input border'
-                            ></textarea>
+                            />
                           </div>
 
                           <div className='col-sm-12 text-end'>

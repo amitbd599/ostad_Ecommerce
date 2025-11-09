@@ -160,14 +160,10 @@ const ProductDetails = () => {
                         ))}
                       </Swiper>
                     </div>
-                    <h3 className='product-details__desc'>
+                    <h5 className='product-details__desc'>
                       Product Description
-                    </h3>
+                    </h5>
                     <div className='product-details__item'>
-                      <h5 className='product-details__title mb-3'>
-                        Template Features
-                      </h5>
-
                       {/* description */}
                       <div>{parse(singleProduct?.description || "")}</div>
                     </div>
@@ -242,7 +238,6 @@ const ProductDetails = () => {
                     </h3>
                   </div>
 
-
                   <div className='price py-3'>
                     <h4>
                       {singleProduct?.is_discount === false
@@ -262,7 +257,6 @@ const ProductDetails = () => {
                   </div>
 
                   <div className='size py-3'>
-
                     <h5>Size: {data?.size}</h5>
                     <div className='size_varient'>
                       {singleProduct?.size?.map((item, index) => (
@@ -305,11 +299,10 @@ const ProductDetails = () => {
                   </div>
                   <div className='quantity py-3'>
                     <div className='w-100'>
-                      <h5 className="text-danger">
+                      <h5 className='text-danger'>
                         Stock: {singleProduct?.stock}
                       </h5>
                       <div className='inner'>
-
                         <button
                           className='btn-quantity btn-decrease'
                           onClick={() =>
@@ -336,32 +329,31 @@ const ProductDetails = () => {
                       </div>
                     </div>
                     <div className='w-100 pt-5'>
-                      {
-                        singleProduct?.stock === 0 ?
-                          (
-                            <button
-                              disabled={true}
-                              className='btn not-allow btn-main d-flex w-100 justify-content-center align-items-center gap-2 pill px-sm-5 '
-                            >
-                              <img src='assets/images/icons/add-to-cart.svg' alt='' />
+                      {singleProduct?.stock === 0 ? (
+                        <button
+                          disabled={true}
+                          className='btn not-allow btn-main d-flex w-100 justify-content-center align-items-center gap-2 pill px-sm-5 '
+                        >
+                          <img
+                            src='assets/images/icons/add-to-cart.svg'
+                            alt=''
+                          />
+                          Product out of stock
+                        </button>
+                      ) : (
+                        <button
+                          disabled={createCartLoading}
+                          onClick={cartSubmit}
+                          className='btn btn-main d-flex w-100 justify-content-center align-items-center gap-2 pill px-sm-5 '
+                        >
+                          <img
+                            src='assets/images/icons/add-to-cart.svg'
+                            alt=''
+                          />
 
-                              Product out of stock
-                            </button>
-                          )
-                          :
-                          (
-                            <button
-                              disabled={createCartLoading}
-                              onClick={cartSubmit}
-                              className='btn btn-main d-flex w-100 justify-content-center align-items-center gap-2 pill px-sm-5 '
-                            >
-                              <img src='assets/images/icons/add-to-cart.svg' alt='' />
-
-                              {createCartLoading ? "Loading..." : "Add To Cart"}
-                            </button>
-                          )
-                      }
-
+                          {createCartLoading ? "Loading..." : "Add To Cart"}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
