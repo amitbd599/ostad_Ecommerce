@@ -9,6 +9,8 @@ const axios = require("axios");
 const productModel = require("../models/productModel");
 const ObjectId = mongoose.Types.ObjectId;
 
+let redirect_url = "https://ostad-mern-ecom.themesoft69.com/cart-thank-you";
+
 //! invoice create
 exports.createInvoice = async (req, res) => {
   try {
@@ -383,7 +385,7 @@ exports.paymentSuccess = async (req, res) => {
       { payment_status: "success" }
     );
 
-    res.redirect(process.env.Origin_HOST + "/cart-thank-you");
+    res.redirect(redirect_url);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -403,7 +405,7 @@ exports.paymentCancel = async (req, res) => {
       { payment_status: "cancel" }
     );
 
-    res.redirect(process.env.Origin_HOST + "/cart-thank-you");
+    res.redirect(redirect_url);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -423,7 +425,7 @@ exports.paymentFail = async (req, res) => {
       { payment_status: "fail" }
     );
 
-    res.redirect(process.env.Origin_HOST + "/cart-thank-you");
+    res.redirect(redirect_url);
   } catch (error) {
     res.status(500).json({
       success: false,

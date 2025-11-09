@@ -170,6 +170,7 @@ const Category = () => {
                         </tr>
                       </thead>
                       <tbody>
+                        {allCategory?.length < 1 && <p>No data found!</p>}
                         {allCategory === null ? (
                           <>
                             {[...Array(4)].map(() => (
@@ -228,12 +229,14 @@ const Category = () => {
                     <div className='flx-between justify-content-end gap-2'>
                       <nav aria-label='Page navigation example'>
                         <div>
-                          <Paginate
-                            handelPageClick={handelPageClick}
-                            page_no={page_no}
-                            per_page={per_page}
-                            totalCount={totalCategory}
-                          />
+                          {allCategory?.length > 1 && (
+                            <Paginate
+                              handelPageClick={handelPageClick}
+                              page_no={page_no}
+                              per_page={per_page}
+                              totalCount={totalCategory}
+                            />
+                          )}
                         </div>
                       </nav>
                     </div>

@@ -1,11 +1,11 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import reviewStore from "../store/reviewStore";
 import { useEffect, useState } from "react";
-import ReactPaginate from "react-paginate";
 import ReactStars from "react-stars";
 import invoiceStore from "../store/invoiceStore";
 import { ErrorToast, formatDate, IsEmpty } from "../helper/helper";
 import { baseURLFile } from "../helper/config";
+import Paginate from "../helper/Paginate";
 
 const DashboardReview = () => {
   const [searchParams] = useSearchParams();
@@ -85,6 +85,9 @@ const DashboardReview = () => {
                 </tr>
               </thead>
               <tbody>
+                {readInvoiceProductListSingleUser?.length < 1 && (
+                  <p>No data found!</p>
+                )}
                 {readInvoiceProductListSingleUser?.map((item, index) => (
                   <tr>
                     <td key={index}>
@@ -162,30 +165,13 @@ const DashboardReview = () => {
             </table>
             <div className='flx-between justify-content-end gap-2'>
               <nav aria-label='Page navigation example'>
-                {totalInvoiceProduct > per_page ? (
-                  <div>
-                    <ReactPaginate
-                      className='pagination common-pagination'
-                      previousLabel='<'
-                      nextLabel='>'
-                      pageClassName='page-item'
-                      activeClassName='pagination'
-                      pageLinkClassName=' page-link'
-                      previousClassName='page-item'
-                      previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                      nextClassName='page-item'
-                      nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                      activeLinkClassName=' pagination active'
-                      breakLabel='...'
-                      pageCount={totalInvoiceProduct / per_page}
-                      initialPage={page_no - 1}
-                      pageRangeDisplayed={3}
-                      onPageChange={handelPageClick}
-                      type='button'
-                    />
-                  </div>
-                ) : (
-                  ""
+                {readInvoiceProductListSingleUser?.length > 1 && (
+                  <Paginate
+                    handelPageClick={handelPageClick}
+                    page_no={page_no}
+                    per_page={per_page}
+                    totalCount={totalInvoiceProduct}
+                  />
                 )}
               </nav>
             </div>

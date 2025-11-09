@@ -182,6 +182,7 @@ const AllOrders = () => {
                     </tr>
                   </thead>
                   <tbody>
+                    {allOrderList?.length < 1 && <p>No data found!</p>}
                     {allOrderList === null ? (
                       <>
                         {[...Array(6)].map(() => (
@@ -293,12 +294,14 @@ const AllOrders = () => {
               <div className='flx-between justify-content-end gap-2'>
                 <nav aria-label='Page navigation example'>
                   <div>
-                    <Paginate
-                      handelPageClick={handelPageClick}
-                      page_no={page_no}
-                      per_page={per_page}
-                      totalCount={totalAllOrderList}
-                    />
+                    {allOrderList?.length > 1 && (
+                      <Paginate
+                        handelPageClick={handelPageClick}
+                        page_no={page_no}
+                        per_page={per_page}
+                        totalCount={totalAllOrderList}
+                      />
+                    )}
                   </div>
                 </nav>
               </div>

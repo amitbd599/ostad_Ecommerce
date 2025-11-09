@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ReactPaginate from "react-paginate";
 import { FaArrowRotateRight } from "react-icons/fa6";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import productStore from "../store/productStore";
@@ -8,6 +7,7 @@ import Skeleton from "react-loading-skeleton";
 import { baseURLFile } from "../helper/config";
 import categoryStore from "../store/categoryStore";
 import brandStore from "../store/brandStore";
+import Paginate from "../helper/Paginate";
 
 const AllProduct = () => {
   const [searchParams] = useSearchParams();
@@ -369,31 +369,13 @@ const AllProduct = () => {
                   </div>
 
                   <nav aria-label='Page navigation example'>
-                    {totalProducts > per_page ? (
-                      <div>
-                        <ReactPaginate
-                          className='pagination common-pagination'
-                          previousLabel='<'
-                          nextLabel='>'
-                          pageClassName='page-item'
-                          activeClassName='pagination'
-                          pageLinkClassName=' page-link'
-                          previousClassName='page-item'
-                          previousLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                          nextClassName='page-item'
-                          nextLinkClassName='page-link flx-align gap-2 flex-nowrap'
-                          activeLinkClassName=' pagination active'
-                          breakLabel='...'
-                          pageCount={totalProducts / per_page}
-                          // initialPage={page_no - 1}
-                          pageRangeDisplayed={3}
-                          onPageChange={handelPageClick}
-                          type='button'
-                        />
-                      </div>
-                    ) : (
-                      ""
-                    )}
+                    {/* Paginate */}
+                    <Paginate
+                      handelPageClick={handelPageClick}
+                      page_no={page_no}
+                      per_page={per_page}
+                      totalCount={totalProducts}
+                    />
                   </nav>
                 </div>
               </div>

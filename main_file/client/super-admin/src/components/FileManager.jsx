@@ -164,12 +164,14 @@ const FileManager = () => {
                     )}
                   </div>
                   <nav aria-label='Page navigation example'>
-                    <Paginate
-                      handelPageClick={handelPageClick}
-                      page_no={page_no}
-                      per_page={per_page}
-                      totalCount={totalFile}
-                    />
+                    {allFile?.length > 1 && (
+                      <Paginate
+                        handelPageClick={handelPageClick}
+                        page_no={page_no}
+                        per_page={per_page}
+                        totalCount={totalFile}
+                      />
+                    )}
                   </nav>
                 </div>
               </div>

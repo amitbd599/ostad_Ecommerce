@@ -98,8 +98,6 @@ const ProductDetails = () => {
       singleProduct?.price) *
     100;
 
-  console.log(allReviewByProduct);
-
   return (
     <div className='product-details mt-32 padding-b-120'>
       <div className='container container-two'>
@@ -249,9 +247,13 @@ const ProductDetails = () => {
                           ? ""
                           : `৳${singleProduct?.price}`}
                       </del>{" "}
-                      <span className='discount_percent'>
-                        - {discount.toFixed(0)}% Off
-                      </span>
+                      {singleProduct?.is_discount === true && (
+                        <>
+                          <span className='discount_percent'>
+                            - {discount.toFixed(0)}% Off
+                          </span>
+                        </>
+                      )}
                     </h4>
                     <p>{singleProduct?.sort_description}</p>
                   </div>
@@ -393,10 +395,14 @@ const ProductDetails = () => {
                       {singleProduct?.is_discount ? "True" : "False"}
                     </span>
                   </li>
-                  <li className='meta-attribute__item'>
-                    <span className='name'>Discount Percent</span>
-                    <span className='details'>{discount.toFixed(0)}%</span>
-                  </li>
+                  {singleProduct?.is_discount === true && (
+                    <>
+                      <li className='meta-attribute__item'>
+                        <span className='name'>Discount Percent</span>
+                        <span className='details'>{discount.toFixed(0)}%</span>
+                      </li>
+                    </>
+                  )}
                 </ul>
                 {/* Meta Attribute List End */}
               </div>

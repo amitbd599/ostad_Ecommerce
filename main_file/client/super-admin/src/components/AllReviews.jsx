@@ -49,6 +49,7 @@ const AllReviews = () => {
         <div className='card-body'>
           <div className='table-responsive'>
             <div className='product-review-wrapper'>
+              {allReview?.length < 1 && <p>No data found!</p>}
               {allReview?.map((item, index) => (
                 <div key={index} className='product-review'>
                   <div className='product-review__top flx-between'>
@@ -93,12 +94,14 @@ const AllReviews = () => {
             <div className='flx-between justify-content-end gap-2'>
               <nav aria-label='Page navigation example'>
                 <div>
-                  <Paginate
-                    handelPageClick={handelPageClick}
-                    page_no={page_no}
-                    per_page={per_page}
-                    totalCount={totalReview}
-                  />
+                  {allReview?.length > 1 && (
+                    <Paginate
+                      handelPageClick={handelPageClick}
+                      page_no={page_no}
+                      per_page={per_page}
+                      totalCount={totalReview}
+                    />
+                  )}
                 </div>
               </nav>
             </div>
