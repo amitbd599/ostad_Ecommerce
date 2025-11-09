@@ -12,6 +12,9 @@ const PrivateRoute = ({ children }) => {
       try {
         await adminVerifyRequest();
         let result = getToken();
+
+        console.log(result);
+
         if (result) {
           setIsLogin(true);
         } else {

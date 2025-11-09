@@ -1,8 +1,6 @@
-const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const fileModel = require("../models/fileModel");
-const ObjectId = mongoose.Types.ObjectId;
 //! File upload
 exports.fileUpload = async (req, res) => {
   try {
@@ -36,7 +34,6 @@ exports.fileRemove = async (req, res) => {
         console.log(err);
       }
     });
-    
 
     const data = await fileModel.deleteOne({ _id, filename });
 

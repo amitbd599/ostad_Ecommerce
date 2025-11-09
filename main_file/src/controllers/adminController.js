@@ -1,6 +1,14 @@
 const bcrypt = require("bcrypt");
 const adminModel = require("../models/adminModel");
 const { EncodeToken } = require("../utility/tokenHelper");
+
+let options = {
+  maxAge: process.env.Cookie_Expire_Time,
+  httpOnly: false,
+  sameSite: "none",
+  secure: true,
+};
+
 //! Create user
 exports.register = async (req, res) => {
   try {
@@ -42,15 +50,8 @@ exports.login = async (req, res) => {
     if (isMatch) {
       let token = EncodeToken(user.email, user._id.toString());
 
-      let options = {
-        maxAge: process.env.Cookie_Expire_Time,
-        httpOnly: false,
-        sameSite: "none",
-        secure: true,
-      };
-
       // Set cookie
-      res.cookie("admin-token", token, options);
+      res.cookie("a__token", token, options);
       res.status(200).json({
         success: true,
         message: "Login successful",
@@ -114,55 +115,26 @@ exports.adminVerify = async (req, res) => {
 //! user Logout
 exports.logout = async (req, res) => {
   try {
-    res.clearCookie("admin-token");
+    res.clearCookie("a__token");
     res.status(200).json({ success: true, message: "Logout success!" });
   } catch (e) {
     res.status(500).json({ success: false, error: e.toString() });
   }
 };
 
-//! update user
+//! update admin
 exports.update = async (req, res) => {
   try {
     const { email, password } = req.body;
     const _id = req.headers._id;
 
+    let updatedData = { email };
+
     const user = await adminModel.findOne({ email, _id });
     if (!user)
       return res
         .status(200)
-        .json({ success: false, message: "Invalid email or password" });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res
-        .status(200)
-        .json({ success: false, message: "Invalid email or password" });
-
-    if (isMatch) {
-      let token = EncodeToken(user.email, user._id.toString());
-
-      let options = {
-        maxAge: process.env.Cookie_Expire_Time,
-        httpOnly: false,
-        sameSite: "none",
-        secure: true,
-      };
-
-      // Set cookie
-      res.cookie("admin-token", token, options);
-      res.status(200).json({
-        success: true,
-        message: "Login successful",
-        user: {
-          id: user._id,
-          email: user.email,
-        },
-        token: token,
-      });
-    }
-
-    let updatedData = { email };
+        .json({ success: false, message: "Invalid email." });
 
     // যদি password ফিল্ড থাকে, তবে সেটি bcrypt দিয়ে হ্যাশ করে আপডেট করবো
     if (password) {
@@ -174,6 +146,11 @@ exports.update = async (req, res) => {
     const updatedUser = await adminModel.findByIdAndUpdate(_id, updatedData, {
       new: true,
     });
+
+    let token = EncodeToken(updatedUser?.email, updatedUser?._id.toString());
+
+    // Set cookie
+    res.cookie("a__token", token, options);
 
     res.status(200).json({
       success: true,

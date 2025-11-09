@@ -1,6 +1,14 @@
 const bcrypt = require("bcrypt");
 const { EncodeToken } = require("../utility/tokenHelper");
 const userModel = require("../models/userModel");
+
+let options = {
+  maxAge: process.env.Cookie_Expire_Time,
+  httpOnly: false,
+  sameSite: "none",
+  secure: true,
+};
+
 //! Create user
 exports.register = async (req, res) => {
   try {
@@ -52,15 +60,8 @@ exports.login = async (req, res) => {
     if (isMatch) {
       let token = EncodeToken(user.email, user._id.toString());
 
-      let options = {
-        maxAge: process.env.Cookie_Expire_Time,
-        httpOnly: false,
-        sameSite: "none",
-        secure: true,
-      };
-
       // Set cookie
-      res.cookie("token", token, options);
+      res.cookie("u__token", token, options);
       res.status(200).json({
         success: true,
         message: "Login successful",
@@ -125,7 +126,7 @@ exports.userVerify = async (req, res) => {
 //! user Logout
 exports.logout = async (req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("u__token");
     res.status(200).json({ success: true, message: "Logout success!" });
   } catch (e) {
     res.status(500).json({ success: false, error: e.toString() });
@@ -178,6 +179,12 @@ exports.update = async (req, res) => {
       ship_state,
     };
 
+    const user = await userModel.findOne({ email, _id });
+    if (!user)
+      return res
+        .status(200)
+        .json({ success: false, message: "Invalid email." });
+
     // যদি password ফিল্ড থাকে, তবে সেটি bcrypt দিয়ে হ্যাশ করে আপডেট করবো
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -187,23 +194,21 @@ exports.update = async (req, res) => {
     // isMatch password
     const isMatch = await bcrypt.compare(password, updatedData.password);
 
-    if (isMatch) {
-      let token = EncodeToken(email, _id.toString());
+    if (!isMatch)
+      return res
+        .status(200)
+        .json({ success: false, message: "Invalid email or password" });
 
+    if (isMatch) {
       // Update user
       const user = await userModel.findByIdAndUpdate(_id, updatedData, {
         new: true,
       });
 
-      let options = {
-        maxAge: process.env.Cookie_Expire_Time,
-        httpOnly: false,
-        sameSite: "none",
-        secure: true,
-      };
+      let token = EncodeToken(user?.email, user?._id.toString());
 
       // Set cookie
-      res.cookie("token", token, options);
+      res.cookie("u__token", token, options);
       res.status(200).json({
         success: true,
         message: "Update data successful",

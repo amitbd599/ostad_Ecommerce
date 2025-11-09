@@ -16,7 +16,9 @@ class FormHelper {
   }
 
   getToken() {
-    const token = Cookies.get("token");
+    const token = Cookies.get("a__token");
+    console.log(token);
+
     return !!token;
   }
 

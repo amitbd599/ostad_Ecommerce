@@ -1,4 +1,5 @@
 const categoryModel = require("../models/categoryModel");
+const productModel = require("../models/productModel");
 
 //! Category create
 exports.createCategory = async (req, res) => {
@@ -134,7 +135,16 @@ exports.deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    let data = await categoryModel.findByIdAndDelete(id);
+    // find product with this category id
+    let products = await productModel.find({ category_id: id });
+    if (products.length > 0) {
+      return res.status(200).json({
+        success: false,
+        message: "Please delete all products with this category first.",
+      });
+    }
+
+    await categoryModel.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
       message: "Category deleted successfully",

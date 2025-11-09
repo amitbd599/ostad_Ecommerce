@@ -185,7 +185,7 @@ const HeaderOne = () => {
               id='offcanvas-navigation'
             >
               <li className='nav-menu__item'>
-                <NavLink to='/contact' className='nav-menu__link'>
+                <NavLink to='/' className='nav-menu__link'>
                   Home
                 </NavLink>
               </li>

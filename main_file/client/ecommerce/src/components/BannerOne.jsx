@@ -25,13 +25,12 @@ const BannerOne = () => {
               <div className='hero-inner position-relative pe-lg-5'>
                 <div>
                   <h1 className='hero-inner__title'>
-                    Exclusive Design Collection
+                    Discover the Latest Trends in Fashion
                   </h1>
                   <p className='hero-inner__desc font-18'>
-                    Your premier destination for fashion-forward clothing and
-                    accessories. We pride ourselves on offering a curated
-                    selection of rare and beautiful items sourced both locally
-                    and globally.
+                    Shop stylish outfits, shoes, and accessories for every
+                    season. Stay ahead of the fashion curve with our exclusive
+                    collection.
                   </p>
                 </div>
               </div>
@@ -55,7 +54,7 @@ const BannerOne = () => {
                   className='element two end-0'
                 />
                 <div className='statistics animation bg-main text-center'>
-                  <h5 className='statistics__amount text-white'>50k</h5>
+                  <h5 className='statistics__amount text-white'>20k</h5>
                   <span className='statistics__text text-white font-14'>
                     Customers
                   </span>

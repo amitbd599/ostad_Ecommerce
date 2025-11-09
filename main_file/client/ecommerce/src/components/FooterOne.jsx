@@ -34,8 +34,9 @@ const FooterOne = () => {
                   </Link>
                 </div>
                 <p className='footer-widget__desc'>
-                  Lorem consultancy elitsed do eiusmod tempor inci didunt ut
-                  labore dolore magna aliqua sed do eiusmod.
+                  Your one-stop online store for fashion, electronics, home
+                  essentials, and more. Discover quality products at unbeatable
+                  prices
                 </p>
               </div>
             </div>
@@ -44,28 +45,25 @@ const FooterOne = () => {
                 <h5 className='footer-widget__title text-white'>Useful Link</h5>
                 <ul className='footer-lists'>
                   <li className='footer-lists__item'>
-                    <Link to='/all-product' className='footer-lists__link'>
+                    <Link
+                      to='/all-products?category_id=0&brand_id=0&remark=0&keyword=0&per_page=12&page_no=1'
+                      className='footer-lists__link'
+                    >
                       Product
                     </Link>
                   </li>
+
                   <li className='footer-lists__item'>
-                    <Link to='/product-details' className='footer-lists__link'>
-                      Product Details
-                    </Link>
-                  </li>
-                  <li className='footer-lists__item'>
-                    <Link to='/profile' className='footer-lists__link'>
+                    <Link
+                      to='/dashboard-profile'
+                      className='footer-lists__link'
+                    >
                       Profile
                     </Link>
                   </li>
                   <li className='footer-lists__item'>
                     <Link to='/cart' className='footer-lists__link'>
                       Shopping Cart
-                    </Link>
-                  </li>
-                  <li className='footer-lists__item'>
-                    <Link to='/dashboard' className='footer-lists__link'>
-                      Dashboard
                     </Link>
                   </li>
                 </ul>
@@ -76,7 +74,10 @@ const FooterOne = () => {
                 <h5 className='footer-widget__title text-white'>Quick Links</h5>
                 <ul className='footer-lists'>
                   <li className='footer-lists__item'>
-                    <Link to='/dashboard' className='footer-lists__link'>
+                    <Link
+                      to='/dashboard-profile'
+                      className='footer-lists__link'
+                    >
                       Dashboard
                     </Link>
                   </li>
@@ -88,16 +89,6 @@ const FooterOne = () => {
                   <li className='footer-lists__item'>
                     <Link to='/register' className='footer-lists__link'>
                       Register
-                    </Link>
-                  </li>
-                  <li className='footer-lists__item'>
-                    <Link to='/blog' className='footer-lists__link'>
-                      Blog{" "}
-                    </Link>
-                  </li>
-                  <li className='footer-lists__item'>
-                    <Link to='/blog-details' className='footer-lists__link'>
-                      Blog Details
                     </Link>
                   </li>
                 </ul>

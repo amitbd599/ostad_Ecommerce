@@ -1,4 +1,5 @@
 const brandModel = require("../models/brandModel");
+const productModel = require("../models/productModel");
 
 //! Brand create
 exports.createBrand = async (req, res) => {
@@ -134,8 +135,16 @@ exports.updateBrand = async (req, res) => {
 exports.deleteBrand = async (req, res) => {
   try {
     const { id } = req.params;
+    // find product with this brand id
+    let products = await productModel.find({ brand_id: id });
+    if (products.length > 0) {
+      return res.status(200).json({
+        success: false,
+        message: "Please delete all products with this brand first.",
+      });
+    }
 
-    let data = await brandModel.findByIdAndDelete(id);
+    await brandModel.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
       message: "Brand deleted successfully",
