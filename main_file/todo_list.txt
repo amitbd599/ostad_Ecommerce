@@ -1,0 +1,4 @@
+01) intro ==
+02) file folder make ==
+03) install important npm pkg.
+04) add all pkg and run our server
