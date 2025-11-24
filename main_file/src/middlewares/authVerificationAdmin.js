@@ -4,7 +4,6 @@ module.exports = (req, res, next) => {
   token = req.cookies["a__token"];
 
   let decoded = DecodeToken(token);
-  console.log(decoded);
 
   if (decoded === null) {
     return res.status(401).json({

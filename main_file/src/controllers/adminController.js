@@ -9,7 +9,7 @@ let options = {
   secure: true,
 };
 
-//! Create user
+//! Create admin
 exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;

@@ -14,23 +14,6 @@ const router = require("./src/routes/api");
 
 dotENV.config();
 
-// Connect to MongoDB
-
-let URL = "mongodb://127.0.0.1:27017/ostad_ecommerce";
-const option = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
-
-mongoose
-  .connect(URL, option)
-  .then((res) => {
-    console.log("Database Connected");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 mongoose.set("strictQuery", false);
 
 // Global Middlewares
@@ -51,14 +34,31 @@ app.use(
   })
 );
 
-app.use(mongoSanitize());
 app.use(hpp());
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb" }));
+app.use(mongoSanitize());
 
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 }); // 3000 requests per 15 minutes
 app.use(limiter);
+
+// Connect to MongoDB
+
+let URL = "mongodb://127.0.0.1:27017/ostad_ecommerce";
+const option = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+};
+
+mongoose
+  .connect(URL, option)
+  .then((res) => {
+    console.log("Database Connected");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.use("/api/v1", router);
 
