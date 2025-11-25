@@ -1,6 +1,6 @@
-const bcrypt = require("bcrypt");
-const adminModel = require("../models/adminModel");
+const userModel = require("../models/userModel");
 const { EncodeToken } = require("../utility/tokenHelper");
+const bcrypt = require("bcrypt");
 
 let options = {
   maxAge: process.env.Cookie_Expire_Time,
@@ -9,16 +9,25 @@ let options = {
   secure: true,
 };
 
-//! Create admin
+//! Create user
 exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // find the existing user
+    let ifUser = await userModel.find({ email });
+    if (ifUser.length > 0) {
+      return res.status(200).json({
+        success: false,
+        message: "Email already registered.",
+      });
+    }
+
     // Create and save the new user
-    user = await adminModel.create({ email, password });
+    await userModel.create({ email, password });
     res.status(200).json({
       success: true,
-      message: "User created successfully",
+      message: "Registration successfully.",
     });
   } catch (error) {
     res.status(500).json({
@@ -33,8 +42,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    const user = await adminModel.findOne({ email });
+    const user = await userModel.findOne({ email });
     if (!user)
       return res
         .status(200)
@@ -51,7 +59,7 @@ exports.login = async (req, res) => {
       let token = EncodeToken(user.email, user._id.toString());
 
       // Set cookie
-      res.cookie("a__token", token, options);
+      res.cookie("u__token", token, options);
       res.status(200).json({
         success: true,
         message: "Login successful",
@@ -62,34 +70,31 @@ exports.login = async (req, res) => {
         token: token,
       });
     }
-  } catch (e) {
+  } catch (error) {
     res.status(200).json({
       success: false,
-      error: e.toString(),
+      error: error.toString(),
       message: "Something went wrong.",
     });
   }
 };
 
 //! get User
-exports.admin = async (req, res) => {
+exports.user = async (req, res) => {
   try {
     let email = req.headers.email;
-
-    let MatchStage = {
-      $match: {
-        email,
-      },
+    let matchStage = {
+      $match: { email },
     };
-
     let project = {
       $project: {
         password: 0,
       },
     };
-    let data = await adminModel.aggregate([MatchStage, project]);
+
+    let data = await userModel.aggregate([matchStage, project]);
     res.status(200).json({ success: true, data: data[0] });
-  } catch (e) {
+  } catch (error) {
     res.status(500).json({
       success: false,
       error: e.toString(),
@@ -97,11 +102,12 @@ exports.admin = async (req, res) => {
     });
   }
 };
-//! admin Verify
-exports.adminVerify = async (req, res) => {
+
+//! user Verify
+exports.userVerify = async (req, res) => {
   try {
     res.status(200).json({ success: true });
-  } catch (e) {
+  } catch (error) {
     res.status(500).json({
       success: false,
       error: e.toString(),
@@ -113,22 +119,62 @@ exports.adminVerify = async (req, res) => {
 //! user Logout
 exports.logout = async (req, res) => {
   try {
-    res.clearCookie("a__token");
+    res.clearCookie("u__token");
     res.status(200).json({ success: true, message: "Logout success!" });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.toString() });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: e.toString(),
+      message: "Something went wrong.",
+    });
   }
 };
 
-//! update admin
+//! update user
 exports.update = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let email = req.headers.email;
     const _id = req.headers._id;
+    const {
+      password,
+      cus_add,
+      cus_city,
+      cus_country,
+      cus_fax,
+      cus_name,
+      cus_phone,
+      cus_postcode,
+      cus_state,
+      ship_add,
+      ship_city,
+      ship_country,
+      ship_name,
+      ship_phone,
+      ship_postcode,
+      ship_state,
+    } = req.body;
 
-    let updatedData = { email };
+    let updatedData = {
+      email,
+      password,
+      cus_add,
+      cus_city,
+      cus_country,
+      cus_fax,
+      cus_name,
+      cus_phone,
+      cus_postcode,
+      cus_state,
+      ship_add,
+      ship_city,
+      ship_country,
+      ship_name,
+      ship_phone,
+      ship_postcode,
+      ship_state,
+    };
 
-    const user = await adminModel.findOne({ email, _id });
+    const user = await userModel.findOne({ email, _id });
     if (!user)
       return res
         .status(200)
@@ -140,40 +186,38 @@ exports.update = async (req, res) => {
       updatedData.password = hashedPassword;
     }
 
-    // Update user
-    const updatedUser = await adminModel.findByIdAndUpdate(_id, updatedData, {
-      new: true,
-    });
+    // isMatch password
+    const isMatch = await bcrypt.compare(password, updatedData.password);
 
-    let token = EncodeToken(updatedUser?.email, updatedUser?._id.toString());
+    if (!isMatch)
+      return res
+        .status(200)
+        .json({ success: false, message: "Invalid email or password" });
 
-    // Set cookie
-    res.cookie("a__token", token, options);
+    if (isMatch) {
+      // Update user
+      const user = await userModel.findByIdAndUpdate(_id, updatedData, {
+        new: true,
+      });
 
-    res.status(200).json({
-      success: true,
-      message: "User updated successfully",
-      user: {
-        email: updatedUser.email,
-      },
-    });
+      let token = EncodeToken(user?.email, user?._id.toString());
+
+      // Set cookie
+      res.cookie("u__token", token, options);
+      res.status(200).json({
+        success: true,
+        message: "Update data successful",
+        user: {
+          id: user._id,
+          email: user.email,
+        },
+        token: token,
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,
       error: error.toString(),
-      message: "Something went wrong.",
-    });
-  }
-};
-
-//! verifyAuth
-exports.verifyAuth = async (req, res) => {
-  try {
-    res.status(200).json({ success: true });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
       message: "Something went wrong.",
     });
   }

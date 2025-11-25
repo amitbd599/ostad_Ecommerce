@@ -9,7 +9,7 @@ let options = {
   secure: true,
 };
 
-//! Create admin
+//! create admin
 exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -29,6 +29,7 @@ exports.register = async (req, res) => {
   }
 };
 
+//! admin Login
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -63,6 +64,110 @@ exports.login = async (req, res) => {
         token: token,
       });
     }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! get admin
+exports.admin = async (req, res) => {
+  try {
+    let email = req.headers.email;
+
+    let matchStage = {
+      $match: { email },
+    };
+    let project = {
+      $project: {
+        password: 0,
+      },
+    };
+
+    let data = await adminModel.aggregate([matchStage, project]);
+
+    res.status(200).json({
+      success: true,
+      data: data[0],
+    });
+
+    console.log(data);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! admin Verify
+exports.adminVerify = async (req, res) => {
+  try {
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+// ! admin Logout
+exports.logout = async (req, res) => {
+  try {
+    res.clearCookie("a__token");
+
+    res.status(200).json({ success: true, message: "Logout success!" });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! update admin
+exports.update = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const _id = req.headers._id;
+
+    let updatedData = { email };
+    const user = await adminModel.findOne({ email, _id });
+
+    if (!user)
+      return res
+        .status(200)
+        .json({ success: false, message: "Invalid email." });
+
+    // যদি password ফিল্ড থাকে, তবে সেটি bcrypt দিয়ে হ্যাশ করে আপডেট করবো
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updatedData.password = hashedPassword;
+    }
+
+    // Update user
+    const updatedUser = await adminModel.findByIdAndUpdate(_id, updatedData, {
+      new: true,
+    });
+
+    let token = EncodeToken(updatedUser?.email, updatedUser?._id.toString());
+    // Set cookie
+    res.cookie("a__token", token, options);
+
+    res.status(200).json({
+      success: true,
+      message: "Admin updated successfully",
+      user: {
+        email: updatedUser.email,
+      },
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
