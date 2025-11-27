@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const productModel = require("../models/productModel");
 const ObjectId = mongoose.Types.ObjectId;
-
 //! Product create
 exports.createProduct = async (req, res) => {
   try {
@@ -25,7 +24,6 @@ exports.createProduct = async (req, res) => {
       return res.status(200).json({
         success: false,
         message: "The discount  price must be smaller than the main price.",
-
       });
     }
 
@@ -44,6 +42,7 @@ exports.createProduct = async (req, res) => {
       category_id,
       brand_id,
     });
+
     res.status(200).json({
       success: true,
       message: "Product created successfully",
@@ -58,7 +57,7 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-//! Product Get All with Pagination
+//! Get All Product with Pagination
 exports.allProduct = async (req, res) => {
   try {
     let page_no = Number(req.params.page_no);
@@ -69,10 +68,10 @@ exports.allProduct = async (req, res) => {
     let keyword = req.params.keyword;
 
     let skipRow = (page_no - 1) * per_page;
-
     let sortStage = { createdAt: -1 };
 
     let MatchingStage;
+
     if (category_id !== "0") {
       MatchingStage = {
         $match: { category_id: new ObjectId(category_id) },
@@ -142,7 +141,6 @@ exports.allProduct = async (req, res) => {
     };
 
     let products = await productModel.aggregate([MatchingStage, facetStage]);
-
     res.status(200).json({
       success: true,
       message: "Products fetched successfully",
@@ -161,9 +159,6 @@ exports.allProduct = async (req, res) => {
 exports.singleProduct = async (req, res) => {
   try {
     const id = new ObjectId(req.params.id);
-
-    console.log(id);
-
     let matchStage = {
       $match: { _id: id },
     };
@@ -191,6 +186,7 @@ exports.singleProduct = async (req, res) => {
       joinWithCategory,
       joinWithBrand,
     ]);
+
     res.status(200).json({
       success: true,
       message: "Product fetched successfully",
@@ -229,10 +225,8 @@ exports.updateProduct = async (req, res) => {
       return res.status(200).json({
         success: false,
         message: "The discount  price must be smaller than the main price.",
-
       });
     }
-
 
     let data = await productModel.findByIdAndUpdate(
       id,
@@ -253,6 +247,7 @@ exports.updateProduct = async (req, res) => {
       },
       { new: true }
     );
+
     res.status(200).json({
       success: true,
       message: "Product updated successfully",
@@ -272,7 +267,7 @@ exports.deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    let data = await productModel.findByIdAndDelete(id);
+    await productModel.findByIdAndDelete(id);
     res.status(200).json({
       success: true,
       message: "Product deleted successfully",
