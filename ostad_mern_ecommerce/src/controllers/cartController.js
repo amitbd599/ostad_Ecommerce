@@ -1,16 +1,12 @@
-
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const cartModel = require("../models/cartModel");
 const productModel = require("../models/productModel");
 const ObjectId = mongoose.Types.ObjectId;
-
 //! cart create
-
 exports.createCart = async (req, res) => {
   try {
-    const { product_id, product_name, color, qty, size } = req.body;
-
     let user_id = req.headers._id;
+    const { product_id, product_name, color, qty, size } = req.body;
 
     // find the stock products
     let product = await productModel.findById(product_id);
@@ -37,17 +33,21 @@ exports.createCart = async (req, res) => {
 
       const carts = await cartModel.find({ product_id }).select("qty");
       const totalQty = carts.reduce((sum, item) => sum + item.qty, 0);
+
       if (product?.stock < totalQty + qty) {
         return res.status(200).json({
           success: false,
           message: "You have added all the products in stock.",
         });
       }
+
       const updateData = await cartModel.updateOne(
-        { _id: existingCart._id, user_id: existingCart.user_id },
+        {
+          _id: existingCart._id,
+          user_id: existingCart.user_id,
+        },
         { $set: newReqBody }
       );
-
       res.status(200).json({
         success: true,
         message: "Cart update.",
@@ -61,7 +61,7 @@ exports.createCart = async (req, res) => {
       if (product?.stock < totalQty + qty) {
         return res.status(200).json({
           success: false,
-          message: "You have added all the products in stock. ",
+          message: "You have added all the products in stock.",
         });
       }
 
@@ -73,7 +73,6 @@ exports.createCart = async (req, res) => {
         qty,
         size,
       });
-
       res.status(200).json({
         success: true,
         message: "Product add to cart successfully",
@@ -102,6 +101,7 @@ exports.readCart = async (req, res) => {
         as: "product",
       },
     };
+
     let unwindProductStage = { $unwind: "$product" };
     let joinWithBrand = {
       $lookup: {
@@ -119,6 +119,7 @@ exports.readCart = async (req, res) => {
         as: "category",
       },
     };
+
     let unwindBrandStage = { $unwind: "$brand" };
     let unwindCategoryStage = { $unwind: "$category" };
     let projectionStage = {
@@ -131,6 +132,7 @@ exports.readCart = async (req, res) => {
         "product.createdAt": 0,
         "product.updatedAt": 0,
         "product.description": 0,
+        "product.sort_description": 0,
         "brand._id": 0,
         "brand.createdAt": 0,
         "brand.updatedAt": 0,
@@ -144,17 +146,17 @@ exports.readCart = async (req, res) => {
         updatedAt: 0,
       },
     };
-    const data = await cartModel.aggregate([
+
+    let data = await cartModel.aggregate([
       matchStage,
       joinWithProduct,
       unwindProductStage,
       joinWithBrand,
-      unwindBrandStage,
       joinWithCategory,
+      unwindBrandStage,
       unwindCategoryStage,
       projectionStage,
     ]);
-
     res.status(200).json({
       success: true,
       message: "Cart fetched successfully",
@@ -176,14 +178,14 @@ exports.updateCart = async (req, res) => {
 
     let user_id = req.headers._id;
     let cart_id = new ObjectId(req.params.cart_id);
-
     let initQTY = 1;
+
     if (inc) {
       // find the stock products
       let product = await productModel.findById(product_id);
-
       const carts = await cartModel.find({ product_id }).select("qty");
       const totalQty = carts.reduce((sum, item) => sum + item.qty, 0);
+
       if (product?.stock >= totalQty + initQTY) {
         const data = await cartModel.updateOne(
           { _id: cart_id, user_id: user_id },
@@ -223,8 +225,10 @@ exports.updateCart = async (req, res) => {
 //! cart delete
 exports.deleteCart = async (req, res) => {
   try {
-    let cart_id = new ObjectId(req.params.cart_id);
-    const data = await cartModel.deleteOne({ _id: cart_id });
+    let cart_id = req.params.cart_id;
+
+    let data = await cartModel.findByIdAndDelete(cart_id);
+
     res.status(200).json({
       success: true,
       message: "Cart deleted successfully",
