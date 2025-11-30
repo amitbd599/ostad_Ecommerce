@@ -1,16 +1,13 @@
 const mongoose = require("mongoose");
-const { Parser } = require("json2csv");
 const cartModel = require("../models/cartModel");
+const userModel = require("../models/userModel");
 const invoiceModel = require("../models/invoiceModel");
 const invoiceProductModel = require("../models/invoiceProductModel");
-const userModel = require("../models/userModel");
-const FormData = require("form-data");
-const axios = require("axios");
 const productModel = require("../models/productModel");
+const { default: axios } = require("axios");
 const ObjectId = mongoose.Types.ObjectId;
 
 let redirect_url = "/cart-thank-you";
-
 //! invoice create
 exports.createInvoice = async (req, res) => {
   try {
@@ -18,9 +15,7 @@ exports.createInvoice = async (req, res) => {
     let cus_email = req.headers.email;
 
     // =========== Step-1: Calculate total payable & vat =============
-
     let matchStage = { $match: { user_id } };
-
     let joinStageWithProduct = {
       $lookup: {
         from: "products",
@@ -29,7 +24,6 @@ exports.createInvoice = async (req, res) => {
         as: "product",
       },
     };
-
     let unwindStage = { $unwind: "$product" };
 
     let cartProducts = await cartModel.aggregate([
@@ -40,24 +34,18 @@ exports.createInvoice = async (req, res) => {
 
     if (cartProducts.length > 0) {
       let totalAmount = 0;
-
       cartProducts.forEach((item) => {
-        let price;
-
+        let price; // 50
         if (item?.product?.is_discount === true) {
-          price = parseFloat(item.product.discount_price); //20
+          price = parseFloat(item?.product?.discount_price); //50
         } else {
-          price = parseFloat(item.product.price); //200
+          price = parseFloat(item?.product?.price); //300
         }
-        totalAmount = totalAmount + parseFloat(item?.qty) * price;
+        totalAmount = totalAmount + parseInt(item?.qty) * price;
       });
-
       let vat = totalAmount * 0.15; // 15% vat
       let shipping = 75; // 75tk
-
       let totalPayable = totalAmount + vat + shipping;
-
-      console.log(parseFloat(totalPayable).toFixed(2));
 
       // =========== Step-2: Prepare customer details & shipping details =============
 
@@ -122,7 +110,6 @@ exports.createInvoice = async (req, res) => {
 
       // =========== Step-5: Create invoice product =============
       let invoice_id = createInvoice._id;
-
       cartProducts.forEach(async (item) => {
         await invoiceProductModel.create({
           user_id: user_id,
@@ -140,18 +127,14 @@ exports.createInvoice = async (req, res) => {
       });
 
       // =========== Step-6: stock remove  =============
-
       for (const item of cartProducts) {
         await productModel.updateOne(
           { _id: item.product_id },
           { $inc: { stock: -item.qty } }
         );
       }
-
       // =========== Step-7: Remove carts =============
-
       await cartModel.deleteMany({ user_id: user_id });
-
       // =========== Step-8: Prepare SSL Payment =============
 
       let paymentSetting = {
@@ -206,14 +189,13 @@ exports.createInvoice = async (req, res) => {
       form.append("product_amount", "According Invoice");
 
       let SSLRes = await axios.post(paymentSetting.init_url, form);
-
       res.status(200).json({
         success: true,
         message: "Payment updated successfully",
         data: SSLRes.data,
       });
     } else {
-      res.status(200).json({
+      return res.status(200).json({
         success: false,
         message: "Cart empty!",
       });
@@ -233,8 +215,8 @@ exports.readAllInvoiceSingleUser = async (req, res) => {
     let user_id = new ObjectId(req.headers._id);
     let page_no = Number(req.params.page_no);
     let per_page = Number(req.params.per_page);
-    let skipRow = (page_no - 1) * per_page;
 
+    let skipRow = (page_no - 1) * per_page;
     let matchStage = {
       $match: {
         user_id: user_id,
@@ -250,6 +232,7 @@ exports.readAllInvoiceSingleUser = async (req, res) => {
     };
 
     let products = await invoiceModel.aggregate([matchStage, facetStage]);
+
     res.status(200).json({
       success: true,
       message: "Invoice fetched successfully",
@@ -309,15 +292,15 @@ exports.readInvoiceProductListSingleUser = async (req, res) => {
     let user_id = new ObjectId(req.headers._id);
     let page_no = Number(req.params.page_no);
     let per_page = Number(req.params.per_page);
-    let skipRow = (page_no - 1) * per_page;
 
+    let skipRow = (page_no - 1) * per_page;
     let matchStage = {
       $match: {
         user_id: user_id,
       },
     };
-    let sortStage = { createdAt: -1 };
 
+    let sortStage = { createdAt: -1 };
     let joinStageWithProduct = {
       $lookup: {
         from: "products",
@@ -326,22 +309,9 @@ exports.readInvoiceProductListSingleUser = async (req, res) => {
         as: "product",
       },
     };
-
     let unwindStage = { $unwind: "$product" };
 
-    let projectionStage = {
-      $project: {
-        product_name: 1,
-        qty: 1,
-        price: 1,
-        color: 1,
-        size: 1,
-        size: 1,
-        createdAt: 1,
-        "product._id": 1,
-        "product.images": 1,
-      },
-    };
+    let projectionStage = {};
 
     let facetStage = {
       $facet: {
@@ -350,7 +320,6 @@ exports.readInvoiceProductListSingleUser = async (req, res) => {
           { $sort: sortStage },
           { $skip: skipRow },
           { $limit: per_page },
-          projectionStage,
           unwindStage,
         ],
       },
@@ -361,9 +330,10 @@ exports.readInvoiceProductListSingleUser = async (req, res) => {
       joinStageWithProduct,
       facetStage,
     ]);
+
     res.status(200).json({
       success: true,
-      message: "Invoice fetched successfully",
+      message: "Invoice all product fetched successfully",
       data: products[0],
     });
   } catch (error) {
@@ -439,7 +409,6 @@ exports.paymentFail = async (req, res) => {
 exports.paymentIpn = async (req, res) => {
   try {
     let trx_id = req.params.trx_id;
-
     // Here do something you have to need . . .  .
 
     res.status(200).json({
@@ -455,15 +424,13 @@ exports.paymentIpn = async (req, res) => {
   }
 };
 
-// ===================== // For admin --
-
-// all Order List by date filter
+//! all Order List by date filter
 exports.allOrderList = async (req, res) => {
   try {
     const page_no = Number(req.params.page_no) || 1;
     const per_page = Number(req.params.per_page) || 10;
-    const skipRow = (page_no - 1) * per_page;
 
+    const skipRow = (page_no - 1) * per_page;
     // Optional date filter
     const { from, to } = req.query;
 
@@ -471,12 +438,22 @@ exports.allOrderList = async (req, res) => {
     const fromDate = from
       ? new Date(`${from}T00:00:00`)
       : new Date("1970-01-01T00:00:00");
+
     const toDate = to ? new Date(`${to}T23:59:59.999`) : new Date();
 
     const matchStage = {
       createdAt: {
         $gte: fromDate,
         $lte: toDate,
+      },
+    };
+
+    let joinStageWithProduct = {
+      $lookup: {
+        from: "invoicesproducts",
+        localField: "_id",
+        foreignField: "invoice_id",
+        as: "product",
       },
     };
 
@@ -488,44 +465,15 @@ exports.allOrderList = async (req, res) => {
           { $sort: { createdAt: -1 } },
           { $skip: skipRow },
           { $limit: per_page },
-          {
-            $lookup: {
-              from: "invoicesproducts",
-              localField: "_id",
-              foreignField: "invoice_id",
-              as: "product",
-            },
-          },
-          {
-            $project: {
-              _id: 1,
-              user_id: 1,
-              payable: 1,
-              cus_details: 1,
-              ship_details: 1,
-              tran_id: 1,
-              val_id: 1,
-              deliver_status: 1,
-              payment_status: 1,
-              vat: 1,
-              total: 1,
-              createdAt: 1,
-              "product.product_id": 1,
-              "product.product_name": 1,
-              "product.qty": 1,
-              "product.price": 1,
-              "product.color": 1,
-              "product.size": 1,
-            },
-          },
+          joinStageWithProduct,
         ],
       },
     };
 
     // Aggregate pipeline
     const products = await invoiceModel.aggregate([
-      { $match: matchStage }, // filter by date
-      facetStage, // count + paginated products
+      { $match: matchStage },
+      facetStage,
     ]);
 
     res.status(200).json({
@@ -539,153 +487,5 @@ exports.allOrderList = async (req, res) => {
       message: "Something went wrong.",
       error: error.toString(),
     });
-  }
-};
-
-//! invoice update
-exports.updateInvoice = async (req, res) => {
-  try {
-    const { _id, user_id, deliver_status } = req.body;
-
-    // Step 1: Find the invoice
-    const checkInvoice = await invoiceModel.findById(_id);
-    if (!checkInvoice) {
-      return res.status(404).json({
-        success: false,
-        message: "Invoice not found!",
-      });
-    }
-
-    // Step 2: Prevent multiple updates
-    if (checkInvoice.deliver_status === "delivered") {
-      return res.status(200).json({
-        success: false,
-        message: "Product already delivered!",
-      });
-    }
-    if (checkInvoice.deliver_status === "cancel") {
-      return res.status(200).json({
-        success: false,
-        message: "Product already canceled!",
-      });
-    }
-
-    // Step 3: Handle logic based on payment_status
-    const paymentStatus = checkInvoice.payment_status;
-
-    if (paymentStatus === "success") {
-      // ✅ Payment successful: allow deliver or cancel
-
-      if (deliver_status === "delivered") {
-        // Update invoice as delivered
-        const data = await invoiceModel.findByIdAndUpdate(
-          { _id, user_id },
-          { deliver_status },
-          { new: true }
-        );
-
-        return res.status(200).json({
-          success: true,
-          message: "Product delivered successfully!",
-          data,
-        });
-      }
-
-      if (deliver_status === "cancel") {
-        return res.status(200).json({
-          success: false,
-          message: "Payment is success. You can't cancel!",
-        });
-      }
-
-      // Invalid deliver_status
-      return res.status(200).json({
-        success: false,
-        message: "Invalid deliver status update!",
-      });
-    } else {
-      // ❌ Payment not successful: allow only cancel
-      if (deliver_status === "cancel") {
-        const invoiceProducts = await invoiceProductModel.find({
-          invoice_id: _id,
-        });
-        // Restock each product
-        for (const item of invoiceProducts) {
-          await productModel.updateOne(
-            { _id: item.product_id },
-            { $inc: { stock: item.qty } }
-          );
-        }
-
-        // Update invoice as canceled
-
-        const data = await invoiceModel.findByIdAndUpdate(
-          { _id, user_id },
-          { deliver_status },
-          { new: true }
-        );
-
-        return res.status(200).json({
-          success: true,
-          message: "Unpaid order canceled and stock restored!",
-          data,
-        });
-      }
-
-      return res.status(200).json({
-        success: false,
-        message: "Cannot deliver because payment was not successful!",
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Something went wrong.",
-      error: error.message,
-    });
-  }
-};
-
-exports.exportCSV = async (req, res) => {
-  try {
-    const { from, to } = req.query;
-
-    const fromDate = from
-      ? new Date(`${from}T00:00:00`)
-      : new Date("1970-01-01T00:00:00");
-    const toDate = to ? new Date(`${to}T23:59:59.999`) : new Date();
-
-    const matchStage = {
-      createdAt: {
-        $gte: fromDate,
-        $lte: toDate,
-      },
-    };
-
-    // 🧾 Get invoices
-    const data = await invoiceModel.find(matchStage).sort({ createdAt: -1 });
-
-    // 📊 Select columns for CSV
-    const fields = [
-      "_id",
-      "user_id",
-      "payable",
-      "deliver_status",
-      "payment_status",
-      "total",
-      "vat",
-      "createdAt",
-    ];
-
-    // 🪄 Convert to CSV
-    const parser = new Parser({ fields });
-    const csv = parser.parse(data);
-
-    // 💾 Send file
-    res.header("Content-Type", "text/csv");
-    res.attachment("invoices.csv");
-    res.send(csv);
-  } catch (error) {
-    res.status(500).send("Error creating CSV file");
   }
 };
