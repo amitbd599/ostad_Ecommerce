@@ -662,10 +662,10 @@ exports.exportCSV = async (req, res) => {
       },
     };
 
-    // 🧾 Get invoices
+    // Get invoices
     const data = await invoiceModel.find(matchStage).sort({ createdAt: -1 });
 
-    // 📊 Select columns for CSV
+    // Select columns for CSV
     const fields = [
       "_id",
       "user_id",
@@ -677,11 +677,11 @@ exports.exportCSV = async (req, res) => {
       "createdAt",
     ];
 
-    // 🪄 Convert to CSV
+    // Convert to CSV
     const parser = new Parser({ fields });
     const csv = parser.parse(data);
 
-    // 💾 Send file
+    // Send file
     res.header("Content-Type", "text/csv");
     res.attachment("invoices.csv");
     res.send(csv);
