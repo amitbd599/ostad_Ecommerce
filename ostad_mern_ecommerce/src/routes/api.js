@@ -9,8 +9,11 @@ const brandController = require("../controllers/brandController.js");
 const reviewController = require("../controllers/reviewController.js");
 const invoiceController = require("../controllers/invoiceController.js");
 const cartController = require("../controllers/cartController.js");
+const fileController = require("../controllers/fileController.js");
+const dashboardSummaryController = require("../controllers/dashboardSummaryController.js");
 const authVerificationAdmin = require("../middlewares/authVerificationAdmin.js");
 const authVerificationUser = require("../middlewares/authVerificationUser.js");
+const fileUpload = require("../middlewares/fileUpload.js");
 
 //! ============== For Super admin ==================
 router.post("/admin-register", adminController.register);
@@ -161,5 +164,20 @@ router.put(
   authVerificationAdmin,
   invoiceController.updateInvoice
 );
+
+// ! File Uploads
+
+router.post(
+  "/file-upload",
+  authVerificationAdmin,
+  fileUpload,
+  fileController.fileUpload
+);
+
+router.get("/all-file/:per_page/:page_no", fileController.allFile);
+router.post("/file-remove", authVerificationAdmin, fileController.fileRemove);
+
+//! dashboard Summary
+router.get("/dashboard-summary", dashboardSummaryController.dashboardSummary);
 
 module.exports = router;

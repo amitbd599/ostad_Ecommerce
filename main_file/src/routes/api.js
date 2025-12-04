@@ -173,8 +173,8 @@ router.post(
   fileUpload,
   fileController.fileUpload
 );
-router.post("/file-remove", authVerificationAdmin, fileController.fileRemove);
 router.get("/all-file/:per_page/:page_no", fileController.allFile);
+router.post("/file-remove", authVerificationAdmin, fileController.fileRemove);
 
 //! dashboard Summary
 router.get("/dashboard-summary", dashboardSummaryController.dashboardSummary);
