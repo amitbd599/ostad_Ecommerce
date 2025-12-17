@@ -6,7 +6,10 @@ exports.createBrand = async (req, res) => {
   try {
     const { brand_name, brand_img } = req.body;
 
-    let data = await brandModel.create({ brand_name, brand_img });
+    let data = await brandModel.create({
+      brand_name,
+      brand_img,
+    });
     res.status(200).json({
       success: true,
       message: "Brand created successfully",
@@ -21,15 +24,15 @@ exports.createBrand = async (req, res) => {
   }
 };
 
-//!  Get All Brand with Pagination
+//! Brand Get All with Pagination
 exports.allBrand = async (req, res) => {
   try {
     let page_no = Number(req.params.page_no);
     let per_page = Number(req.params.per_page);
 
     let skipRow = (page_no - 1) * per_page;
-    let sortStage = { createdAt: -1 };
 
+    let sortStage = { createdAt: -1 };
     let joinWithProduct = {
       $lookup: {
         from: "products",
@@ -80,7 +83,7 @@ exports.allBrand = async (req, res) => {
   }
 };
 
-//!  Get Brand Single
+//! Brand Get Single
 exports.singleBrand = async (req, res) => {
   try {
     const { id } = req.params;
@@ -108,10 +111,12 @@ exports.updateBrand = async (req, res) => {
 
     let data = await brandModel.findByIdAndUpdate(
       id,
-      { brand_name, brand_img },
+      {
+        brand_name,
+        brand_img,
+      },
       { new: true }
     );
-
     res.status(200).json({
       success: true,
       message: "Brand updated successfully",

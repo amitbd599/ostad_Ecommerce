@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-
-const DataSchema = new mongoose.Schema(
+const OTPSchema = mongoose.Schema(
   {
     filename: { type: String },
   },
@@ -10,5 +9,5 @@ const DataSchema = new mongoose.Schema(
   }
 );
 
-const fileModel = mongoose.model("files", DataSchema);
+const fileModel = mongoose.model("files", OTPSchema);
 module.exports = fileModel;

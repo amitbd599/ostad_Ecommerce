@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-
-const DataSchema = new mongoose.Schema(
+const DataSchema = mongoose.Schema(
   {
     user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
     product_id: { type: mongoose.Schema.Types.ObjectId, required: true },

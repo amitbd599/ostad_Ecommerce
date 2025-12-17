@@ -1,6 +1,6 @@
+const bcrypt = require("bcrypt");
 const adminModel = require("../models/adminModel");
 const { EncodeToken } = require("../utility/tokenHelper");
-const bcrypt = require("bcrypt");
 
 let options = {
   maxAge: process.env.Cookie_Expire_Time,
@@ -9,16 +9,16 @@ let options = {
   secure: true,
 };
 
-//! create admin
+//! Create admin
 exports.register = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    await adminModel.create({ email, password });
-
+    // Create and save the new user
+    user = await adminModel.create({ email, password });
     res.status(200).json({
       success: true,
-      message: "Admin created successfully",
+      message: "User created successfully",
     });
   } catch (error) {
     res.status(500).json({
@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
   }
 };
 
-//! admin Login
+//! User Login
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -42,7 +42,6 @@ exports.login = async (req, res) => {
 
     // isMatch password
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch)
       return res
         .status(200)
@@ -53,7 +52,6 @@ exports.login = async (req, res) => {
 
       // Set cookie
       res.cookie("a__token", token, options);
-
       res.status(200).json({
         success: true,
         message: "Login successful",
@@ -64,71 +62,61 @@ exports.login = async (req, res) => {
         token: token,
       });
     }
-  } catch (error) {
-    res.status(500).json({
+  } catch (e) {
+    res.status(200).json({
       success: false,
-      error: error.toString(),
+      error: e.toString(),
       message: "Something went wrong.",
     });
   }
 };
 
-//! get admin
+//! get User
 exports.admin = async (req, res) => {
   try {
     let email = req.headers.email;
 
-    let matchStage = {
-      $match: { email },
+    let MatchStage = {
+      $match: {
+        email,
+      },
     };
+
     let project = {
       $project: {
         password: 0,
       },
     };
-
-    let data = await adminModel.aggregate([matchStage, project]);
-
-    res.status(200).json({
-      success: true,
-      data: data[0],
-    });
-
-    console.log(data);
-  } catch (error) {
+    let data = await adminModel.aggregate([MatchStage, project]);
+    res.status(200).json({ success: true, data: data[0] });
+  } catch (e) {
     res.status(500).json({
       success: false,
-      error: error.toString(),
+      error: e.toString(),
       message: "Something went wrong.",
     });
   }
 };
-
 //! admin Verify
 exports.adminVerify = async (req, res) => {
   try {
     res.status(200).json({ success: true });
-  } catch (error) {
+  } catch (e) {
     res.status(500).json({
       success: false,
-      error: error.toString(),
+      error: e.toString(),
       message: "Something went wrong.",
     });
   }
 };
 
-// ! admin Logout
+//! user Logout
 exports.logout = async (req, res) => {
   try {
     res.clearCookie("a__token");
-
     res.status(200).json({ success: true, message: "Logout success!" });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.toString(),
-      message: "Something went wrong.",
-    });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.toString() });
   }
 };
 
@@ -139,8 +127,8 @@ exports.update = async (req, res) => {
     const _id = req.headers._id;
 
     let updatedData = { email };
-    const user = await adminModel.findOne({ email, _id });
 
+    const user = await adminModel.findOne({ email, _id });
     if (!user)
       return res
         .status(200)
@@ -158,12 +146,13 @@ exports.update = async (req, res) => {
     });
 
     let token = EncodeToken(updatedUser?.email, updatedUser?._id.toString());
+
     // Set cookie
     res.cookie("a__token", token, options);
 
     res.status(200).json({
       success: true,
-      message: "Admin updated successfully",
+      message: "User updated successfully",
       user: {
         email: updatedUser.email,
       },
@@ -172,6 +161,19 @@ exports.update = async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! verifyAuth
+exports.verifyAuth = async (req, res) => {
+  try {
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
       message: "Something went wrong.",
     });
   }

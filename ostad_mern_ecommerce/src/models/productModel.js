@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 
 const DataSchema = new mongoose.Schema(
   {
-    title: { type: String },
+    title: {
+      type: String,
+    },
     images: [String],
     sort_description: { type: String },
     price: { type: Number },

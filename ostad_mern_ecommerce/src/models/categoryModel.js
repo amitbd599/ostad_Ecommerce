@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-
-const DataSchema = new mongoose.Schema(
+const DataSchema = mongoose.Schema(
   {
     category_name: { type: String, unique: true, required: true },
     category_img: { type: String, required: true },

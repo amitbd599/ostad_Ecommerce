@@ -6,8 +6,10 @@ exports.createCategory = async (req, res) => {
   try {
     const { category_name, category_img } = req.body;
 
-    let data = await categoryModel.create({ category_name, category_img });
-
+    let data = await categoryModel.create({
+      category_name,
+      category_img,
+    });
     res.status(200).json({
       success: true,
       message: "Category created successfully",
@@ -22,15 +24,15 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-//!  Get All Category with Pagination
+//! Category Get All with Pagination
 exports.allCategory = async (req, res) => {
   try {
     let page_no = Number(req.params.page_no);
     let per_page = Number(req.params.per_page);
 
     let skipRow = (page_no - 1) * per_page;
-    let sortStage = { createdAt: -1 };
 
+    let sortStage = { createdAt: -1 };
     let joinWithProduct = {
       $lookup: {
         from: "products",
@@ -45,7 +47,6 @@ exports.allCategory = async (req, res) => {
         totalProduct: { $size: "$products" },
       },
     };
-
     let facetStage = {
       $facet: {
         totalCount: [{ $count: "count" }],
@@ -66,6 +67,7 @@ exports.allCategory = async (req, res) => {
     };
 
     let categories = await categoryModel.aggregate([facetStage]);
+
     res.status(200).json({
       success: true,
       message: "Categories fetched successfully",
@@ -84,6 +86,7 @@ exports.allCategory = async (req, res) => {
 exports.singleCategory = async (req, res) => {
   try {
     const { id } = req.params;
+
     let data = await categoryModel.findById(id);
     res.status(200).json({
       success: true,
@@ -107,10 +110,12 @@ exports.updateCategory = async (req, res) => {
 
     let data = await categoryModel.findByIdAndUpdate(
       id,
-      { category_name, category_img },
+      {
+        category_name,
+        category_img,
+      },
       { new: true }
     );
-
     res.status(200).json({
       success: true,
       message: "Category updated successfully",
@@ -131,7 +136,6 @@ exports.deleteCategory = async (req, res) => {
     const { id } = req.params;
 
     // find product with this category id
-
     let products = await productModel.find({ category_id: id });
     if (products.length > 0) {
       return res.status(200).json({

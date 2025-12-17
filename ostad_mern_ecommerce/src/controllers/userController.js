@@ -1,6 +1,6 @@
-const userModel = require("../models/userModel");
-const { EncodeToken } = require("../utility/tokenHelper");
 const bcrypt = require("bcrypt");
+const { EncodeToken } = require("../utility/tokenHelper");
+const userModel = require("../models/userModel");
 
 let options = {
   maxAge: process.env.Cookie_Expire_Time,
@@ -15,6 +15,7 @@ exports.register = async (req, res) => {
     const { email, password } = req.body;
 
     // find the existing user
+
     let ifUser = await userModel.find({ email });
     if (ifUser.length > 0) {
       return res.status(200).json({
@@ -24,7 +25,7 @@ exports.register = async (req, res) => {
     }
 
     // Create and save the new user
-    await userModel.create({ email, password });
+    user = await userModel.create({ email, password });
     res.status(200).json({
       success: true,
       message: "Registration successfully.",
@@ -42,6 +43,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const user = await userModel.findOne({ email });
     if (!user)
       return res
@@ -70,31 +72,36 @@ exports.login = async (req, res) => {
         token: token,
       });
     }
-  } catch (error) {
+  } catch (e) {
     res.status(200).json({
       success: false,
-      error: error.toString(),
+      error: e.toString(),
       message: "Something went wrong.",
     });
   }
 };
 
 //! get User
-exports.user = async (req, res) => {
+exports.admin = async (req, res) => {
   try {
     let email = req.headers.email;
-    let matchStage = {
-      $match: { email },
+
+    console.log(email);
+
+    let MatchStage = {
+      $match: {
+        email,
+      },
     };
+
     let project = {
       $project: {
         password: 0,
       },
     };
-
-    let data = await userModel.aggregate([matchStage, project]);
+    let data = await userModel.aggregate([MatchStage, project]);
     res.status(200).json({ success: true, data: data[0] });
-  } catch (error) {
+  } catch (e) {
     res.status(500).json({
       success: false,
       error: e.toString(),
@@ -107,7 +114,7 @@ exports.user = async (req, res) => {
 exports.userVerify = async (req, res) => {
   try {
     res.status(200).json({ success: true });
-  } catch (error) {
+  } catch (e) {
     res.status(500).json({
       success: false,
       error: e.toString(),
@@ -121,12 +128,8 @@ exports.logout = async (req, res) => {
   try {
     res.clearCookie("u__token");
     res.status(200).json({ success: true, message: "Logout success!" });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: e.toString(),
-      message: "Something went wrong.",
-    });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.toString() });
   }
 };
 
@@ -134,9 +137,9 @@ exports.logout = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     let email = req.headers.email;
-    const _id = req.headers._id;
     const {
       password,
+      image,
       cus_add,
       cus_city,
       cus_country,
@@ -153,10 +156,12 @@ exports.update = async (req, res) => {
       ship_postcode,
       ship_state,
     } = req.body;
+    const _id = req.headers._id;
 
     let updatedData = {
       email,
       password,
+      image,
       cus_add,
       cus_city,
       cus_country,
@@ -218,6 +223,19 @@ exports.update = async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.toString(),
+      message: "Something went wrong.",
+    });
+  }
+};
+
+//! verifyAuth
+exports.verifyAuth = async (req, res) => {
+  try {
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
       message: "Something went wrong.",
     });
   }

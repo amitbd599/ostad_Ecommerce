@@ -1,9 +1,9 @@
-const brandModel = require("../models/brandModel");
-const categoryModel = require("../models/categoryModel");
-const invoiceModel = require("../models/invoiceModel");
-const productModel = require("../models/productModel");
-const reviewModel = require("../models/reviewModel");
 const userModel = require("../models/userModel");
+const productModel = require("../models/productModel");
+const invoiceModel = require("../models/invoiceModel");
+const reviewModel = require("../models/reviewModel");
+const categoryModel = require("../models/categoryModel");
+const brandModel = require("../models/brandModel");
 
 exports.dashboardSummary = async (req, res) => {
   try {
@@ -31,7 +31,6 @@ exports.dashboardSummary = async (req, res) => {
       { $match: { payment_status: "success" } },
       { $group: { _id: null, total: { $sum: "$payable" } } },
     ]);
-
     const totalIncome = totalIncomeAgg.length > 0 ? totalIncomeAgg[0].total : 0;
 
     res.status(200).json({

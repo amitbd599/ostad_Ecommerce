@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
 
+const authVerificationAdmin = require("../middlewares/authVerificationAdmin.js");
+const authVerificationUser = require("../middlewares/authVerificationUser.js");
 const adminController = require("../controllers/adminController.js");
 const userController = require("../controllers/userController.js");
 const productController = require("../controllers/productController.js");
 const categoryController = require("../controllers/categoryController.js");
 const brandController = require("../controllers/brandController.js");
 const reviewController = require("../controllers/reviewController.js");
-const invoiceController = require("../controllers/invoiceController.js");
 const cartController = require("../controllers/cartController.js");
+const invoiceController = require("../controllers/invoiceController.js");
 const fileController = require("../controllers/fileController.js");
 const dashboardSummaryController = require("../controllers/dashboardSummaryController.js");
-const authVerificationAdmin = require("../middlewares/authVerificationAdmin.js");
-const authVerificationUser = require("../middlewares/authVerificationUser.js");
 const fileUpload = require("../middlewares/fileUpload.js");
 
 //! ============== For Super admin ==================
@@ -26,7 +26,7 @@ router.put("/admin-update", authVerificationAdmin, adminController.update);
 //! ============== For user ==================
 router.post("/user-register", userController.register);
 router.post("/user-login", userController.login);
-router.get("/user", authVerificationUser, userController.user);
+router.get("/user", authVerificationUser, userController.admin);
 router.get("/user-verify", authVerificationUser, userController.userVerify);
 router.get("/user-logout", authVerificationUser, userController.logout);
 router.put("/user-update", authVerificationUser, userController.update);
@@ -37,7 +37,6 @@ router.post(
   authVerificationAdmin,
   productController.createProduct
 );
-
 router.get(
   "/all-products/:category_id/:brand_id/:remark/:keyword/:per_page/:page_no",
   productController.allProduct
@@ -103,6 +102,11 @@ router.get(
   "/all-review-by-product/:product_id",
   reviewController.allReviewByProducts
 );
+router.post(
+  "/single-review",
+  authVerificationUser,
+  reviewController.singleReview
+);
 
 //! ============== For cart ==================
 router.post("/create-cart", authVerificationUser, cartController.createCart);
@@ -134,7 +138,6 @@ router.get(
 
 router.get(
   "/read-single-invoice-single-user/:invoice_id",
-  authVerificationUser,
   invoiceController.readSingleInvoiceSingleUser
 );
 
@@ -150,13 +153,11 @@ router.post("/payment-fail/:trx_id", invoiceController.paymentFail);
 router.post("/payment-ipn/:trx_id", invoiceController.paymentIpn);
 
 // For admin --
-
 router.get(
   "/all-order-list/:per_page/:page_no",
   authVerificationAdmin,
   invoiceController.allOrderList
-); //all-order-list/10/1?from=2025-11-01&to=2025-11-05
-
+); //all-order-list/1/10?from=2025-11-01&to=2025-11-05
 router.get("/export-csv", authVerificationAdmin, invoiceController.exportCSV); //export-csv?from=2025-11-01&to=2025-11-05
 
 router.put(
@@ -166,14 +167,12 @@ router.put(
 );
 
 // ! File Uploads
-
 router.post(
   "/file-upload",
   authVerificationAdmin,
   fileUpload,
   fileController.fileUpload
 );
-
 router.get("/all-file/:per_page/:page_no", fileController.allFile);
 router.post("/file-remove", authVerificationAdmin, fileController.fileRemove);
 

@@ -28,7 +28,7 @@ const PrivateRoute = ({ children }) => {
         setLoading(false); // Set loading to false after verification
       }
     })();
-  }, []);
+  }, [adminVerifyRequest]);
 
   if (loading) {
     return <></>;

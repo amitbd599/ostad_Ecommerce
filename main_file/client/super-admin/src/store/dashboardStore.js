@@ -1,7 +1,7 @@
 import axios from "axios";
 import { create } from "zustand";
 import { baseURL } from "../helper/config";
-import { ErrorToast, SuccessToast } from "../helper/helper";
+import { ErrorToast } from "../helper/helper";
 
 const dashboardStore = create((set) => ({
   dashboard: null,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import adminStore from "../store/adminStore";
-import { ErrorToast, IsEmpty, SuccessToast } from "../helper/helper";
+import { ErrorToast, IsEmpty } from "../helper/helper";
 
 const ProfileInner = () => {
   let { adminUpdateRequest, adminUpdateLoading, admin } = adminStore();

@@ -23,6 +23,8 @@ const upload = multer({
 // ✅ Middleware wrapper to handle Multer errors inside this file
 const fileUpload = (req, res, next) => {
   upload.single("file")(req, res, (err) => {
+    console.log(err?.code);
+
     if (err) {
       if (err?.code === "LIMIT_FILE_SIZE") {
         return res.status(400).json({
@@ -32,7 +34,7 @@ const fileUpload = (req, res, next) => {
       }
       return res.status(400).json({
         success: false,
-        message: "File upload failed.",
+        message: "File upload failed00.",
       });
     }
     next(); // continue if no error

@@ -1,5 +1,5 @@
 const express = require("express");
-
+const router = require("./src/routes/api");
 const app = new express();
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
@@ -10,47 +10,16 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const dotENV = require("dotenv");
-const router = require("./src/routes/api");
 
 dotENV.config();
 
-mongoose.set("strictQuery", false);
-
-// Global Middlewares
-app.use(cookieParser());
-app.use(
-  cors({
-    origin: ["http://localhost:5173", "http://localhost:3001"],
-    credentials: true,
-  })
-);
-
-app.use(
-  helmet.contentSecurityPolicy({
-    useDefaults: true,
-    directives: {
-      "img-src": ["'self'", "https: data:"],
-    },
-  })
-);
-
-app.use(hpp());
-
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb" }));
-app.use(mongoSanitize());
-
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 }); // 3000 requests per 15 minutes
-app.use(limiter);
-
-// Connect to MongoDB
-
 let URL = "mongodb://127.0.0.1:27017/ostad_ecommerce";
-const option = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+let option = {
+  user: process.env.DB_USER,
+  pass: process.env.DB_PASS,
+  autoIndex: true,
+  serverSelectionTimeoutMS: 50000,
 };
-
 mongoose
   .connect(URL, option)
   .then((res) => {
@@ -60,11 +29,41 @@ mongoose
     console.log(err);
   });
 
+mongoose.set("strictQuery", false);
+
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:3001"],
+    credentials: true,
+  })
+);
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      "img-src": ["'self'", "https: data:"],
+    },
+  })
+);
+app.use(mongoSanitize());
+app.use(hpp());
+
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
+
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 3000 });
+app.use(limiter);
+
 app.use("/api/v1", router);
 
 app.use("/api/v1/get-file", express.static("uploads"));
 
-// Serve Frontend
+// Add React Front End Routing supper admin
+// app.get("/super-admin", function (req, res) {
+//   res.sendFile(path.resolve(__dirname, "client", "super-admin", "index.html"));
+// });
+
 // app.use(
 //   "/super-admin",
 //   express.static(path.join(__dirname, "client", "super-admin", "dist"), {
@@ -77,7 +76,9 @@ app.use("/api/v1/get-file", express.static("uploads"));
 //   );
 // });
 
+// ✅ Serve static files from Vite's dist folder
 // app.use(express.static(path.join(__dirname, "client", "ecommerce", "dist")));
+// Add React Front End Routing
 // app.get("*", function (req, res) {
 //   res.sendFile(
 //     path.resolve(__dirname, "client", "ecommerce", "dist", "index.html")
