@@ -65,7 +65,7 @@ const CreateProduct = () => {
     }
   };
 
-  console.log(data);
+
 
   return (
     <>

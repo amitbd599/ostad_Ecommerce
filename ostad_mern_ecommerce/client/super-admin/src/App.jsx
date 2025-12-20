@@ -48,7 +48,7 @@ function App() {
 
         <Route
           exact
-          path='/all-product'
+          path='/all-products'
           element={
             <PrivateRoute>
               <AllProductPage />

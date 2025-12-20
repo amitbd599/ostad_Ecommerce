@@ -1,9 +1,46 @@
 import ReactQuill from "react-quill-new";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { formats, modules } from "../helper/helper";
 import Paginate from "../helper/Paginate";
+import productStore from "../store/productStore";
+import categoryStore from "../store/categoryStore";
+import brandStore from "../store/brandStore";
+import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import { baseURLFile, hostURL } from "../helper/config";
 
 const AllProducts = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  let {
+    allProducts,
+    totalProducts,
+    allProductsRequest,
+    deleteProductRequest,
+    updateProductRequest,
+    singleProductsRequest,
+  } = productStore();
+  let { allCategoryRequest, allCategory } = categoryStore();
+  let { allBrandRequest, allBrand } = brandStore();
+
+  const per_page = 12;
+  const page_no = searchParams.get("page_no") || 1;
+
+  // all Products
+  useEffect(() => {
+    (async () => {
+      await allProductsRequest(0, 0, 0, 0, per_page, page_no);
+      await allCategoryRequest(100, 1);
+      await allBrandRequest(100, 1);
+    })();
+  }, [allBrandRequest, allCategoryRequest, allProductsRequest, page_no]);
+
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allProductsRequest(0, 0, 0, 0, per_page, page_no + 1); //"/:category_id/:brand_id/:remark/:keyword/:per_page/:page_no",
+    navigate(`/all-products?page_no=${page_no + 1}`);
+  };
+
   return (
     <>
       {/* Cover Photo Start */}
@@ -32,54 +69,102 @@ const AllProducts = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className='super_admin_all-product'>
-                        <td>
-                          <img
-                            src={`https://placehold.co/60x60`}
-                            alt=''
-                            className='cover-img'
-                          />
-                        </td>
-                        <td>
-                          {" "}
-                          <h6 className='product-item__title'>
-                            <Link
-                              to={`http://localhost:3001/super-admin/product-details?product_id=1`}
-                              className='link'
-                            >
-                              Baby Toy Car
-                            </Link>
-                          </h6>
-                        </td>
-                        <td>
-                          <div className='flx-align justify-content-center gap-2'>
-                            <h6 className='product-item__price mb-0'>৳900</h6>
-                            <span className='product-item__prevPrice font-12 text-danger text-decoration-line-through'>
-                              ৳900
-                            </span>
-                          </div>{" "}
-                        </td>
-                        <td> Yes</td>
-                        <td> 100</td>
-                        <td>
-                          <div className='d-flex justify-content-end gap-2'>
-                            <button
-                              className='btn btn-success'
-                              data-bs-toggle='modal'
-                              data-bs-target={`#exampleModal_${1}`}
-                            >
-                              Edit
-                            </button>
-                            <button className='btn btn-danger'>Delete</button>
-                          </div>
-                        </td>
-                      </tr>
+                      {allProducts?.length < 1 && <p>No data found!</p>}
+
+                      {allProducts === null ? (
+                        <>
+                          {[...Array(6)].map(() => (
+                            <tr className='super_admin_all-product '>
+                              <td className='Skeleton'>
+                                <Skeleton count={1} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={1} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={1} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={1} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={1} />
+                              </td>
+                              <td className='Skeleton'>
+                                <Skeleton count={1} />
+                              </td>
+                            </tr>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          {allProducts?.map((item, index) => (
+                            <tr key={index} className='super_admin_all-product'>
+                              <td>
+                                <img
+                                  src={`${baseURLFile}/${item?.images?.[0]}`}
+                                  alt=''
+                                  className='cover-img'
+                                />
+                              </td>
+                              <td>
+                                {" "}
+                                <h6 className='product-item__title'>
+                                  <Link
+                                    to={`${hostURL}/product-details?product_id=${item?._id}`}
+                                    className='link'
+                                  >
+                                    {item?.title}
+                                  </Link>
+                                </h6>
+                              </td>
+                              <td>
+                                <div className='flx-align justify-content-center gap-2'>
+                                  <h6 className='product-item__price mb-0'>
+                                    {item?.is_discount === false
+                                      ? `৳${item?.price}`
+                                      : `৳${item?.discount_price}`}
+                                  </h6>
+                                  <span className='product-item__prevPrice font-12 text-danger text-decoration-line-through'>
+                                    {item?.is_discount === false
+                                      ? ""
+                                      : `৳${item?.price}`}
+                                  </span>
+                                </div>{" "}
+                              </td>
+                              <td> {item?.is_discount ? "Yes" : "No"}</td>
+                              <td> {item?.stock}</td>
+                              <td>
+                                <div className='d-flex justify-content-end gap-2'>
+                                  <button
+                                    className='btn btn-success'
+                                    data-bs-toggle='modal'
+                                    data-bs-target={`#exampleModal_${1}`}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button className='btn btn-danger'>
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </>
+                      )}
                     </tbody>
                   </table>
                   <div className='flx-between justify-content-end gap-2'>
                     <nav aria-label='Page navigation example'>
                       <div>
-                        <Paginate page_no={1} per_page={5} totalCount={10} />
+                        {allProducts?.length > 1 && (
+                          <Paginate
+                            handelPageClick={handelPageClick}
+                            page_no={page_no}
+                            per_page={per_page}
+                            totalCount={totalProducts}
+                          />
+                        )}
                       </div>
                     </nav>
                   </div>

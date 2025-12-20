@@ -1,12 +1,23 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa6";
 import ThemeToggle from "../components/ThemeToggle";
 import { FaAngleRight } from "react-icons/fa";
+import adminStore from "../store/adminStore";
 
 const MasterLayout = ({ children }) => {
+  const navigate = useNavigate();
   let [active, setActive] = useState(false);
   let [show, setShow] = useState(false);
+
+  let { adminLogoutRequest } = adminStore();
+
+  let logout = async () => {
+    let res = await adminLogoutRequest();
+    if (res) {
+      navigate("/login");
+    }
+  };
 
   let dashboardControl = () => {
     setActive(!active);
@@ -81,7 +92,7 @@ const MasterLayout = ({ children }) => {
                 </li>
                 <li className='sidebar-list__item'>
                   <NavLink
-                    to='/all-product'
+                    to='/all-products'
                     className={(navData) =>
                       navData.isActive
                         ? "sidebar-list__link activePage"
@@ -247,7 +258,10 @@ const MasterLayout = ({ children }) => {
                         </li>
 
                         <li className='sidebar-list__item'>
-                          <button className='sidebar-list__link'>
+                          <button
+                            onClick={logout}
+                            className='sidebar-list__link'
+                          >
                             <span className='sidebar-list__icon'>
                               <img
                                 src='/super-admin/assets/images/icons/sidebar-icon13.svg'

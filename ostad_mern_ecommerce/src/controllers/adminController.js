@@ -128,7 +128,7 @@ exports.update = async (req, res) => {
 
     let updatedData = { email };
 
-    const user = await adminModel.findOne({ email, _id });
+    const user = await adminModel.findOne({ _id });
     if (!user)
       return res
         .status(200)
