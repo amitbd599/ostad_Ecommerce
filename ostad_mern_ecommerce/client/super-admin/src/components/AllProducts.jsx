@@ -1,11 +1,17 @@
 import ReactQuill from "react-quill-new";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { formats, modules } from "../helper/helper";
+import {
+  DeleteAlert,
+  ErrorToast,
+  formats,
+  IsEmpty,
+  modules,
+} from "../helper/helper";
 import Paginate from "../helper/Paginate";
 import productStore from "../store/productStore";
 import categoryStore from "../store/categoryStore";
 import brandStore from "../store/brandStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { baseURLFile, hostURL } from "../helper/config";
 
@@ -39,6 +45,87 @@ const AllProducts = () => {
     let page_no = event.selected;
     await allProductsRequest(0, 0, 0, 0, per_page, page_no + 1); //"/:category_id/:brand_id/:remark/:keyword/:per_page/:page_no",
     navigate(`/all-products?page_no=${page_no + 1}`);
+  };
+
+  // delete Product
+
+  let deleteProduct = async (_id) => {
+    let res = await DeleteAlert(deleteProductRequest, _id);
+    if (res) {
+      await allProductsRequest(0, 0, 0, 0, per_page, page_no);
+    }
+  };
+
+  // readSingleProduct
+  let [data, setData] = useState({
+    title: "",
+    images: [],
+    sort_description: "",
+    price: "",
+    is_discount: true,
+    discount_price: 0,
+    remark: "",
+    stock: 0,
+    color: [],
+    size: [],
+    description: "",
+    category_id: "",
+    brand_id: "",
+  });
+  const [value, setValue] = useState("");
+  let [_id, setId] = useState("");
+  let readSingleProduct = async (_id) => {
+    let res = await singleProductsRequest(_id);
+
+    if (res) {
+      setId(res?._id);
+      setData({
+        title: res?.title,
+        images: res?.images,
+        sort_description: res?.sort_description,
+        price: res?.price,
+        is_discount: res?.is_discount,
+        discount_price: res?.discount_price,
+        remark: res?.remark,
+        stock: res?.stock,
+        color: res?.color,
+        size: res?.size,
+        category_id: res?.category_id,
+        brand_id: res?.brand_id,
+      });
+      setValue(res?.description);
+    }
+  };
+
+  // Validation rules
+  const validations = [
+    { field: data.title, message: "Title is required!" },
+    { field: data.images, message: "Images is required!" },
+    { field: data.sort_description, message: "Sort description is required!" },
+    { field: data.price, message: "Price is required!" },
+    { field: data.is_discount, message: "Discount is required!" },
+    { field: data.discount_price, message: "Discount price is required!" },
+    { field: data.remark, message: "Remark is required!" },
+    { field: data.stock, message: "Stock is required!" },
+    { field: data.color, message: "Color is required!" },
+    { field: data.size, message: "Size is required!" },
+    { field: value, message: "Description is required!" },
+    { field: data.category_id, message: "Category is required!" },
+    { field: data.brand_id, message: "Brand is required!" },
+  ];
+
+  // update Product
+  let updateProduct = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+    data.description = value;
+    let res = await updateProductRequest(_id, data);
+    if (res) {
+      await allProductsRequest(0, 0, 0, 0, per_page, page_no);
+    }
   };
 
   return (
@@ -137,13 +224,17 @@ const AllProducts = () => {
                               <td>
                                 <div className='d-flex justify-content-end gap-2'>
                                   <button
+                                    onClick={() => readSingleProduct(item?._id)}
                                     className='btn btn-success'
                                     data-bs-toggle='modal'
                                     data-bs-target={`#exampleModal_${1}`}
                                   >
                                     Edit
                                   </button>
-                                  <button className='btn btn-danger'>
+                                  <button
+                                    onClick={() => deleteProduct(item?._id)}
+                                    className='btn btn-danger'
+                                  >
                                     Delete
                                   </button>
                                 </div>
@@ -213,7 +304,13 @@ const AllProducts = () => {
                                       Title
                                     </label>
                                     <input
-                                      value={"Baby Toy Car"}
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          title: e.target.value,
+                                        })
+                                      }
+                                      value={data.title}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -223,9 +320,13 @@ const AllProducts = () => {
                                       Short Description
                                     </label>
                                     <input
-                                      value={
-                                        "A fun and safe toy car for babies."
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          sort_description: e.target.value,
+                                        })
                                       }
+                                      value={data.sort_description}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -236,9 +337,15 @@ const AllProducts = () => {
                                       image_1.png, image_2.jpg, image_3.png)
                                     </label>
                                     <textarea
-                                      value={
-                                        "image_1.png, image_2.jpg, image_3.png"
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          images: e.target.value
+                                            .split(",")
+                                            .map((item) => item.trim()),
+                                        })
                                       }
+                                      value={data.images}
                                       name=''
                                       id=''
                                       className='common-input border'
@@ -249,7 +356,13 @@ const AllProducts = () => {
                                       Price
                                     </label>
                                     <input
-                                      value={1000}
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          price: Number(e.target.value),
+                                        })
+                                      }
+                                      value={data.price}
                                       type='number'
                                       className='common-input border'
                                     />
@@ -261,7 +374,14 @@ const AllProducts = () => {
                                     <div className='select-has-icon'>
                                       <select
                                         className='common-input border'
-                                        value={true}
+                                        onChange={(e) =>
+                                          setData({
+                                            ...data,
+                                            is_discount:
+                                              e.target.value === "true",
+                                          })
+                                        }
+                                        value={data.is_discount}
                                       >
                                         <option value={true}>True</option>
                                         <option value={false}>False</option>
@@ -273,7 +393,15 @@ const AllProducts = () => {
                                       Discount Price
                                     </label>
                                     <input
-                                      value={500}
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          discount_price: Number(
+                                            e.target.value
+                                          ),
+                                        })
+                                      }
+                                      value={data.discount_price}
                                       type='number'
                                       className='common-input border'
                                     />
@@ -286,13 +414,22 @@ const AllProducts = () => {
                                     <div className='select-has-icon'>
                                       <select
                                         className='common-input border'
-                                        value={"Baby"}
+                                        onChange={(e) =>
+                                          setData({
+                                            ...data,
+                                            category_id: e.target.value,
+                                          })
+                                        }
+                                        value={data.category_id}
                                       >
                                         <option value={""}>
                                           Please Select A Category **
                                         </option>
-                                        <option value={123}>Laptop</option>
-                                        <option value={123}>Baby</option>
+                                        {allCategory?.map((item, index) => (
+                                          <option key={index} value={item?._id}>
+                                            {item?.category_name}
+                                          </option>
+                                        ))}
                                       </select>
                                     </div>
                                   </div>
@@ -303,13 +440,22 @@ const AllProducts = () => {
                                     <div className='select-has-icon'>
                                       <select
                                         className='common-input border'
-                                        value={"Walton"}
+                                        onChange={(e) =>
+                                          setData({
+                                            ...data,
+                                            brand_id: e.target.value,
+                                          })
+                                        }
+                                        value={data.brand_id}
                                       >
                                         <option value={""}>
                                           Please Select A Brand **
                                         </option>
-                                        <option value={123}>Waltop</option>
-                                        <option value={123}>Squaire</option>
+                                        {allBrand?.map((item, index) => (
+                                          <option key={index} value={item?._id}>
+                                            {item?.brand_name}
+                                          </option>
+                                        ))}
                                       </select>
                                     </div>
                                   </div>
@@ -318,7 +464,13 @@ const AllProducts = () => {
                                       Remark (Ex: New)
                                     </label>
                                     <input
-                                      value={"New"}
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          remark: e.target.value,
+                                        })
+                                      }
+                                      value={data.remark}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -328,7 +480,13 @@ const AllProducts = () => {
                                       Stock
                                     </label>
                                     <input
-                                      value={50}
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          stock: Number(e.target.value),
+                                        })
+                                      }
+                                      value={data.stock}
                                       type='number'
                                       className='common-input border'
                                     />
@@ -338,7 +496,15 @@ const AllProducts = () => {
                                       Color (Ex: Red, Green, Blue)
                                     </label>
                                     <input
-                                      value={"Red, Green, Blue"}
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          color: e.target.value
+                                            .split(",")
+                                            .map((item) => item.trim()),
+                                        })
+                                      }
+                                      value={data.color}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -349,7 +515,15 @@ const AllProducts = () => {
                                       Size (Ex: XXL, XL, X)
                                     </label>
                                     <input
-                                      value={"XXL, XL, X"}
+                                      onChange={(e) =>
+                                        setData({
+                                          ...data,
+                                          size: e.target.value
+                                            .split(",")
+                                            .map((item) => item.trim()),
+                                        })
+                                      }
+                                      value={data.size}
                                       type='text'
                                       className='common-input border'
                                     />
@@ -364,7 +538,8 @@ const AllProducts = () => {
                                       theme='snow'
                                       modules={modules}
                                       formats={formats}
-                                      value={"This is a sample description."}
+                                      value={value}
+                                      onChange={setValue}
                                     />
                                   </div>
                                 </div>
@@ -386,6 +561,7 @@ const AllProducts = () => {
                   Close
                 </button>
                 <button
+                  onClick={updateProduct}
                   data-bs-dismiss='modal'
                   type='button'
                   className='btn btn-primary'

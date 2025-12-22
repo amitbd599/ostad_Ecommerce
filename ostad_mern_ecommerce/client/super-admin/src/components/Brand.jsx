@@ -1,6 +1,92 @@
 import Paginate from "../helper/Paginate";
-
+import { useNavigate, useSearchParams } from "react-router-dom";
+import brandStore from "../store/brandStore";
+import { useEffect, useState } from "react";
+import { DeleteAlert, ErrorToast, IsEmpty } from "../helper/helper";
+import Skeleton from "react-loading-skeleton";
+import { baseURLFile } from "../helper/config";
 const Brand = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const per_page = 6;
+  const page_no = searchParams.get("page_no") || 1;
+
+  let {
+    createBrandRequest,
+    allBrandRequest,
+    allBrand,
+    totalBrand,
+    deleteBrandRequest,
+    singleBrandRequest,
+
+    updateBrandRequest,
+  } = brandStore();
+
+  let [data, setData] = useState({
+    brand_name: "",
+    brand_img: "",
+  });
+
+  // Validation rules
+  const validations = [
+    { field: data.brand_name, message: "Brand name is required!" },
+    { field: data.brand_img, message: "Brand name is required!" },
+  ];
+
+  let brandSubmit = async () => {
+    for (const { field, message } of validations) {
+      if (IsEmpty(field)) {
+        return ErrorToast(message);
+      }
+    }
+    await createBrandRequest(data);
+    await allBrandRequest(per_page, page_no);
+  };
+
+  // all Brand
+  useEffect(() => {
+    (async () => {
+      await allBrandRequest(per_page, page_no);
+    })();
+  }, [allBrandRequest, page_no]);
+
+  //! pagination function
+  const handelPageClick = async (event) => {
+    let page_no = event.selected;
+    await allBrandRequest(per_page, page_no + 1);
+
+    navigate(`/brand?page_no=${page_no + 1}`);
+  };
+
+  // delete Brand
+  let deleteBrand = async (_id) => {
+    let res = await DeleteAlert(deleteBrandRequest, _id);
+    if (res) {
+      await allBrandRequest(per_page, page_no);
+    }
+  };
+
+  // read single Brand
+  let [_id, setId] = useState("");
+  let readSingleBrand = async (_id) => {
+    let res = await singleBrandRequest(_id);
+    if (res) {
+      setId(res?._id);
+      setData({
+        brand_name: res?.brand_name,
+        brand_img: res?.brand_img,
+      });
+    }
+  };
+
+  // update Brand
+  let updateBrand = async () => {
+    let res = await updateBrandRequest(_id, data);
+    if (res) {
+      await allBrandRequest(per_page, page_no);
+    }
+  };
+
   return (
     <>
       {/* Cover Photo Start */}
@@ -27,6 +113,12 @@ const Brand = () => {
                               Brand name
                             </label>
                             <input
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  brand_name: e.target.value,
+                                })
+                              }
                               type='text'
                               className='common-input border'
                             />
@@ -36,13 +128,22 @@ const Brand = () => {
                               Image Single
                             </label>
                             <input
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  brand_img: e.target.value,
+                                })
+                              }
                               type='text'
                               className='common-input border'
                             />
                           </div>
 
                           <div className='col-sm-12 text-end'>
-                            <button className='btn btn-main btn-lg pill mt-4 '>
+                            <button
+                              onClick={brandSubmit}
+                              className='btn btn-main btn-lg pill mt-4 '
+                            >
                               Create Brand
                             </button>
                           </div>
@@ -66,32 +167,73 @@ const Brand = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <div className='img-100'>
-                              <img src={`https://placehold.co/60x60`} alt='' />
-                            </div>
-                          </td>
-                          <td>Walton</td>
-                          <td>
-                            <div className='d-flex justify-content-end gap-2'>
-                              <button
-                                className='btn btn-success'
-                                data-bs-toggle='modal'
-                                data-bs-target={`#exampleModal_${1}`}
-                              >
-                                Edit
-                              </button>
-                              <button className='btn btn-danger'>Delete</button>
-                            </div>
-                          </td>
-                        </tr>
+                        {allBrand?.length < 1 && <p>No data found!</p>}
+                        {allBrand === null ? (
+                          <>
+                            <>
+                              {[...Array(4)].map(() => (
+                                <tr>
+                                  <td className='Skeleton'>
+                                    <Skeleton count={1} />
+                                  </td>
+                                  <td className='Skeleton'>
+                                    <Skeleton count={1} />
+                                  </td>
+                                  <td className='Skeleton'>
+                                    <Skeleton count={1} />
+                                  </td>
+                                </tr>
+                              ))}
+                            </>
+                          </>
+                        ) : (
+                          <>
+                            {allBrand?.map((item, index) => (
+                              <tr key={index}>
+                                <td>
+                                  <div className='img-100'>
+                                    <img
+                                      src={`${baseURLFile}/${item?.brand_img}`}
+                                      alt=''
+                                    />
+                                  </div>
+                                </td>
+                                <td>{item?.brand_name}</td>
+                                <td>
+                                  <div className='d-flex justify-content-end gap-2'>
+                                    <button
+                                      onClick={() => readSingleBrand(item?._id)}
+                                      className='btn btn-success'
+                                      data-bs-toggle='modal'
+                                      data-bs-target={`#exampleModal_${1}`}
+                                    >
+                                      Edit
+                                    </button>
+                                    <button
+                                      onClick={() => deleteBrand(item?._id)}
+                                      className='btn btn-danger'
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </>
+                        )}
                       </tbody>
                     </table>
                     <div className='flx-between justify-content-end gap-2'>
                       <nav aria-label='Page navigation example'>
                         <div>
-                          <Paginate page_no={1} per_page={5} totalCount={10} />
+                          {allBrand?.length > 1 && (
+                            <Paginate
+                              handelPageClick={handelPageClick}
+                              page_no={page_no}
+                              per_page={per_page}
+                              totalCount={totalBrand}
+                            />
+                          )}
                         </div>
                       </nav>
                     </div>
@@ -138,7 +280,13 @@ const Brand = () => {
                                 Brand name
                               </label>
                               <input
-                                value='Walton'
+                                onChange={(e) =>
+                                  setData({
+                                    ...data,
+                                    brand_name: e.target.value,
+                                  })
+                                }
+                                value={data.brand_name}
                                 type='text'
                                 className='common-input border'
                               />
@@ -148,7 +296,13 @@ const Brand = () => {
                                 Image Single
                               </label>
                               <input
-                                value='https://placehold.co/60x60'
+                                onChange={(e) =>
+                                  setData({
+                                    ...data,
+                                    brand_img: e.target.value,
+                                  })
+                                }
+                                value={data.brand_img}
                                 type='text'
                                 className='common-input border'
                               />
@@ -169,6 +323,7 @@ const Brand = () => {
                   Close
                 </button>
                 <button
+                  onClick={() => updateBrand()}
                   type='button'
                   className='btn btn-primary'
                   data-bs-dismiss='modal'
