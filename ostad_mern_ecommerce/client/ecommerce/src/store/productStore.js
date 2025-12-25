@@ -35,9 +35,9 @@ const productStore = create((set) => ({
 
   // all New Arrival Products
   allNewArrivalProducts: null,
-  newArrivalProductsRequest: async () => {
+  newArrivalProductsRequest: async (item) => {
     try {
-      let res = await axios.get(baseURL + `/all-products/0/0/0/0/8/1`, {
+      let res = await axios.get(baseURL + `/all-products/0/0/0/0/${item}/1`, {
         withCredentials: true,
         credentials: "include",
       });
