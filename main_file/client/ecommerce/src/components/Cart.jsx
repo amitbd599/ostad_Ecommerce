@@ -15,14 +15,14 @@ const Cart = () => {
   }, [allCartRequest]);
 
   let increaseCartQty = async (cart_id, product_id, qty) => {
-    await updateCartRequest(cart_id, { product_id, qty: qty + 1, inc:true });
+    await updateCartRequest(cart_id, { product_id, qty: qty + 1, inc: true });
     await allCartRequest();
   };
   let decreaseCartQty = async (cart_id, product_id, qty) => {
     if (qty === 1) {
       return ErrorToast("Cart must have one item.");
     }
-    await updateCartRequest(cart_id, { product_id, qty: qty - 1, inc:false });
+    await updateCartRequest(cart_id, { product_id, qty: qty - 1, inc: false });
     await allCartRequest();
   };
 
@@ -139,25 +139,23 @@ const Cart = () => {
                           {/* {item?.product?.price} */}
                           {item?.product?.is_discount === false
                             ? `৳${item?.product?.price}`
-                            : `৳${item?.product?.discount_price}`}{" "}
+                            : `৳${item?.product?.discount_price}`}
                           <del className='font-12 text-danger '>
-                            {" "}
+
                             {item?.product?.is_discount === false
                               ? ""
                               : `৳${item?.product?.price}`}
-                          </del>{" "}
+                          </del>
                         </span>
                       </td>
                       <td>
                         <span className='cart-item__totalPrice text-body font-18 fw-400 mb-0'>
                           {item?.product?.is_discount === false
-                            ? `৳${
-                                Number(item?.product?.price) * Number(item?.qty)
-                              }`
-                            : `৳${
-                                Number(item?.product?.discount_price) *
-                                Number(item?.qty)
-                              }`}
+                            ? `৳${Number(item?.product?.price) * Number(item?.qty)
+                            }`
+                            : `৳${Number(item?.product?.discount_price) *
+                            Number(item?.qty)
+                            }`}
                         </span>
                       </td>
                     </tr>
