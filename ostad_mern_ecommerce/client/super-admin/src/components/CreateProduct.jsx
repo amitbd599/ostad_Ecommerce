@@ -60,7 +60,7 @@ const CreateProduct = () => {
     }
     let res = await createProductRequest(data);
     if (res) {
-      navigate("/all-product");
+      navigate("/all-products");
     }
   };
 

@@ -13,7 +13,7 @@ const dotENV = require("dotenv");
 
 dotENV.config();
 
-let URL = "mongodb://127.0.0.1:27017/ostad_ecommerce";
+let URL = process.env.MONGO_URI;
 let option = {
   user: process.env.DB_USER,
   pass: process.env.DB_PASS,
@@ -59,30 +59,26 @@ app.use("/api/v1", router);
 
 app.use("/api/v1/get-file", express.static("uploads"));
 
-// Add React Front End Routing supper admin
-// app.get("/super-admin", function (req, res) {
-//   res.sendFile(path.resolve(__dirname, "client", "super-admin", "index.html"));
-// });
-
-// app.use(
-//   "/super-admin",
-//   express.static(path.join(__dirname, "client", "super-admin", "dist"), {
-//     index: false, // important! prevents redirect 301
-//   })
-// );
-// app.get("/super-admin/*", (req, res) => {
-//   res.sendFile(
-//     path.resolve(__dirname, "client", "super-admin", "dist", "index.html")
-//   );
-// });
+//! Add React Front End Routing supper admin
+app.use(
+  "/super-admin",
+  express.static(path.join(__dirname, "client", "super-admin", "dist"), {
+    index: false, // important! prevents redirect 301
+  })
+);
+app.get("/super-admin/*", (req, res) => {
+  res.sendFile(
+    path.resolve(__dirname, "client", "super-admin", "dist", "index.html")
+  );
+});
 
 // ✅ Serve static files from Vite's dist folder
-// app.use(express.static(path.join(__dirname, "client", "ecommerce", "dist")));
+app.use(express.static(path.join(__dirname, "client", "ecommerce", "dist")));
 // Add React Front End Routing
-// app.get("*", function (req, res) {
-//   res.sendFile(
-//     path.resolve(__dirname, "client", "ecommerce", "dist", "index.html")
-//   );
-// });
+app.get("*", function (req, res) {
+  res.sendFile(
+    path.resolve(__dirname, "client", "ecommerce", "dist", "index.html")
+  );
+});
 
 module.exports = app;
